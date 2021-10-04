@@ -10,11 +10,11 @@ public class CarInfoVo {
 	private String	mdlNm;
 	private String 	mdlClCd;
     private Integer upMdlNo;
-    private String 	RlsYear;
-    private Integer RlsPrice;
-    private String 	MnfCd;
-    private String 	AprnKnCd;
-    private String 	CarKnCd;
-    private Integer SrtOrd;
+    private String 	rlsYear;
+    private Integer rlsPrice;
+    private String 	mnfCd;
+    private String 	carAprnCd;
+    private String 	carKnCd;
+    private Integer srtOrd;
 
 }
