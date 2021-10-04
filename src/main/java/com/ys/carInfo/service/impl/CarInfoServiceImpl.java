@@ -10,8 +10,8 @@ import org.springframework.stereotype.Service;
 import com.ys.carInfo.mapper.CarInfoMapper;
 import com.ys.carInfo.service.CarInfoService;
 import com.ys.carInfo.vo.CarInfoVo;
-import com.ys.common.MyBatisSupport;
-import com.ys.common.MyBatisTransactionManager;
+import com.ys.config.MyBatisSupport;
+import com.ys.config.MyBatisTransactionManager;
 
 
 @Service("carInfoService")

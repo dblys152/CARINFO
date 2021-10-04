@@ -1,4 +1,4 @@
-package com.ys.common;
+package com.ys.config;
 
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionException;

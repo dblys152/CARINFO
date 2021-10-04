@@ -30,7 +30,7 @@ public class CarInfoController {
 		List<Map<String, Object>> carInfoList = carInfoService.selectCarInfoList(map);
 		model.addAttribute("carInfoList", carInfoList);
 
-		return "NewFile";
+		return "/form/carInfo/carInfoList";
 	}
 
 	@RequestMapping(value="save", method=RequestMethod.POST)

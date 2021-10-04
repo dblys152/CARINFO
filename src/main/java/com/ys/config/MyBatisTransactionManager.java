@@ -1,4 +1,4 @@
-package com.ys.common;
+package com.ys.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.TransactionException;

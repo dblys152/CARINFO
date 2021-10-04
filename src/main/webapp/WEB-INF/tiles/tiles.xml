@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC
+		"-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
+		"http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+<tiles-definitions>
+
+	<definition name="main" template="/WEB-INF/tiles/layout.jsp">
+		<put-attribute name="title" value="CARINFO"/>
+		<put-attribute name="header" value="/WEB-INF/tiles/header.jsp"/>
+		<put-attribute name="body" value=""/>
+		<put-attribute name="footer" value="/WEB-INF/tiles/footer.jsp"/>
+	</definition>
+
+	<definition name="/form/*/**"  extends="main">
+        <put-attribute name="body"  value="/WEB-INF/views/{1}/{2}.jsp"/>
+    </definition>
+
+	<definition name="/empty/*/**"  template="/WEB-INF/tiles/empty_layout.jsp">
+        <put-attribute name="body" value="/WEB-INF/views/{1}/{2}.jsp" />
+    </definition>
+
+</tiles-definitions>
