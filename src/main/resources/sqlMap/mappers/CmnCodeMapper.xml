@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ys.common.mapper.CmnCodeMapper">
+
+	<select id="selectCmnCdList" parameterType="HashMap" resultType="HashMap">
+		SELECT
+				CMN_CD		cmnCd
+			  , CMN_CD_NM	cmnCdNm
+			  , NOTE		note
+		FROM 	CMN_CODE
+		WHERE	1 = 1
+		AND 	USE_YN = 'Y'
+		AND 	DEL_YN = 'N'
+		ORDER	BY	SRT_ORD
+				  , CMN_CD
+	</select>
+
+
+</mapper>

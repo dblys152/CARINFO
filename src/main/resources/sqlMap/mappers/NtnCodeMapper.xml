@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ys.common.mapper.NtnCodeMapper">
+
+	<select id="selectNtnCdList" parameterType="HashMap" resultType="HashMap">
+		SELECT
+				NTN_CD			ntnCd
+			  , NTN_CD_KR_NM	ntnCdKrNm
+			  , NTN_CD_EN_NM	ntnCdEnNm
+		FROM 	NTN_CODE
+		WHERE	1 = 1
+		AND 	USE_YN = 'Y'
+		AND 	DEL_YN = 'N'
+		ORDER	BY	NTN_CD
+	</select>
+
+
+</mapper>
