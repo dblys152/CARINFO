@@ -5,16 +5,14 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ys.carInfo.mapper.CarInfoMapper;
 import com.ys.carInfo.service.CarInfoService;
 import com.ys.carInfo.vo.CarInfoVo;
-import com.ys.config.MyBatisSupport;
-import com.ys.config.MyBatisTransactionManager;
-
 
 @Service("carInfoService")
-public class CarInfoServiceImpl extends MyBatisSupport implements CarInfoService {
+public class CarInfoServiceImpl implements CarInfoService {
 
 	@Autowired CarInfoMapper carInfoMapper;
 
@@ -24,25 +22,10 @@ public class CarInfoServiceImpl extends MyBatisSupport implements CarInfoService
 	}
 
 	@Override
+	@Transactional
 	public void insertCarInfo(Map<String, Object> map) throws Exception {
-		MyBatisTransactionManager transaction = getTransactionManager();
-
-		try {
-			transaction.start();
-
-			CarInfoVo carInfoVo = new CarInfoVo();
-			carInfoMapper.insertCarInfo(carInfoVo);
-
-			transaction.commit();
-		} catch(Exception e) {
-			transaction.rollback();
-		} finally {
-			transaction.end();
-		}
-
-
-
-
+		CarInfoVo carInfoVo = new CarInfoVo();
+		carInfoMapper.insertCarInfo(carInfoVo);
 	}
 
 }

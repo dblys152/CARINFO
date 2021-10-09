@@ -12,5 +12,5 @@ public interface CarInfoMapper {
 
 	public List<Map<String, Object>> selectCarInfoList(Map<String, Object> map) throws Exception;
 
-	public void insertCarInfo(CarInfoVo carInfoVo);
+	public void insertCarInfo(CarInfoVo carInfoVo) throws Exception;
 }

@@ -8,10 +8,9 @@ import org.springframework.stereotype.Service;
 
 import com.ys.common.mapper.CmnCodeMapper;
 import com.ys.common.service.CmnCodeService;
-import com.ys.config.MyBatisSupport;
 
 @Service("cmnCodeService")
-public class CmnCodeServiceImpl extends MyBatisSupport implements CmnCodeService {
+public class CmnCodeServiceImpl implements CmnCodeService {
 
 	@Autowired CmnCodeMapper cmnCodeMapper;
 

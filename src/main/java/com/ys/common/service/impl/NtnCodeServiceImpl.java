@@ -8,10 +8,9 @@ import org.springframework.stereotype.Service;
 
 import com.ys.common.mapper.NtnCodeMapper;
 import com.ys.common.service.NtnCodeService;
-import com.ys.config.MyBatisSupport;
 
 @Service("ntnCodeService")
-public class NtnCodeServiceImpl extends MyBatisSupport implements NtnCodeService {
+public class NtnCodeServiceImpl implements NtnCodeService {
 
 	@Autowired NtnCodeMapper ntnCodeMapper;
 

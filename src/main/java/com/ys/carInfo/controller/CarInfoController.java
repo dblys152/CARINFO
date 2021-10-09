@@ -40,7 +40,7 @@ public class CarInfoController {
 		List<Map<String, Object>> ntnCdList = ntnCodeService.selectNtnCdList(map);
 		model.addAttribute("ntnCdList", ntnCdList);
 
-		return "/form/carInfo/carInfoList";
+		return "/form/carInfo/carInfoMainView";
 	}
 
 	@RequestMapping(value="save", method=RequestMethod.POST)
@@ -51,7 +51,7 @@ public class CarInfoController {
 		try {
 			carInfoService.insertCarInfo(map);
 		} catch(Exception e) {
-
+			logger.error(e.getMessage());
 		}
 
 		return map;
