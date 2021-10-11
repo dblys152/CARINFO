@@ -30,7 +30,7 @@ public class CarinfoApplication {
 
 	@RequestMapping(value="/", method=RequestMethod.GET)
 	public String root() {
-		return "redirect:carInfo/list";
+		return "redirect:carInfo/main";
 	}
 
 }

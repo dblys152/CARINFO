@@ -11,23 +11,23 @@
     <meta name="description" content="" />
     <meta name="author" content="" />
     <!-- Favicon-->
-    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
-    <!-- Core theme CSS (includes Bootstrap)-->
+    <link rel="icon" type="image/x-icon" href="/resources/bootstrap5/assets/favicon.ico" />
     <link href="/resources/bootstrap4/css/styles.css" rel="stylesheet" />
-    <!-- Bootstrap core JS-->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Core theme JS-->
+    <link href="/resources/style/fontawesome.css" rel="stylesheet" />
     <script src="/resources/bootstrap4/js/scripts.js"></script>
+    <script src="/resources/script/jquery_v3.5.1.js"></script>
+    <script src="/resources/script/common.js"></script>
+
 </head>
 <body>
 	<tiles:insertAttribute name="header"/>
 
-	<section class="container">
+	<div class="container">
 		<!-- Content -->
 		<div class="contents">
 	  		<tiles:insertAttribute name="body"/>
 	  	</div>
-	</section>
+	</div>
 
 	<tiles:insertAttribute name="footer"/>
 </body>

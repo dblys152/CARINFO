@@ -28,8 +28,8 @@ public class CarInfoController {
 	@Autowired CmnCodeService cmnCodeService;
 	@Autowired NtnCodeService ntnCodeService;
 
-	@RequestMapping(value="list", method=RequestMethod.GET)
-	public String list(Model model) throws Exception {
+	@RequestMapping(value="/main", method=RequestMethod.GET)
+	public String main(Model model) throws Exception {
 		Map<String, Object> map = new HashMap<>();
 		List<Map<String, Object>> carInfoList = carInfoService.selectCarInfoList(map);
 		model.addAttribute("carInfoList", carInfoList);
@@ -43,7 +43,7 @@ public class CarInfoController {
 		return "/form/carInfo/carInfoMainView";
 	}
 
-	@RequestMapping(value="save", method=RequestMethod.POST)
+	@RequestMapping(value="/save", method=RequestMethod.POST)
 	@ResponseBody
 	public Map<String, Object> save (
 			@RequestBody Map<String, Object> map,
