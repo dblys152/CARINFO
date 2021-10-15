@@ -5,9 +5,11 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.ys.common.vo.CmnCodeVo;
+
 @Mapper
 public interface CmnCodeMapper {
 
-	public List<Map<String, Object>> selectCmnCdList(Map<String, Object> map) throws Exception;
+	public List<CmnCodeVo> selectCmnCdList(Map<String, Object> map) throws Exception;
 
 }

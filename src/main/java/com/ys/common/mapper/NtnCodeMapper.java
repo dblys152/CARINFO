@@ -5,9 +5,11 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.ys.common.vo.NtnCodeVo;
+
 @Mapper
 public interface NtnCodeMapper {
 
-	public List<Map<String, Object>> selectNtnCdList(Map<String, Object> map) throws Exception;
+	public List<NtnCodeVo> selectNtnCdList(Map<String, Object> map) throws Exception;
 
 }

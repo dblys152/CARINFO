@@ -2,16 +2,16 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ys.common.mapper.NtnCodeMapper">
 
-	<select id="selectNtnCdList" parameterType="HashMap" resultType="HashMap">
+	<select id="selectNtnCdList" parameterType="HashMap" resultType="com.ys.common.vo.NtnCodeVo">
 		SELECT
-				NTN_CD			ntnCd
-			  , NTN_CD_KR_NM	ntnCdKrNm
-			  , NTN_CD_EN_NM	ntnCdEnNm
+				NTN_CD
+			  , NTN_CD_KR_NM
+			  , NTN_CD_EN_NM
 		FROM 	NTN_CODE
 		WHERE	1 = 1
 		AND 	USE_YN = 'Y'
 		AND 	DEL_YN = 'N'
-		ORDER	BY	NTN_CD
+		ORDER	BY	NTN_CD_KR_NM
 	</select>
 
 

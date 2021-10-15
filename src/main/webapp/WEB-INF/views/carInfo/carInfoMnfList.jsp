@@ -18,10 +18,10 @@ gnbActive = 'setting';
 	<!-- content -->
 	<div class="col-lg-12">
 		<div class="mb-3">
-			<button type="button" class="btn btn-secondary edit_on btn_edit" value="tiny">자동차 모델</button>
-			<button type="button" class="btn btn-outline-secondary btn_edit" value="smart">제조사</button>
+			<a href="mdlList" class="btn btn-outline-secondary">자동차 모델</a>
+			<a href="mnfList" type="button" class="btn btn-secondary">제조사</a>
 			<div class="float-end">
-				<button type="button" class="btn btn-info">제조사 등록</button>
+				<a href="mnfWrite" class="btn btn-info">제조사 등록</a>
 			</div>
 		</div>
 		<div class="col-md-4">
@@ -35,9 +35,17 @@ gnbActive = 'setting';
 			</div>
 		</div>
 		<table class="table table-hover">
+		<colgroup>
+			<col width = "50px">
+			<col width = "80px">
+			<col width = "150px">
+			<col width = "150px">
+			<col width = "150px">
+		</colgroup>
 		<thead>
 			<tr>
 				<th scope="col">No.</th>
+				<th scope="col">로고</th>
 				<th scope="col">제조사명</th>
 				<th scope="col">제조국</th>
 				<th scope="col">등록일</th>
@@ -46,18 +54,21 @@ gnbActive = 'setting';
 		<tbody>
 			<tr>
 				<th scope="row">1</th>
+				<td></td>
 				<td>BMW</td>
 				<td>독일</td>
 				<td>2021-10-11</td>
 			</tr>
 			<tr>
 				<th scope="row">2</th>
+				<td></td>
 				<td>포르쉐</td>
 				<td>독일</td>
 				<td>2021-10-11</td>
 			</tr>
 			<tr>
 				<th scope="row">3</th>
+				<td></td>
 				<td>폭스바겐</td>
 				<td>독일</td>
 				<td>2021-10-11</td>

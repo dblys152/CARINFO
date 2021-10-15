@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ys.carInfo.service.CarInfoService;
-import com.ys.common.service.CmnCodeService;
-import com.ys.common.service.NtnCodeService;
+import com.ys.common.service.CodeService;
+import com.ys.common.vo.CmnCodeVo;
 
 @Controller
 @RequestMapping("/carInfo")
@@ -25,8 +25,7 @@ public class CarInfoController {
 	private static final Logger logger = LoggerFactory.getLogger(CarInfoController.class);
 
 	@Autowired CarInfoService carInfoService;
-	@Autowired CmnCodeService cmnCodeService;
-	@Autowired NtnCodeService ntnCodeService;
+	@Autowired CodeService codeService;
 
 	@RequestMapping(value="/main", method=RequestMethod.GET)
 	public String main(Model model) throws Exception {
@@ -34,11 +33,8 @@ public class CarInfoController {
 		List<Map<String, Object>> carInfoList = carInfoService.selectCarInfoList(map);
 		model.addAttribute("carInfoList", carInfoList);
 
-		List<Map<String, Object>> cmnCdList = cmnCodeService.selectCmnCdList(map);
+		List<CmnCodeVo> cmnCdList = codeService.selectCmnCdList(map);
 		model.addAttribute("cmnCdList", cmnCdList);
-
-		List<Map<String, Object>> ntnCdList = ntnCodeService.selectNtnCdList(map);
-		model.addAttribute("ntnCdList", ntnCdList);
 
 		return "/form/carInfo/carInfoMainView";
 	}
