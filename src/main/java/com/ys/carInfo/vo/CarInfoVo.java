@@ -12,7 +12,7 @@ public class CarInfoVo {
     private Integer upMdlNo;
     private String 	rlsYear;
     private Integer rlsPrice;
-    private String 	mnfCd;
+    private String 	mnfNo;
     private String 	carAprnCd;
     private String 	carKnCd;
     private Integer srtOrd;

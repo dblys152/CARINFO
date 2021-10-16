@@ -18,6 +18,8 @@
     <script src="/resources/script/jquery_v3.5.1.js"></script>
     <script src="/resources/script/common.js"></script>
 
+    <script src="/resources/script/axios.min.js"></script>
+
 </head>
 <body>
 	<tiles:insertAttribute name="header"/>

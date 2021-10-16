@@ -12,43 +12,40 @@ gnbActive = 'setting';
 	<!-- Page header-->
 	<div class="py-3 bg-light border-bottom mb-4">
         <div class="my-1">
-            <p class="lead mb-0">제조사 등록</p>
+            <p class="lead mb-0">제조사 상세정보</p>
         </div>
 	</div>
 	<!-- content -->
 	<div class="col-lg-12">
 		<input type="hidden" name="mnfNo" value="<c:out value="${ vo.mnfNo }"/>">
 		<div class="mb-3 row">
-		 	<label for="inputPassword" class="col-sm-2 col-form-label">제조사명<span class="text-danger">*</span></label>
+		 	<label for="inputPassword" class="col-sm-2 col-form-label">제조사명</label>
 			<div class="col-sm-10">
-			  <input type="text" class="form-control" name="mnfNm" value="<c:out value="${ vo.mnfNm }"/>">
+			  <c:out value="${ vo.MNFNM }"/>
 			</div>
 		</div>
 		<div class="mb-3 row">
-		 	<label for="inputPassword" class="col-sm-2 col-form-label">제조국<span class="text-danger">*</span></label>
+		 	<label for="inputPassword" class="col-sm-2 col-form-label">제조국</label>
 			<div class="col-sm-10">
-				<select class="form-select" aria-label="Default select example" name="ntnCd">
-					<c:forEach items="${ ntnCdList }" var="i">
-					<option value="<c:out value="${ i.ntnCd }"/>"><c:out value="${ i.ntnCdKrNm } (${ i.ntnCdEnNm })"/></option>
-					</c:forEach>
-				</select>
+				<c:out value="${ vo.ntnCdKrNm } (${ vo.ntnCdEnNm })"/>
 			</div>
 		</div>
 		<div class="mb-3 row">
-		 	<label for="inputPassword" class="col-sm-2 col-form-label">제조사 로고<span class="text-danger">*</span></label>
+		 	<label for="inputPassword" class="col-sm-2 col-form-label">제조사 로고</label>
 		 	<div class="col-sm-10">
-				<label for="formFile" class="form-label">로고 크기 50x50</label>
-				<input class="form-control" type="file" id="formFile">
+
 			</div>
 		</div>
 		<div class="mb-3 row">
 			<div class="d-flex justify-content-between bd-highlight mb-3">
 				<div></div>
 				<div>
-					<button type="button" class="btn btn-info" id="mnfSave">등록</button>
-					<a href="mnfList" class="btn btn-outline-secondary">취소</a>
+					<a href="mnfWrite?mnfNo=${ param.mnfNo }" class="btn btn-info">수정</a>
+					<a href="mnfList" class="btn btn-outline-secondary">목록</a>
 				</div>
-				<div></div>
+				<div>
+					<button type="button" class="btn btn-danger" id="mnfDel">삭제</button>
+				</div>
 			</div>
 		</div>
 	</div>

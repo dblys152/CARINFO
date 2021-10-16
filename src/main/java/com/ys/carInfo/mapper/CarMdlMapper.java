@@ -8,9 +8,10 @@ import org.apache.ibatis.annotations.Mapper;
 import com.ys.carInfo.vo.CarInfoVo;
 
 @Mapper
-public interface CarInfoMapper {
+public interface CarMdlMapper {
 
 	public List<Map<String, Object>> selectCarInfoList(Map<String, Object> map) throws Exception;
 
 	public void insertCarInfo(CarInfoVo carInfoVo) throws Exception;
+
 }

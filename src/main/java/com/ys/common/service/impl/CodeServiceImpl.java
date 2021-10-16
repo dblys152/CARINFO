@@ -15,8 +15,8 @@ import com.ys.common.vo.NtnCodeVo;
 @Service("codeService")
 public class CodeServiceImpl implements CodeService {
 
-	@Autowired CmnCodeMapper cmnCodeMapper;
-	@Autowired NtnCodeMapper ntnCodeMapper;
+	@Autowired private CmnCodeMapper cmnCodeMapper;
+	@Autowired private NtnCodeMapper ntnCodeMapper;
 
 	@Override
 	public List<CmnCodeVo> selectCmnCdList(Map<String, Object> map) throws Exception {

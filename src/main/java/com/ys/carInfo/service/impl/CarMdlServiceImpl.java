@@ -7,14 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ys.carInfo.mapper.CarInfoMapper;
-import com.ys.carInfo.service.CarInfoService;
+import com.ys.carInfo.mapper.CarMdlMapper;
+import com.ys.carInfo.service.CarMdlService;
 import com.ys.carInfo.vo.CarInfoVo;
 
 @Service("carInfoService")
-public class CarInfoServiceImpl implements CarInfoService {
+public class CarMdlServiceImpl implements CarMdlService {
 
-	@Autowired CarInfoMapper carInfoMapper;
+	@Autowired private CarMdlMapper carInfoMapper;
 
 	@Override
 	public List<Map<String, Object>> selectCarInfoList(Map<String, Object> map) throws Exception {
@@ -27,5 +27,6 @@ public class CarInfoServiceImpl implements CarInfoService {
 		CarInfoVo carInfoVo = new CarInfoVo();
 		carInfoMapper.insertCarInfo(carInfoVo);
 	}
+
 
 }

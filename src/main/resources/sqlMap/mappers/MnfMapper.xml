@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ys.carInfo.mapper.MnfMapper">
+
+	<insert id="mergeMnf" parameterType="com.ys.carInfo.vo.MnfVo">
+		<selectKey resultType="String" keyProperty="mnfNo" order="BEFORE">
+			<choose>
+			<when test="mnfNo != null and mnfNo != ''">
+				SELECT 	#{mnfNo,jdbcType=VARCHAR} MNF_NO
+				FROM 	DUAL
+			</when>
+			<otherwise>
+				SELECT	'MNF' || NVL(SUBSTR(TO_NUMBER(SUBSTR(MAX(MNF_NO), -3)) + 1001, -3), '001') MNF_NO
+				FROM 	MNF
+			</otherwise>
+			</choose>
+		</selectKey>
+		MERGE 	INTO MNF 	M
+		USING 	(
+					SELECT
+							#{mnfNo,jdbcType=VARCHAR}	MNF_NO
+						  , #{mnfNm,jdbcType=VARCHAR}	MNF_NM
+						  , #{ntnCd,jdbcType=VARCHAR}	NTN_CD
+						  , #{regNo,jdbcType=INTEGER}	REG_NO
+						  , SYSDATE						REG_DTT
+						  , #{modNo,jdbcType=INTEGER}	MOD_NO
+						  , SYSDATE						MOD_DTT
+					FROM 	DUAL
+				)	S
+		ON 		(M.MNF_NO = S.MNF_NO)
+		WHEN 	MATCHED THEN
+				UPDATE	SET
+						M.MNF_NM 	= S.MNF_NM
+					  , M.NTN_CD 	= S.NTN_CD
+					  , M.DEL_YN 	= 'N'
+					  , M.MOD_NO 	= S.MOD_NO
+					  , M.MOD_DTT	= S.MOD_DTT
+		WHEN 	NOT MATCHED THEN
+				INSERT 	(
+							MNF_NO
+						  , MNF_NM
+						  , NTN_CD
+						  , REG_NO
+						  , REG_DTT
+						  , MOD_NO
+						  , MOD_DTT
+						)
+				VALUES	(
+							S.MNF_NO
+						  , S.MNF_NM
+						  , S.NTN_CD
+						  , S.REG_NO
+						  , S.REG_DTT
+						  , S.MOD_NO
+						  , S.MOD_DTT
+						)
+	</insert>
+
+	<select id="selectMnf" parameterType="String" resultType="java.util.HashMap">
+		SELECT
+				MF.MNF_NO			mnfNo
+			  , MF.MNF_NM			mnfNm
+			  , MF.NTN_CD			ntnCd
+			  , NC.NTN_CD_KR_NM		ntnCdKrNm
+			  , NC.NTN_CD_EN_NM		ntnCdEnNm
+			  , AF.FILE_NO			fileNo
+			  , AF.FILE_PATH_NM		filePathNm
+			  , AF.FILE_NM			fileNm
+			  , AF.FILE_EXT_NM		fileExtNm
+		FROM 	MNF			MF
+			  , NTN_CODE 	NC
+			  , ATCH_FILE 	AF
+		WHERE	1 = 1
+		AND 	MF.MNF_NO = #{mnfNo,jdbcType=VARCHAR}
+		AND 	MF.DEL_YN = 'N'
+		AND 	MF.NTN_CD = NC.NTN_CD
+		AND 	MF.MNF_NO = AF.FILE_IDNT_NO(+)
+		AND 	AF.DEL_YN(+) = 'N'
+	</select>
+
+</mapper>

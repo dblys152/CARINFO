@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.ys.carInfo.service.CarInfoService;
+import com.ys.carInfo.service.CarMdlService;
 import com.ys.common.service.CodeService;
 import com.ys.common.vo.CmnCodeVo;
 
@@ -24,13 +24,13 @@ public class CarInfoController {
 
 	private static final Logger logger = LoggerFactory.getLogger(CarInfoController.class);
 
-	@Autowired CarInfoService carInfoService;
-	@Autowired CodeService codeService;
+	@Autowired private CarMdlService carMdlService;
+	@Autowired private CodeService codeService;
 
 	@RequestMapping(value="/main", method=RequestMethod.GET)
 	public String main(Model model) throws Exception {
 		Map<String, Object> map = new HashMap<>();
-		List<Map<String, Object>> carInfoList = carInfoService.selectCarInfoList(map);
+		List<Map<String, Object>> carInfoList = carMdlService.selectCarInfoList(map);
 		model.addAttribute("carInfoList", carInfoList);
 
 		List<CmnCodeVo> cmnCdList = codeService.selectCmnCdList(map);
@@ -45,7 +45,7 @@ public class CarInfoController {
 			@RequestBody Map<String, Object> map,
 			Model model) throws Exception {
 		try {
-			carInfoService.insertCarInfo(map);
+			carMdlService.insertCarInfo(map);
 		} catch(Exception e) {
 			logger.error(e.getMessage());
 		}
