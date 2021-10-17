@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" 		uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="form"	uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="fn"		uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fmt" 	uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <script>
 //menu 활성화
@@ -17,23 +19,29 @@ gnbActive = 'setting';
 	</div>
 	<!-- content -->
 	<div class="col-lg-12">
-		<input type="hidden" name="mnfNo" value="<c:out value="${ vo.mnfNo }"/>">
+		<input type="hidden" name="mnfNo" value="<c:out value="${ mnfMap.mnfNo }"/>">
 		<div class="mb-3 row">
 		 	<label for="inputPassword" class="col-sm-2 col-form-label">제조사명</label>
 			<div class="col-sm-10">
-			  <c:out value="${ vo.MNFNM }"/>
+			  <c:out value="${ mnfMap.mnfNm }"/>
 			</div>
 		</div>
 		<div class="mb-3 row">
 		 	<label for="inputPassword" class="col-sm-2 col-form-label">제조국</label>
 			<div class="col-sm-10">
-				<c:out value="${ vo.ntnCdKrNm } (${ vo.ntnCdEnNm })"/>
+				<c:out value="${ mnfMap.ntnCdKrNm } (${ mnfMap.ntnCdEnNm })"/>
 			</div>
 		</div>
 		<div class="mb-3 row">
 		 	<label for="inputPassword" class="col-sm-2 col-form-label">제조사 로고</label>
 		 	<div class="col-sm-10">
 
+			</div>
+		</div>
+		<div class="mb-3 row">
+		 	<label for="inputPassword" class="col-sm-2 col-form-label">등록일</label>
+			<div class="col-sm-10">
+				<c:out value="${ mnfMap.regDt }"/>
 			</div>
 		</div>
 		<div class="mb-3 row">

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ys.carInfo.mapper.MnfMapper">
+<mapper namespace="com.ys.carInfo.carMdl.mapper.MnfMapper">
 
-	<insert id="mergeMnf" parameterType="com.ys.carInfo.vo.MnfVo">
+	<insert id="mergeMnf" parameterType="com.ys.carInfo.carMdl.vo.MnfVo">
 		<selectKey resultType="String" keyProperty="mnfNo" order="BEFORE">
 			<choose>
 			<when test="mnfNo != null and mnfNo != ''">
@@ -58,15 +58,16 @@
 
 	<select id="selectMnf" parameterType="String" resultType="java.util.HashMap">
 		SELECT
-				MF.MNF_NO			mnfNo
-			  , MF.MNF_NM			mnfNm
-			  , MF.NTN_CD			ntnCd
-			  , NC.NTN_CD_KR_NM		ntnCdKrNm
-			  , NC.NTN_CD_EN_NM		ntnCdEnNm
-			  , AF.FILE_NO			fileNo
-			  , AF.FILE_PATH_NM		filePathNm
-			  , AF.FILE_NM			fileNm
-			  , AF.FILE_EXT_NM		fileExtNm
+				MF.MNF_NO			"mnfNo"
+              , MF.MNF_NM			"mnfNm"
+              , MF.NTN_CD			"ntnCd"
+              , NC.NTN_CD_KR_NM		"ntnCdKrNm"
+              , NC.NTN_CD_EN_NM		"ntnCdEnNm"
+              , TO_CHAR(MF.REG_DTT, 'YYYY-MM-DD') "regDt"
+              , AF.FILE_NO			"fileNo"
+              , AF.FILE_PATH_NM		"filePathNm"
+              , AF.FILE_NM			"fileNm"
+              , AF.FILE_EXT_NM		"fileExtNm"
 		FROM 	MNF			MF
 			  , NTN_CODE 	NC
 			  , ATCH_FILE 	AF
@@ -76,6 +77,44 @@
 		AND 	MF.NTN_CD = NC.NTN_CD
 		AND 	MF.MNF_NO = AF.FILE_IDNT_NO(+)
 		AND 	AF.DEL_YN(+) = 'N'
+	</select>
+
+	<select id="selectMnfList" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		SELECT  A.*
+		FROM    (
+		            SELECT
+		                    ROWNUM	"rn"
+		                  , A.*
+		            FROM    (
+		                        SELECT
+		                                MF.MNF_NO			"mnfNo"
+		                              , MF.MNF_NM			"mnfNm"
+		                              , MF.NTN_CD			"ntnCd"
+		                              , NC.NTN_CD_KR_NM		"ntnCdKrNm"
+		                              , NC.NTN_CD_EN_NM		"ntnCdEnNm"
+		                              , TO_CHAR(MF.REG_DTT, 'YYYY-MM-DD') "regDt"
+		                              , AF.FILE_NO			"fileNo"
+		                              , AF.FILE_PATH_NM		"filePathNm"
+		                              , AF.FILE_NM			"fileNm"
+		                              , AF.FILE_EXT_NM		"fileExtNm"
+		                              , COUNT(*) OVER() 	"totCnt"
+		                        FROM 	MNF			MF
+		                              , NTN_CODE 	NC
+		                              , ATCH_FILE 	AF
+		                        WHERE	1 = 1
+		                        AND 	MF.DEL_YN = 'N'
+		                        AND 	MF.NTN_CD = NC.NTN_CD
+		                        AND 	MF.MNF_NO = AF.FILE_IDNT_NO(+)
+		                        AND 	AF.DEL_YN(+) = 'N'
+		                        ORDER	BY	MNF_NO DESC
+		                    )   A
+		        <![CDATA[
+		            WHERE   ROWNUM <= #{search.listCnt,jdbcType=INTEGER} * #{search.cp,jdbcType=INTEGER}
+		        ]]>
+		        )   A
+	<![CDATA[
+		WHERE   "rn" > (#{search.cp,jdbcType=INTEGER} - 1) * #{search.listCnt,jdbcType=INTEGER}
+	]]>
 	</select>
 
 </mapper>

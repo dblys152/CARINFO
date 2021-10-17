@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" 		uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="form"	uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="fn"		uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fmt" 	uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <script>
 //menu 활성화
@@ -52,27 +54,24 @@ gnbActive = 'setting';
 			</tr>
 		</thead>
 		<tbody>
-			<tr>
-				<th scope="row">1</th>
-				<td></td>
-				<td>BMW</td>
-				<td>독일</td>
-				<td>2021-10-11</td>
-			</tr>
-			<tr>
-				<th scope="row">2</th>
-				<td></td>
-				<td>포르쉐</td>
-				<td>독일</td>
-				<td>2021-10-11</td>
-			</tr>
-			<tr>
-				<th scope="row">3</th>
-				<td></td>
-				<td>폭스바겐</td>
-				<td>독일</td>
-				<td>2021-10-11</td>
-			</tr>
+			<c:choose>
+			<c:when test="${ fn:length(mnfList) > 0 }">
+				<c:forEach items="${ mnfList }" var="i">
+				<tr>
+					<th scope="row"><c:out value="${ i.rn }"/></th>
+					<td></td>
+					<td><c:out value="${ i.mnfNm }"/></td>
+					<td><c:out value="${ i.ntnCdKrNm } (${ i.ntnCdEnNm })"/></td>
+					<td><c:out value="${ i.regDt }"/></td>
+				</tr>
+				</c:forEach>
+			</c:when>
+			<c:otherwise>
+				<tr>
+					<td class="text-center" colspan="5">등록된 데이터가 없습니다.</td>
+				</tr>
+			</c:otherwise>
+			</c:choose>
 		</tbody>
 		</table>
 		<!-- Pagination-->

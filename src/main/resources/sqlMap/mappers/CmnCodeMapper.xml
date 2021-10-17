@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ys.common.mapper.CmnCodeMapper">
+<mapper namespace="com.ys.carInfo.common.mapper.CmnCodeMapper">
 
-	<select id="selectCmnCdList" parameterType="HashMap" resultType="com.ys.common.vo.CmnCodeVo">
+	<select id="selectCmnCdList" parameterType="HashMap" resultType="com.ys.carInfo.common.vo.CmnCodeVo">
 		SELECT
 				CMN_CD
 			  , CMN_CD_NM
