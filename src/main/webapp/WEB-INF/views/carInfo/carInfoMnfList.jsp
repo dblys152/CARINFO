@@ -36,7 +36,7 @@ gnbActive = 'setting';
 			  </div>
 			</div>
 		</div>
-		<table class="table table-hover">
+		<table class="table table-hover" id="mnfTbl">
 		<colgroup>
 			<col width = "50px">
 			<col width = "80px">
@@ -53,26 +53,7 @@ gnbActive = 'setting';
 				<th scope="col">등록일</th>
 			</tr>
 		</thead>
-		<tbody>
-			<c:choose>
-			<c:when test="${ fn:length(mnfList) > 0 }">
-				<c:forEach items="${ mnfList }" var="i">
-				<tr>
-					<th scope="row"><c:out value="${ i.rn }"/></th>
-					<td></td>
-					<td><c:out value="${ i.mnfNm }"/></td>
-					<td><c:out value="${ i.ntnCdKrNm } (${ i.ntnCdEnNm })"/></td>
-					<td><c:out value="${ i.regDt }"/></td>
-				</tr>
-				</c:forEach>
-			</c:when>
-			<c:otherwise>
-				<tr>
-					<td class="text-center" colspan="5">등록된 데이터가 없습니다.</td>
-				</tr>
-			</c:otherwise>
-			</c:choose>
-		</tbody>
+		<tbody></tbody>
 		</table>
 		<!-- Pagination-->
 		<nav aria-label="Pagination">
@@ -89,3 +70,28 @@ gnbActive = 'setting';
 		</nav>
 	</div>
 </div>
+
+<script>
+window.addEventListener('DOMContentLoaded', () => {
+	listCore();
+});
+
+function listCore() {
+	axios.get('mnfListCore')
+	.then((res) => {
+		let tbl = document.querySelector('#mnfTbl > tbody');
+		tbl.innerHTML = res.data;
+
+		let trs = document.querySelectorAll('#mnfTbl > tbody tr');
+	    for(tr of trs) {
+			tr.addEventListener('click', () => {
+				location.href="mnfView?mnfNo=" + tr.querySelector('input[name="mnfNo"]').value
+			});
+	    }
+
+	}).catch((err) => {
+    	console.log(err);
+	});
+}
+
+</script>

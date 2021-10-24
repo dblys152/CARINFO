@@ -19,17 +19,17 @@ gnbActive = 'setting';
 	</div>
 	<!-- content -->
 	<div class="col-lg-12">
-		<input type="hidden" name="mnfNo" value="<c:out value="${ mnfMap.mnfNo }"/>">
+		<input type="hidden" name="mnfNo" value="<c:out value="${ mnfVo.mnfNo }"/>">
 		<div class="mb-3 row">
 		 	<label for="inputPassword" class="col-sm-2 col-form-label">제조사명</label>
 			<div class="col-sm-10">
-			  <c:out value="${ mnfMap.mnfNm }"/>
+			  <c:out value="${ mnfVo.mnfNm }"/>
 			</div>
 		</div>
 		<div class="mb-3 row">
 		 	<label for="inputPassword" class="col-sm-2 col-form-label">제조국</label>
 			<div class="col-sm-10">
-				<c:out value="${ mnfMap.ntnCdKrNm } (${ mnfMap.ntnCdEnNm })"/>
+				<c:out value="${ mnfVo.ntnCdKrNm } (${ mnfVo.ntnCdEnNm })"/>
 			</div>
 		</div>
 		<div class="mb-3 row">
@@ -41,7 +41,7 @@ gnbActive = 'setting';
 		<div class="mb-3 row">
 		 	<label for="inputPassword" class="col-sm-2 col-form-label">등록일</label>
 			<div class="col-sm-10">
-				<c:out value="${ mnfMap.regDt }"/>
+				<c:out value="${ mnfVo.regDt }"/>
 			</div>
 		</div>
 		<div class="mb-3 row">
@@ -62,29 +62,5 @@ gnbActive = 'setting';
 <script>
 window.addEventListener('DOMContentLoaded', () => {
 
-	document.getElementById('mnfSave').addEventListener('click', () => {
-		let mnfNmInp = document.querySelector('input[name="mnfNm"]');
-		if(mnfNmInp.value == '') {
-			alert("제조사명을 입력해주세요.");
-			mnfNmInp.focus();
-		} else {
-			let dataForm = {
-				"mnfNo": document.querySelector('input[name="mnfNo"]').value
-			  , "mnfNm": mnfNmInp.value
-			  , "ntnCd": document.querySelector('select[name="ntnCd"]').value
-			};
-			fn_saveMnf(dataForm);
-		}
-	});
-
 });
-
-function fn_saveMnf(dataForm) {
-	axios.post('mnfWrite', dataForm)
-	.then((res) => {
-		location.href="mnfView?mnfNo=" + res.data.mnfNo;
-	}).catch((err) => {
-    	console.log(err);
-	});
-}
 </script>

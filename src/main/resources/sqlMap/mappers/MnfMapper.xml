@@ -56,7 +56,7 @@
 						)
 	</insert>
 
-	<select id="selectMnf" parameterType="String" resultType="java.util.HashMap">
+	<select id="selectMnf" parameterType="String" resultType="com.ys.carInfo.carMdl.vo.MnfVo">
 		SELECT
 				MF.MNF_NO			"mnfNo"
               , MF.MNF_NM			"mnfNm"

@@ -11,7 +11,7 @@ public interface MnfService {
 	public String mergeMnf(MnfVo mnfVo) throws Exception;
 
 	/* 제조사 조회 */
-	public Map<String, Object> selectMnf(String mnfNo) throws Exception;
+	public MnfVo selectMnf(String mnfNo) throws Exception;
 
 	/* 제조사 목록 조회 */
 	public List<Map<String, Object>> selectMnfList(Map<String, Object> map) throws Exception;

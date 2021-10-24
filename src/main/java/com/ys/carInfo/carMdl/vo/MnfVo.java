@@ -14,8 +14,11 @@ public class MnfVo implements Serializable {
 	private String	mnfNo;
 	private String	mnfNm;
 	private String 	ntnCd;
+	private String 	ntnCdKrNm;
+	private String 	ntnCdEnNm;
 	private Integer regNo;
 	private Integer modNo;
+	private String 	regDt;
 
 	private MultipartFile file;
 }

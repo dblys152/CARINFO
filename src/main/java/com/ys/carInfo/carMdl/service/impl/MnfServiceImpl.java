@@ -26,7 +26,7 @@ public class MnfServiceImpl implements MnfService {
 	}
 
 	@Override
-	public Map<String, Object> selectMnf(String mnfNo) throws Exception {
+	public MnfVo selectMnf(String mnfNo) throws Exception {
 		return mnfMapper.selectMnf(mnfNo);
 	}
 

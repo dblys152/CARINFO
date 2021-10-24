@@ -12,7 +12,7 @@ public interface MnfMapper {
 
 	public void mergeMnf(MnfVo mnfVo) throws Exception;
 
-	public Map<String, Object> selectMnf(String mnfNo) throws Exception;
+	public MnfVo selectMnf(String mnfNo) throws Exception;
 
 	public List<Map<String, Object>> selectMnfList(Map<String, Object> map) throws Exception;
 }

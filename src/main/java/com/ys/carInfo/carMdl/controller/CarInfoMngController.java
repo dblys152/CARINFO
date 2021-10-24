@@ -52,21 +52,33 @@ public class CarInfoMngController {
 
 		return "/form/carInfo/carInfoMnfList";
 	}
+	@RequestMapping(value="/mnfListCore", method=RequestMethod.GET)
+	public String mnfListCore(
+			@ModelAttribute(value="searchVo") SearchVo searchVo,
+			Model model) throws Exception {
+
+		Map<String, Object> map = new HashMap<>();
+		map.put("search", searchVo);
+		List<Map<String, Object>> mnfList = mnfService.selectMnfList(map);
+		model.addAttribute("mnfList", mnfList);
+
+		return "/empty/carInfo/carInfoMnfListCore";
+	}
 
 	/* 제조사 등록 화면 */
 	@RequestMapping(value="/mnfWrite", method=RequestMethod.GET)
 	public String mnfWrite(
+			@ModelAttribute("mnfVo") MnfVo mnfVo,
 			@RequestParam(value="mnfNo", required=false) String mnfNo,
 			Model model) throws Exception {
 
 		List<NtnCodeVo> ntnCdList = codeService.selectNtnCdList(new HashMap<>());
 		model.addAttribute("ntnCdList", ntnCdList);
 
-		Map<String, Object> mnfMap = new HashMap<>();
 		if(mnfNo != null && !mnfNo.trim().equals("")) {
-			mnfMap = mnfService.selectMnf(mnfNo);
-			model.addAttribute("vo", mnfMap);
+			mnfVo = mnfService.selectMnf(mnfNo);
 		}
+		model.addAttribute("mnfVo", mnfVo);
 
 		return "/form/carInfo/carInfoMnfWrite";
 	}
@@ -74,7 +86,7 @@ public class CarInfoMngController {
 	@RequestMapping(value="/mnfWrite", method=RequestMethod.POST)
 	@ResponseBody
 	public Map<String, Object> insertMnf(
-			@RequestBody MnfVo mnfVo) throws Exception {
+			@ModelAttribute MnfVo mnfVo) throws Exception {
 
 		Map<String, Object> map = new HashMap<>();
 		try {
@@ -93,8 +105,8 @@ public class CarInfoMngController {
 			@RequestParam(value="mnfNo") String mnfNo,
 			Model model) throws Exception {
 
-		Map<String, Object> mnfMap = mnfService.selectMnf(mnfNo);
-		model.addAttribute("mnfMap", mnfMap);
+		MnfVo mnfVo = mnfService.selectMnf(mnfNo);
+		model.addAttribute("mnfVo", mnfVo);
 
 		return "/form/carInfo/carInfoMnfView";
 	}
