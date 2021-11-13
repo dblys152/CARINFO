@@ -26,3 +26,12 @@
 </c:otherwise>
 </c:choose>
 
+<script>
+$(document).ready(() => {
+	$('#mnfTbl > tbody tr').on('click', (e) => {
+		location.href="mnfView?mnfNo=" + $(e.currentTarget).find('input[name="mnfNo"]').val();
+	});
+
+	paging(10, '${ totCnt }', '${ listCnt }', '${ pageNo }');
+});
+</script>

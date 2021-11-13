@@ -80,7 +80,7 @@
 	</select>
 
 	<select id="selectMnfList" parameterType="java.util.HashMap" resultType="java.util.HashMap">
-		SELECT  A.*
+		SELECT	A.*
 		FROM    (
 		            SELECT
 		                    ROWNUM	"rn"
@@ -106,14 +106,25 @@
 		                        AND 	MF.NTN_CD = NC.NTN_CD
 		                        AND 	MF.MNF_NO = AF.FILE_IDNT_NO(+)
 		                        AND 	AF.DEL_YN(+) = 'N'
+		                        AND 	(
+		                        			#{search.schText,jdbcType=VARCHAR} IS NULL OR
+			                        		EXISTS	(
+			                        					SELECT	'X'
+			                        					FROM 	MNF		E
+                        								WHERE	1 = 1
+                        								AND 	E.MNF_NM LIKE '%' || #{search.schText,jdbcType=VARCHAR} || '%'
+                        								AND 	E.DEL_YN = 'N'
+			                        					AND		MF.MNF_NO = E.MNF_NO
+			                        				)
+		                        		)
 		                        ORDER	BY	MNF_NO DESC
 		                    )   A
 		        <![CDATA[
-		            WHERE   ROWNUM <= #{search.listCnt,jdbcType=INTEGER} * #{search.cp,jdbcType=INTEGER}
+		            WHERE   ROWNUM <= #{search.listCnt,jdbcType=INTEGER} * #{search.pageNo,jdbcType=INTEGER}
 		        ]]>
 		        )   A
 	<![CDATA[
-		WHERE   "rn" > (#{search.cp,jdbcType=INTEGER} - 1) * #{search.listCnt,jdbcType=INTEGER}
+		WHERE   "rn" > (#{search.pageNo,jdbcType=INTEGER} - 1) * #{search.listCnt,jdbcType=INTEGER}
 	]]>
 	</select>
 

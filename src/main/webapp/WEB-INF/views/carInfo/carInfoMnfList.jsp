@@ -27,14 +27,14 @@ gnbActive = 'setting';
 			</div>
 		</div>
 		<div class="col-md-4">
+			<form:form modelAttribute="searchVo" method="get">
+			<form:hidden path="pageNo"/>
 			<div class="input-group mb-3">
-			  <input class="form-control" type="text" placeholder="Search" aria-label="Search">
-			  <div class="input-group-append">
-			    <button type="button" class="input-group-text lime lighten-2">
-			    	<i class="fas fa-search"></i>
-			    </button>
-			  </div>
+			  <form:input path="schText" class="form-control" placeholder="Search" aria-label="Search"/>
+			  <button type="button" id="schBtn" class="btn btn-success">검색</button>
+			  <a href="mnfList" class="btn btn-outline-secondary">초기화</a>
 			</div>
+			</form:form>
 		</div>
 		<table class="table table-hover" id="mnfTbl">
 		<colgroup>
@@ -58,39 +58,46 @@ gnbActive = 'setting';
 		<!-- Pagination-->
 		<nav aria-label="Pagination">
 			<hr class="my-0" />
-			<ul class="pagination justify-content-center my-4">
-				<li class="page-item disabled"><a class="page-link" href="#" tabindex="-1" aria-disabled="true">Newer</a></li>
-				<li class="page-item active" aria-current="page"><a class="page-link" href="#!">1</a></li>
-				<li class="page-item"><a class="page-link" href="#!">2</a></li>
-				<li class="page-item"><a class="page-link" href="#!">3</a></li>
-				<li class="page-item disabled"><a class="page-link" href="#!">...</a></li>
-				<li class="page-item"><a class="page-link" href="#!">15</a></li>
-				<li class="page-item"><a class="page-link" href="#!">Older</a></li>
+			<ul class="pagination justify-content-center my-4" id="paging">
+
 			</ul>
 		</nav>
 	</div>
 </div>
 
 <script>
-window.addEventListener('DOMContentLoaded', () => {
+$(document).ready(() => {
 	listCore();
+
+	$('#schBtn').on('click', () => {
+		list(1);
+	});
+	$('#schText').on('keydown', (e) => {
+		if(e.keyCode==13) list(1);
+	});
 });
 
+function list(n) {
+	if(n == null) n = 1;
+	let form = $('#searchVo');
+	form.find('input[name="pageNo"]').val(n);
+	form.submit();
+}
+
 function listCore() {
-	axios.get('mnfListCore')
-	.then((res) => {
-		let tbl = document.querySelector('#mnfTbl > tbody');
-		tbl.innerHTML = res.data;
-
-		let trs = document.querySelectorAll('#mnfTbl > tbody tr');
-	    for(tr of trs) {
-			tr.addEventListener('click', () => {
-				location.href="mnfView?mnfNo=" + tr.querySelector('input[name="mnfNo"]').value
-			});
-	    }
-
-	}).catch((err) => {
-    	console.log(err);
+	let dataForm = $('#searchVo').serialize();
+	$.ajax({
+		url: 'mnfListCore',
+		type: 'GET',
+		data: dataForm,
+		//dataType:'json',
+		//contentType: 'application/json',
+		success: function(result) {
+			$('#mnfTbl > tbody').html(result);
+		},
+		error: function(request,status,error) {
+			 console.log(request.responseText);
+      	}
 	});
 }
 

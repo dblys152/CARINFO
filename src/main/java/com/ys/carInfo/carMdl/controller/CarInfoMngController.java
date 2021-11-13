@@ -45,10 +45,9 @@ public class CarInfoMngController {
 			@ModelAttribute(value="searchVo") SearchVo searchVo,
 			Model model) throws Exception {
 
-		Map<String, Object> map = new HashMap<>();
-		map.put("search", searchVo);
-		List<Map<String, Object>> mnfList = mnfService.selectMnfList(map);
-		model.addAttribute("mnfList", mnfList);
+		if(searchVo.getPageNo() == null) {
+			searchVo.setPageNo(1);
+		}
 
 		return "/form/carInfo/carInfoMnfList";
 	}
@@ -61,6 +60,10 @@ public class CarInfoMngController {
 		map.put("search", searchVo);
 		List<Map<String, Object>> mnfList = mnfService.selectMnfList(map);
 		model.addAttribute("mnfList", mnfList);
+
+		model.addAttribute("totCnt", (mnfList != null && mnfList.size() > 0 ? mnfList.get(0).get("totCnt") : 0));
+		model.addAttribute("listCnt", searchVo.getListCnt());
+		model.addAttribute("pageNo", searchVo.getPageNo());
 
 		return "/empty/carInfo/carInfoMnfListCore";
 	}
