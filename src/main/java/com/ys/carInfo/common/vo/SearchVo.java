@@ -9,7 +9,7 @@ public class SearchVo implements Serializable {
 	private static final long serialVersionUID = -7926953500073464929L;
 
 	private Integer pageNo;
-	private Integer listCnt = 5;
+	private Integer listCnt = 10;
 	private String	schText;
 
 

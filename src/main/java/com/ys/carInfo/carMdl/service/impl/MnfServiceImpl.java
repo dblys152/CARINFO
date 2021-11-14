@@ -10,10 +10,12 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ys.carInfo.carMdl.mapper.MnfMapper;
 import com.ys.carInfo.carMdl.service.MnfService;
 import com.ys.carInfo.carMdl.vo.MnfVo;
+import com.ys.carInfo.common.service.FileService;
 
 @Service("mnfService")
 public class MnfServiceImpl implements MnfService {
 
+	@Autowired FileService fileService;
 	@Autowired private MnfMapper mnfMapper;
 
 	@Override
@@ -22,7 +24,11 @@ public class MnfServiceImpl implements MnfService {
 		mnfVo.setRegNo(0);
 		mnfVo.setModNo(0);
 		mnfMapper.mergeMnf(mnfVo);
-		return mnfVo.getMnfNo();
+		String mnfNo = mnfVo.getMnfNo();
+
+		fileService.uploadFile(mnfVo.getFile(), "MNF", "100101", mnfNo);
+
+		return mnfNo;
 	}
 
 	@Override

@@ -89,6 +89,7 @@ function fn_saveMnf(dataForm) {
 	.then((res) => {
 		location.href="mnfView?mnfNo=" + res.data.mnfNo;
 	}).catch((err) => {
+		alert('저장 실패하였습니다.');
     	console.log(err);
 	});
 }
