@@ -58,9 +58,7 @@ gnbActive = 'setting';
 		<!-- Pagination-->
 		<nav aria-label="Pagination">
 			<hr class="my-0" />
-			<ul class="pagination justify-content-center my-4" id="paging">
-
-			</ul>
+			<ul class="pagination justify-content-center my-4" id="paging"></ul>
 		</nav>
 	</div>
 </div>

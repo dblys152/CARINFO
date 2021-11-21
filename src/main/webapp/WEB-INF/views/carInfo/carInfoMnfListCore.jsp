@@ -20,7 +20,7 @@
 	</c:forEach>
 </c:when>
 <c:otherwise>
-	<tr>
+	<tr class="nodata">
 		<td class="text-center" colspan="5">등록된 데이터가 없습니다.</td>
 	</tr>
 </c:otherwise>
@@ -28,7 +28,7 @@
 
 <script>
 $(document).ready(() => {
-	$('#mnfTbl > tbody tr').on('click', (e) => {
+	$('#mnfTbl > tbody tr:not(.nodata)').on('click', (e) => {
 		location.href="mnfView?mnfNo=" + $(e.currentTarget).find('input[name="mnfNo"]').val();
 	});
 
