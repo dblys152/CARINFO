@@ -1,4 +1,4 @@
-package com.ys.global.exception;
+package com.ys.global.error;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;

@@ -15,6 +15,7 @@ import com.ys.carInfo.common.service.CodeService;
 import com.ys.carInfo.common.service.FileService;
 import com.ys.carInfo.common.vo.CmnCodeVo;
 import com.ys.carInfo.common.vo.NtnCodeVo;
+import com.ys.global.error.exception.EntityNotFoundException;
 
 @Service("fileService")
 public class FileServiceImpl implements FileService {
@@ -28,8 +29,9 @@ public class FileServiceImpl implements FileService {
 	@Autowired FileMapper fileMapper;
 
 	@Override
-	public void uploadFile(MultipartFile file, String tblNm, String fileTyCd, String fileIdntNo) {
-
+	public void uploadFile(MultipartFile file, String tblNm, String fileTyCd, String fileIdntNo) throws Exception {
+		if(file.isEmpty())
+			throw new EntityNotFoundException("file not found");
 
 	}
 

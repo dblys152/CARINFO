@@ -7,6 +7,8 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -22,6 +24,7 @@ import com.ys.carInfo.carMdl.vo.MnfVo;
 import com.ys.carInfo.common.service.CodeService;
 import com.ys.carInfo.common.vo.NtnCodeVo;
 import com.ys.carInfo.common.vo.SearchVo;
+import com.ys.global.error.exception.EntityNotFoundException;
 
 @Controller
 @RequestMapping("/carInfoMng")
@@ -88,18 +91,22 @@ public class CarInfoMngController {
 
 	@RequestMapping(value="/mnfWrite", method=RequestMethod.POST)
 	@ResponseBody
-	public Map<String, Object> insertMnf(
+	public ResponseEntity<Map<String, Object>> insertMnf(
 			@ModelAttribute MnfVo mnfVo) throws Exception {
 
 		Map<String, Object> map = new HashMap<>();
 		try {
 			String mnfNo = mnfService.mergeMnf(mnfVo);
 			map.put("mnfNo", mnfNo);
+		} catch(EntityNotFoundException e) {
+			logger.error(e.getMessage(), e);
+			throw e;
 		} catch(Exception e) {
 			logger.error(e.getMessage(), e);
+			throw e;
 		}
 
-		return map;
+		return ResponseEntity.ok(map);
 	}
 
 	/* 제조사 상세 화면 */

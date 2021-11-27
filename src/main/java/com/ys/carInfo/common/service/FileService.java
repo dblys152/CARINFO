@@ -10,6 +10,6 @@ import com.ys.carInfo.common.vo.NtnCodeVo;
 
 public interface FileService {
 
-	public void uploadFile(MultipartFile file, String tblNm, String fileTyCd, String fileIdnfNo);
+	public void uploadFile(MultipartFile file, String tblNm, String fileTyCd, String fileIdnfNo) throws Exception;
 
 }

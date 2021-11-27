@@ -11,6 +11,7 @@ import com.ys.carInfo.carMdl.mapper.MnfMapper;
 import com.ys.carInfo.carMdl.service.MnfService;
 import com.ys.carInfo.carMdl.vo.MnfVo;
 import com.ys.carInfo.common.service.FileService;
+import com.ys.global.error.exception.EntityNotFoundException;
 
 @Service("mnfService")
 public class MnfServiceImpl implements MnfService {
@@ -26,7 +27,13 @@ public class MnfServiceImpl implements MnfService {
 		mnfMapper.mergeMnf(mnfVo);
 		String mnfNo = mnfVo.getMnfNo();
 
-		fileService.uploadFile(mnfVo.getFile(), "MNF", "100101", mnfNo);
+		try {
+			fileService.uploadFile(mnfVo.getFile(), "MNF", "100101", mnfNo);
+		} catch(EntityNotFoundException e) {
+			throw e;
+		} catch(Exception e) {
+			throw e;
+		}
 
 		return mnfNo;
 	}
