@@ -72,7 +72,7 @@ public class CarInfoMngController {
 		return "/empty/carInfo/carInfoMnfListCore";
 	}
 
-	/* 제조사 등록 화면 */
+	/* 제조사 등록 및 수정 화면 */
 	@RequestMapping(value="/mnfWrite", method=RequestMethod.GET)
 	public String mnfWrite(
 			@ModelAttribute("mnfVo") MnfVo mnfVo,
@@ -90,6 +90,7 @@ public class CarInfoMngController {
 		return "/form/carInfo/carInfoMnfWrite";
 	}
 
+	/* 제조사 등록 및 수정 */
 	@RequestMapping(value="/mnfWrite", method=RequestMethod.POST)
 	@ResponseBody
 	public ResponseEntity<Map<String, Object>> insertMnf(
@@ -115,8 +116,24 @@ public class CarInfoMngController {
 			Model model) throws Exception {
 
 		MnfVo mnfVo = mnfService.selectMnf(mnfNo);
+		if(mnfVo == null) {
+
+		}
 		model.addAttribute("mnfVo", mnfVo);
 
 		return "/form/carInfo/carInfoMnfView";
+	}
+
+	/* 제조사 삭제 */
+	@RequestMapping(value="/mnfDel", method=RequestMethod.POST)
+	@ResponseBody
+	public ResponseEntity<Map<String, Object>> mnfDel(
+			@ModelAttribute MnfVo mnfVo) throws Exception {
+
+		if(mnfVo.getMnfNo() == null)
+			throw new EntityNotFoundException("mnfNo not found");
+		mnfService.deleteMnf(mnfVo.getMnfNo());
+
+		return ResponseEntity.ok(new HashMap<>());
 	}
 }

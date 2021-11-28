@@ -10,4 +10,6 @@ public interface FileService {
 
 	public FileVo selectFile(Integer fileNo) throws Exception;
 
+	public void deleteFile(String fileIdntNo) throws Exception;
+
 }

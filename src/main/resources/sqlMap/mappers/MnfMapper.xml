@@ -65,6 +65,7 @@
               , NC.NTN_CD_EN_NM		"ntnCdEnNm"
               , TO_CHAR(MF.REG_DTT, 'YYYY-MM-DD') "regDt"
               , AF.FILE_NO			"fileNo"
+              , AF.ORG_FILE_NM 		"fileNm"
 		FROM 	MNF			MF
 			  , NTN_CODE 	NC
 			  , ATCH_FILE 	AF
@@ -91,6 +92,7 @@
 		                              , NC.NTN_CD_EN_NM		"ntnCdEnNm"
 		                              , TO_CHAR(MF.REG_DTT, 'YYYY-MM-DD') "regDt"
 		                              , AF.FILE_NO			"fileNo"
+		                              , AF.ORG_FILE_NM 		"fileNm"
 		                              , COUNT(*) OVER() 	"totCnt"
 		                        FROM 	MNF			MF
 		                              , NTN_CODE 	NC
@@ -121,5 +123,14 @@
 		WHERE   "rn" > (#{search.pageNo,jdbcType=INTEGER} - 1) * #{search.listCnt,jdbcType=INTEGER}
 	]]>
 	</select>
+
+	<update id="deleteMnf" parameterType="java.util.HashMap">
+		UPDATE	MNF
+		SET 	DEL_YN = 'Y'
+			  , MOD_NO = #{modNo,jdbcType=INTEGER}
+			  , MOD_DTT = SYSDATE
+		WHERE	1 = 1
+		AND 	MNF_NO = #{mnfNo,jdbcType=VARCHAR}
+	</update>
 
 </mapper>

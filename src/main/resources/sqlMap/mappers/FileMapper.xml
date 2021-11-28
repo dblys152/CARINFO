@@ -36,9 +36,9 @@
 		  , #{fileSize,jdbcType=INTEGER}
 		  , 0
 		  , #{caption,jdbcType=VARCHAR}
-		  , #{regNo,jdbcType=VARCHAR}
+		  , #{regNo,jdbcType=INTEGER}
 		  , SYSDATE
-		  , #{modNo,jdbcType=VARCHAR}
+		  , #{modNo,jdbcType=INTEGER}
 		  , SYSDATE
 		)
 	</insert>
@@ -63,5 +63,14 @@
 		AND 	FILE_NO = #{fileNo,jdbcType=INTEGER}
 		AND 	DEL_YN = 'N'
 	</select>
+
+	<update id="deleteFile" parameterType="java.util.HashMap">
+		UPDATE	ATCH_FILE
+		SET 	DEL_YN = 'Y'
+			  , MOD_NO = #{modNo,jdbcType=INTEGER}
+			  , MOD_DTT = SYSDATE
+		WHERE	1 = 1
+		AND 	FILE_IDNT_NO = #{fileIdntNo,jdbcType=VARCHAR}
+	</update>
 
 </mapper>

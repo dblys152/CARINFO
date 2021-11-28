@@ -15,4 +15,6 @@ public interface FileMapper {
 
 	public FileVo selectFile(Integer fileNo) throws Exception;
 
+	public void deleteFile(Map<String, Object> map) throws Exception;
+
 }

@@ -41,6 +41,7 @@ gnbActive = 'setting';
 		 	<label for="inputPassword" class="col-sm-2 col-form-label">제조사 로고<span class="text-danger">*</span></label>
 		 	<div class="col-sm-10">
 				<label for="formFile" class="form-label">로고 크기 50x50</label>
+				<c:out value="${ mnfVo.fileNm }"/>
 				<input class="form-control upload_img" type="file" name="file">
 			</div>
 		</div>

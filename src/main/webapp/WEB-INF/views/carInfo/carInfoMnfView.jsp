@@ -48,7 +48,7 @@ gnbActive = 'setting';
 			<div class="d-flex justify-content-between bd-highlight mb-3">
 				<div></div>
 				<div>
-					<a href="mnfWrite?mnfNo=${ param.mnfNo }" class="btn btn-info">수정</a>
+					<a href="mnfWrite?mnfNo=${ mnfVo.mnfNo }" class="btn btn-info">수정</a>
 					<a href="mnfList" class="btn btn-outline-secondary">목록</a>
 				</div>
 				<div>
@@ -61,6 +61,23 @@ gnbActive = 'setting';
 
 <script>
 window.addEventListener('DOMContentLoaded', () => {
+	document.getElementById('mnfDel').addEventListener('click', () => {
+		if(confirm('제조사를 삭제하시겠습니까?')) {
+			let dataForm = new FormData();
+			dataForm.append("mnfNo", "${ mnfVo.mnfNo }");
 
+			fn_delMnf(dataForm);
+		}
+	});
 });
+
+function fn_delMnf(dataForm) {
+	axios.post('mnfDel', dataForm, {headers: {'Content-Type': 'multipart/form-data'}})
+	.then((res) => {
+		location.href="mnfList";
+	}).catch((err) => {
+		alert('삭제 실패하였습니다.');
+    	console.log(err);
+	});
+}
 </script>

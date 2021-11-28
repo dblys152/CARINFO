@@ -22,4 +22,5 @@ public class MnfVo implements Serializable {
 
 	private MultipartFile file;
 	private String 	fileNo;
+	private String 	fileNm;
 }

@@ -8,6 +8,8 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,6 +84,14 @@ public class FileServiceImpl implements FileService {
 	@Override
 	public FileVo selectFile(Integer fileNo) throws Exception {
 		return fileMapper.selectFile(fileNo);
+	}
+
+	@Override
+	public void deleteFile(String fileIdntNo) throws Exception {
+		Map<String, Object> map = new HashMap<>();
+		map.put("modNo", 0);
+		map.put("fileIdntNo", fileIdntNo);
+		fileMapper.deleteFile(map);
 	}
 
 

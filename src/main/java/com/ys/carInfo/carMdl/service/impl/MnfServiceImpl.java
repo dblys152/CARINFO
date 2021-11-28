@@ -1,6 +1,7 @@
 package com.ys.carInfo.carMdl.service.impl;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -23,6 +24,9 @@ public class MnfServiceImpl implements MnfService {
 	@Override
 	@Transactional
 	public String mergeMnf(MnfVo mnfVo) throws Exception {
+		if(mnfVo.getFile().isEmpty())
+			throw new EntityNotFoundException("file not found");
+
 		mnfVo.setRegNo(0);
 		mnfVo.setModNo(0);
 		mnfMapper.mergeMnf(mnfVo);
@@ -47,6 +51,16 @@ public class MnfServiceImpl implements MnfService {
 	@Override
 	public List<Map<String, Object>> selectMnfList(Map<String, Object> map) throws Exception {
 		return mnfMapper.selectMnfList(map);
+	}
+
+	@Override
+	@Transactional
+	public void deleteMnf(String mnfNo) throws Exception {
+		Map<String, Object> map = new HashMap<>();
+		map.put("modNo", 0);
+		map.put("mnfNo", mnfNo);
+		fileService.deleteFile(mnfNo);
+		mnfMapper.deleteMnf(map);
 	}
 
 }

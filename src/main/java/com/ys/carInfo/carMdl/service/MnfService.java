@@ -16,4 +16,7 @@ public interface MnfService {
 	/* 제조사 목록 조회 */
 	public List<Map<String, Object>> selectMnfList(Map<String, Object> map) throws Exception;
 
+	/* 제조사 삭제 */
+	public void deleteMnf(String mnfNo) throws Exception;
+
 }
