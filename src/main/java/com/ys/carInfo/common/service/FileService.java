@@ -1,15 +1,13 @@
 package com.ys.carInfo.common.service;
 
-import java.util.List;
-import java.util.Map;
-
 import org.springframework.web.multipart.MultipartFile;
 
-import com.ys.carInfo.common.vo.CmnCodeVo;
-import com.ys.carInfo.common.vo.NtnCodeVo;
+import com.ys.carInfo.common.vo.FileVo;
 
 public interface FileService {
 
-	public void uploadFile(MultipartFile file, String tblNm, String fileTyCd, String fileIdnfNo) throws Exception;
+	public Integer uploadFile(MultipartFile file, String tblNm, String fileTyCd, String fileIdnfNo) throws Exception;
+
+	public FileVo selectFile(Integer fileNo) throws Exception;
 
 }

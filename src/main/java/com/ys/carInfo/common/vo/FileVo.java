@@ -19,7 +19,7 @@ public class FileVo implements Serializable {
 	private String	fileNm;
 	private String	fileExtNm;
 	private String	mimeTy;
-	private Integer fileSize;
+	private long 	fileSize;
 	private Integer fileDownCnt;
 	private String	caption;
 	private Integer regNo;

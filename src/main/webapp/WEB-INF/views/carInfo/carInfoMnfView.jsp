@@ -35,7 +35,7 @@ gnbActive = 'setting';
 		<div class="mb-3 row">
 		 	<label for="inputPassword" class="col-sm-2 col-form-label">제조사 로고</label>
 		 	<div class="col-sm-10">
-
+				<img src="/file/images/<c:out value="${ mnfVo.fileNo }"/>" class="logo" style="width:50px;height:50px">
 			</div>
 		</div>
 		<div class="mb-3 row">

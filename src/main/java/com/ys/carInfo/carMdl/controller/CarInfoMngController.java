@@ -1,5 +1,6 @@
 package com.ys.carInfo.carMdl.controller;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,7 +30,7 @@ import com.ys.global.error.exception.EntityNotFoundException;
 @Controller
 @RequestMapping("/carInfoMng")
 public class CarInfoMngController {
-	 private static final Logger logger = LoggerFactory.getLogger(CarInfoMngController.class);
+	private static final Logger logger = LoggerFactory.getLogger(CarInfoMngController.class);
 
 	@Autowired private CarMdlService carMdlService;
 	@Autowired private MnfService mnfService;
@@ -99,10 +100,8 @@ public class CarInfoMngController {
 			String mnfNo = mnfService.mergeMnf(mnfVo);
 			map.put("mnfNo", mnfNo);
 		} catch(EntityNotFoundException e) {
-			logger.error(e.getMessage(), e);
 			throw e;
-		} catch(Exception e) {
-			logger.error(e.getMessage(), e);
+		} catch(IOException e) {
 			throw e;
 		}
 

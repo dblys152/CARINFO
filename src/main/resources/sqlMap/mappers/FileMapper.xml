@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ys.carInfo.common.mapper.FileMapper">
+
+	<insert id="insertFile" parameterType="com.ys.carInfo.common.vo.FileVo" useGeneratedKeys="true" keyColumn="FILE_NO" keyProperty="fileNo">
+		INSERT	INTO ATCH_FILE	(
+			FILE_NO
+		  , TBL_NM
+		  , FILE_IDNT_NO
+		  , FILE_TY_CD
+		  , FILE_SRT_ORD
+		  , FILE_PATH_NM
+		  , ORG_FILE_NM
+		  , FILE_NM
+		  , FILE_EXT_NM
+		  , MIME_TY
+		  , FILE_SIZE
+		  , FILE_DOWN_CNT
+		  , CAPTION
+		  , REG_NO
+		  , REG_DTT
+		  , MOD_NO
+		  , MOD_DTT
+		)
+		VALUES	(
+			ATCH_FILE_SEQ.NEXTVAL
+		  , #{tblNm,jdbcType=VARCHAR}
+		  , #{fileIdntNo,jdbcType=VARCHAR}
+		  , #{fileTyCd,jdbcType=VARCHAR}
+		  , (SELECT NVL(MAX(FILE_SRT_ORD) + 1, 1) FROM ATCH_FILE WHERE FILE_IDNT_NO = #{fileIdntNo,jdbcType=VARCHAR})
+		  , #{filePathNm,jdbcType=VARCHAR}
+		  , #{orgFileNm,jdbcType=VARCHAR}
+		  , #{fileNm,jdbcType=VARCHAR}
+		  , #{fileExtNm,jdbcType=VARCHAR}
+		  , #{mimeTy,jdbcType=VARCHAR}
+		  , #{fileSize,jdbcType=INTEGER}
+		  , 0
+		  , #{caption,jdbcType=VARCHAR}
+		  , #{regNo,jdbcType=VARCHAR}
+		  , SYSDATE
+		  , #{modNo,jdbcType=VARCHAR}
+		  , SYSDATE
+		)
+	</insert>
+
+	<select id="selectFile" parameterType="Integer" resultType="com.ys.carInfo.common.vo.FileVo">
+		SELECT
+				FILE_NO
+			  , TBL_NM
+			  , FILE_IDNT_NO
+			  , FILE_TY_CD
+			  , FILE_SRT_ORD
+			  , FILE_PATH_NM
+			  , ORG_FILE_NM
+			  , FILE_NM
+			  , FILE_EXT_NM
+			  , MIME_TY
+			  , FILE_SIZE
+			  , FILE_DOWN_CNT
+			  , CAPTION
+		FROM 	ATCH_FILE
+		WHERE	1 = 1
+		AND 	FILE_NO = #{fileNo,jdbcType=INTEGER}
+		AND 	DEL_YN = 'N'
+	</select>
+
+</mapper>

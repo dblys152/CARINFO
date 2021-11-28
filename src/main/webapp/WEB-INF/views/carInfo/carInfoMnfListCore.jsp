@@ -12,7 +12,7 @@
 			<c:out value="${ i.rn }"/>
 			<input type="hidden" name="mnfNo" value="<c:out value="${ i.mnfNo }"/>">
 		</th>
-		<td></td>
+		<td><img src="/file/images/<c:out value="${ i.fileNo }"/>" class="logo" style="width:50px;height:50px"></td>
 		<td><c:out value="${ i.mnfNm }"/></td>
 		<td><c:out value="${ i.ntnCdKrNm } (${ i.ntnCdEnNm })"/></td>
 		<td><c:out value="${ i.regDt }"/></td>

@@ -1,5 +1,6 @@
 package com.ys.carInfo.carMdl.service.impl;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -31,7 +32,7 @@ public class MnfServiceImpl implements MnfService {
 			fileService.uploadFile(mnfVo.getFile(), "MNF", "100101", mnfNo);
 		} catch(EntityNotFoundException e) {
 			throw e;
-		} catch(Exception e) {
+		} catch(IOException e) {
 			throw e;
 		}
 
