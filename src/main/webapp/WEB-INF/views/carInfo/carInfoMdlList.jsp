@@ -36,7 +36,7 @@ gnbActive = 'setting';
 			  </div>
 			</div>
 		</div>
-		<table class="table table-hover">
+		<table class="table table-hover align-middle">
 		<thead>
 			<tr>
 				<th scope="col">No.</th>

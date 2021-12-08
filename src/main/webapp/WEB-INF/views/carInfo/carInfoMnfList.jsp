@@ -36,13 +36,10 @@ gnbActive = 'setting';
 			</div>
 			</form:form>
 		</div>
-		<table class="table table-hover" id="mnfTbl">
+		<table class="table table-hover align-middle" id="mnfTbl">
 		<colgroup>
-			<col width = "50px">
-			<col width = "80px">
-			<col width = "150px">
-			<col width = "150px">
-			<col width = "150px">
+			<col width="50px"><col width="80px"><col width="150px">
+			<col width="150px"><col width="150px">
 		</colgroup>
 		<thead>
 			<tr>

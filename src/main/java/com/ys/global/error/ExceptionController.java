@@ -11,6 +11,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.ys.global.error.exception.BusinessException;
 
@@ -84,10 +85,14 @@ public class ExceptionController {
     }
 
     @ExceptionHandler(Exception.class)
-    protected ResponseEntity<ErrorResponse> handleException(Exception e) {
+    //protected ResponseEntity<ErrorResponse> handleException(Exception e) {
+    protected ModelAndView handleException(Exception e) {
     	logger.error("handleEntityNotFoundException", e);
-        final ErrorResponse response = ErrorResponse.of(ErrorCode.INTERNAL_SERVER_ERROR);
-        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        //final ErrorResponse response = ErrorResponse.of(ErrorCode.INTERNAL_SERVER_ERROR);
+        //return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+    	ModelAndView model = new ModelAndView("/empty/common/500");
+    	model.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+        return model;
     }
 
 }

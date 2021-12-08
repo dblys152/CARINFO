@@ -22,25 +22,25 @@ gnbActive = 'setting';
 		<input type="hidden" name="mnfNo" value="<c:out value="${ mnfVo.mnfNo }"/>">
 		<div class="mb-3 row">
 		 	<label for="inputPassword" class="col-sm-2 col-form-label">제조사명</label>
-			<div class="col-sm-10">
-			  <c:out value="${ mnfVo.mnfNm }"/>
+			<div class="col-sm-10 col-form-label">
+				<c:out value="${ mnfVo.mnfNm }"/>
 			</div>
 		</div>
 		<div class="mb-3 row">
 		 	<label for="inputPassword" class="col-sm-2 col-form-label">제조국</label>
-			<div class="col-sm-10">
+			<div class="col-sm-10 col-form-label">
 				<c:out value="${ mnfVo.ntnCdKrNm } (${ mnfVo.ntnCdEnNm })"/>
 			</div>
 		</div>
 		<div class="mb-3 row">
 		 	<label for="inputPassword" class="col-sm-2 col-form-label">제조사 로고</label>
-		 	<div class="col-sm-10">
+		 	<div class="col-sm-10 col-form-label">
 				<img src="/file/images/<c:out value="${ mnfVo.fileNo }"/>" class="logo" style="width:50px;height:50px">
 			</div>
 		</div>
 		<div class="mb-3 row">
 		 	<label for="inputPassword" class="col-sm-2 col-form-label">등록일</label>
-			<div class="col-sm-10">
+			<div class="col-sm-10 col-form-label">
 				<c:out value="${ mnfVo.regDt }"/>
 			</div>
 		</div>

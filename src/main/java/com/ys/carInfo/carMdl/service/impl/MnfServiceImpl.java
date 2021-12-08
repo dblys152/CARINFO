@@ -24,20 +24,23 @@ public class MnfServiceImpl implements MnfService {
 	@Override
 	@Transactional
 	public String mergeMnf(MnfVo mnfVo) throws Exception {
-		if(mnfVo.getFile().isEmpty())
+		if(mnfVo.getMnfNo() == null && mnfVo.getFile().isEmpty())
 			throw new EntityNotFoundException("file not found");
 
 		mnfVo.setRegNo(0);
 		mnfVo.setModNo(0);
-		mnfMapper.mergeMnf(mnfVo);
+		mnfMapper.mergeMnf(mnfVo);			// 제조사 등록
 		String mnfNo = mnfVo.getMnfNo();
 
-		try {
-			fileService.uploadFile(mnfVo.getFile(), "MNF", "100101", mnfNo);
-		} catch(EntityNotFoundException e) {
-			throw e;
-		} catch(IOException e) {
-			throw e;
+		if(mnfVo.getFileNo() == null) {
+			fileService.deleteFile(mnfNo);	// 로고 삭제
+			try {
+				fileService.uploadFile(mnfVo.getFile(), "MNF", "100101", mnfNo);	// 로고 등록
+			} catch(EntityNotFoundException e) {
+				throw e;
+			} catch(IOException e) {
+				throw e;
+			}
 		}
 
 		return mnfNo;

@@ -17,7 +17,7 @@ public class CustomErrorController implements ErrorController {
 		if(status != null) {
 			int statusCode = Integer.valueOf(status.toString());
 			if(statusCode == HttpStatus.NOT_FOUND.value()){ return "/empty/common/404"; }
-			if(statusCode == HttpStatus.INTERNAL_SERVER_ERROR.value()){ return "/empty/common/500"; }
+			//if(statusCode == HttpStatus.INTERNAL_SERVER_ERROR.value()){ return "/empty/common/500"; }
 		}
 		return "/empty/common/404";
 	}
