@@ -28,12 +28,9 @@ gnbActive = 'setting';
 		</div>
 		<div class="col-md-4">
 			<div class="input-group mb-3">
-			  <input class="form-control" type="text" placeholder="Search" aria-label="Search">
-			  <div class="input-group-append">
-			    <button type="button" class="input-group-text lime lighten-2">
-			    	<i class="fas fa-search"></i>
-			    </button>
-			  </div>
+				<input class="form-control" type="text" placeholder="Search" aria-label="Search">
+			  	<button type="button" id="schBtn" class="btn btn-secondary me-1"><i class="bi bi-search"></i></button>
+			  	<a href="mnfList" class="btn btn-outline-secondary">초기화</a>
 			</div>
 		</div>
 		<table class="table table-hover align-middle">

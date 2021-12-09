@@ -24,15 +24,16 @@ gnbActive = 'setting';
 			<a href="mnfList" type="button" class="btn btn-secondary">제조사</a>
 			<div class="float-end">
 				<a href="mnfWrite" class="btn btn-info">제조사 등록</a>
+				<a href="mnfWrite" class="btn btn-success">제조사 일괄등록</a>
 			</div>
 		</div>
 		<div class="col-md-4">
 			<form:form modelAttribute="searchVo" method="get">
 			<form:hidden path="pageNo"/>
 			<div class="input-group mb-3">
-			  <form:input path="schText" class="form-control" placeholder="Search" aria-label="Search"/>
-			  <button type="button" id="schBtn" class="btn btn-success">검색</button>
-			  <a href="mnfList" class="btn btn-outline-secondary">초기화</a>
+				<form:input path="schText" class="form-control" placeholder="Search" aria-label="Search"/>
+			  	<button type="button" id="schBtn" class="btn btn-secondary me-1"><i class="bi bi-search"></i></button>
+			  	<a href="mnfList" class="btn btn-outline-secondary">초기화</a>
 			</div>
 			</form:form>
 		</div>
