@@ -108,6 +108,24 @@ public class CarInfoMngController {
 
 		return ResponseEntity.ok(map);
 	}
+	
+	/* 제조사 일괄등록 */
+	@RequestMapping(value="/mnfExcelWrite", method=RequestMethod.GET)
+	public String mnfExcelWrite(
+			@ModelAttribute("mnfVo") MnfVo mnfVo,
+			@RequestParam(value="mnfNo", required=false) String mnfNo,
+			Model model) throws Exception {
+
+		List<NtnCodeVo> ntnCdList = codeService.selectNtnCdList(new HashMap<>());
+		model.addAttribute("ntnCdList", ntnCdList);
+
+		if(mnfNo != null && !mnfNo.trim().equals("")) {
+			mnfVo = mnfService.selectMnf(mnfNo);
+		}
+		model.addAttribute("mnfVo", mnfVo);
+
+		return "/form/carInfo/carInfoMnfExcelWrite";
+	}
 
 	/* 제조사 상세 화면 */
 	@RequestMapping(value="/mnfView", method=RequestMethod.GET)

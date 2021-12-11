@@ -24,7 +24,7 @@ gnbActive = 'setting';
 			<a href="mnfList" type="button" class="btn btn-secondary">제조사</a>
 			<div class="float-end">
 				<a href="mnfWrite" class="btn btn-info">제조사 등록</a>
-				<a href="mnfWrite" class="btn btn-success">제조사 일괄등록</a>
+				<a href="mnfExcelWrite" class="btn btn-success">제조사 일괄등록</a>
 			</div>
 		</div>
 		<div class="col-md-4">
