@@ -19,15 +19,21 @@ gnbActive = 'setting';
 	</div>
 	<!-- content -->
 	<div class="col-lg-12">
-		<form:form modelAttribute="mnfVo" enctype="multipart/form-data">
-		<form:hidden path="mnfNo"/>
 		<div class="mb-3 row">
 		 	<div class="col-sm-8" id="file_box">
 				<label for="formFile" class="form-label">엑셀 파일 등록 (.xls, .xlsx)</label>
-				<input class="form-control upload_img" type="file" name="file">
+				<input class="form-control upload_excel" type="file" name="file">
 			</div>
 		</div>
-		</form:form>
+		<div class="mb-3 row">
+			<div class="d-flex justify-content-between bd-highlight mb-3">
+				<div></div>
+				<div>
+					<button type="button" class="btn btn-success" id="excelConvert">데이터 확인</button>
+				</div>
+				<div></div>
+			</div>
+		</div>
 		<div id="example" class="hot "></div>
 		<div class="mb-3 row">
 			<div class="d-flex justify-content-between bd-highlight mb-3">
@@ -72,6 +78,20 @@ window.addEventListener('DOMContentLoaded', () => {
 		});
 	}
 
+	document.getElementById('excelConvert').addEventListener('click', () => {
+		let fileInp = document.querySelector('input[name="file"]');
+		if(fileInp == null || fileInp.value == '') {
+			 alert('엑셀 파일을 등록해주세요.');
+			 fileInp.focus();
+		} else {
+			let formData = new FormData();
+			formData.append("file", fileInp.files[0]);
+
+			fn_convertExcel(formData);
+		}
+	});
+
+
 	document.getElementById('mnfSave').addEventListener('click', () => {
 		let mnfNmInp = document.querySelector('input[name="mnfNm"]');
 		let fileInp = document.querySelector('input[name="file"]');
@@ -96,6 +116,16 @@ window.addEventListener('DOMContentLoaded', () => {
 	});
 
 });
+
+function fn_convertExcel(formData) {
+	axios.post('mnfExcelConvert', formData, {headers: {'Content-Type': 'multipart/form-data'}})
+	.then((res) => {
+
+	}).catch((err) => {
+		alert('저장 실패하였습니다.');
+    	console.log(err);
+	});
+}
 
 function fn_saveMnf(formData) {
 	axios.post('mnfWrite', formData, {headers: {'Content-Type': 'multipart/form-data'}})

@@ -41,8 +41,10 @@ public class FileController {
 		FileVo fileVo = fileService.selectFile(fileNo);
 		String fileFullPath = fileVo.getFilePathNm() + "\\" + fileVo.getFileNm() + "." + fileVo.getFileExtNm();
 		Resource file = new FileSystemResource(new File(fileFullPath).toPath());
-        return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
-                "attachment; filename=\"" + file.getFilename() + "\"").body(file);
+        return ResponseEntity.ok()
+        		.header(HttpHeaders.CONTENT_DISPOSITION,
+        				"attachment; filename=\"" + file.getFilename() + "\"")
+        		.body(file);
     }
 
 }

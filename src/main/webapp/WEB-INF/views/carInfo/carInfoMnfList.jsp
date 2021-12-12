@@ -25,6 +25,7 @@ gnbActive = 'setting';
 			<div class="float-end">
 				<a href="mnfWrite" class="btn btn-info">제조사 등록</a>
 				<a href="mnfExcelWrite" class="btn btn-success">제조사 일괄등록</a>
+				<button type="button" id="excelDown" class="btn btn-success">Excel 다운로드</button>
 			</div>
 		</div>
 		<div class="col-md-4">
@@ -71,6 +72,9 @@ $(document).ready(() => {
 	$('#schText').on('keydown', (e) => {
 		if(e.keyCode==13) list(1);
 	});
+
+	$('#excelDown').on('click', fn_mnfExcelDown);
+
 });
 
 function list(n) {
@@ -94,6 +98,33 @@ function listCore() {
 		error: function(request,status,error) {
 			 console.log(request.responseText);
       	}
+	});
+}
+
+function fn_mnfExcelDown() {
+	axios({
+		method: 'get'
+	  , url: 'mnfExcelDown'
+	  , responseType: 'blob'
+	  , responseEncoding: 'utf8'
+	}).then((res) => {
+		let name = res.headers["content-disposition"]
+					.split("filename=")[1]
+	    			.replace(/"/g, "");
+		name = decodeURIComponent(name);
+		let blob = new Blob([res.data], {type: "application/vnd.ms-excel"});
+        let url = window.URL.createObjectURL(blob);
+        let link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", name);
+        link.style.cssText = "display:none";
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        window.URL.revokeObjectURL(url);	//메모리 누수 방지
+	}).catch((err) => {
+		alert('Excel 다운로드 실패하였습니다.');
+    	console.log(err);
 	});
 }
 

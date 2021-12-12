@@ -1,5 +1,6 @@
 package com.ys.carInfo.carMdl.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -18,5 +19,8 @@ public interface MnfService {
 
 	/* 제조사 삭제 */
 	public void deleteMnf(String mnfNo) throws Exception;
+
+	/* 제조사 모든 목록 조회 */
+	public List<Map<String, Object>> selectMnfAllList(Map<String, Object> map) throws Exception;
 
 }

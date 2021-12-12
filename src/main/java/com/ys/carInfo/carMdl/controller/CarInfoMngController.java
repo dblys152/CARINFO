@@ -1,14 +1,19 @@
 package com.ys.carInfo.carMdl.controller;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,6 +28,7 @@ import com.ys.carInfo.carMdl.service.CarMdlService;
 import com.ys.carInfo.carMdl.service.MnfService;
 import com.ys.carInfo.carMdl.vo.MnfVo;
 import com.ys.carInfo.common.service.CodeService;
+import com.ys.carInfo.common.service.ExcelService;
 import com.ys.carInfo.common.vo.NtnCodeVo;
 import com.ys.carInfo.common.vo.SearchVo;
 import com.ys.global.error.exception.EntityNotFoundException;
@@ -35,6 +41,7 @@ public class CarInfoMngController {
 	@Autowired private CarMdlService carMdlService;
 	@Autowired private MnfService mnfService;
 	@Autowired private CodeService codeService;
+	@Autowired private ExcelService excelService;
 
 	/* 자동차정보 목록 화면 */
 	@RequestMapping(value="/mdlList", method=RequestMethod.GET)
@@ -108,7 +115,7 @@ public class CarInfoMngController {
 
 		return ResponseEntity.ok(map);
 	}
-	
+
 	/* 제조사 일괄등록 */
 	@RequestMapping(value="/mnfExcelWrite", method=RequestMethod.GET)
 	public String mnfExcelWrite(
@@ -154,4 +161,27 @@ public class CarInfoMngController {
 
 		return ResponseEntity.ok(new HashMap<>());
 	}
+
+	/* 제조사 엑셀 다운로드 */
+	@RequestMapping(value="/mnfExcelDown", method=RequestMethod.GET)
+	@ResponseBody
+	public ResponseEntity<byte[]> mnfExcelDown() throws Exception {
+
+		List<Map<String, Object>> mnfList = mnfService.selectMnfAllList(new HashMap<>());
+
+		SXSSFWorkbook wb = excelService.createExcelMnf(mnfList);
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		wb.write(os);
+		os.close();
+
+		String fileNm = "테스트 엑셀";
+		String encodedFileNm = URLEncoder.encode(fileNm, "UTF-8").replace("+", "%20");
+
+		return ResponseEntity.ok()
+				.contentType(MediaType.parseMediaType("application/vnd.ms-excel"))
+				.header(HttpHeaders.CONTENT_DISPOSITION,
+						"attachment; filename=\"" + encodedFileNm + "\"")
+				.body(os.toByteArray());
+	}
+
 }

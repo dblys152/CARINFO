@@ -15,7 +15,20 @@ $(function() {
 	        //확장자 확인
 	    	var ext = fileName.split('.').pop().toLowerCase();
 			if(ext != 'png' && ext != 'jpg' && ext != 'jpeg') {
-				alert('이미지 파일만 업로드가 가능합니다.');
+				alert('이미지 파일만 업로드 가능합니다.');
+				$(this).val('');
+			}
+	    }
+	});
+
+    $('.upload_excel').change(function() {
+		var fileVal = $(this).val().split('\\');
+		var fileName = fileVal[fileVal.length-1]; // 파일명
+	    if (fileVal && fileName != '') {
+	        //확장자 확인
+	    	var ext = fileName.split('.').pop().toLowerCase();
+			if(ext != 'xls' && ext != 'xlsx') {
+				alert('엑셀 파일만 업로드 가능합니다.');
 				$(this).val('');
 			}
 	    }

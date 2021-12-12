@@ -17,4 +17,6 @@ public interface MnfMapper {
 	public List<Map<String, Object>> selectMnfList(Map<String, Object> map) throws Exception;
 
 	public void deleteMnf(Map<String, Object> map) throws Exception;
+
+	public List<Map<String, Object>> selectMnfAllList(Map<String, Object> map) throws Exception;
 }

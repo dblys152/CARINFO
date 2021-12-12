@@ -66,4 +66,9 @@ public class MnfServiceImpl implements MnfService {
 		mnfMapper.deleteMnf(map);
 	}
 
+	@Override
+	public List<Map<String, Object>> selectMnfAllList(Map<String, Object> map) throws Exception {
+		return mnfMapper.selectMnfAllList(map);
+	}
+
 }

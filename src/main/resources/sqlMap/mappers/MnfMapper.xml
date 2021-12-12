@@ -133,4 +133,42 @@
 		AND 	MNF_NO = #{mnfNo,jdbcType=VARCHAR}
 	</update>
 
+	<select id="selectMnfAllList" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		SELECT
+                ROWNUM	"rn"
+              , A.*
+        FROM    (
+                    SELECT
+                            MF.MNF_NO			"mnfNo"
+                          , MF.MNF_NM			"mnfNm"
+                          , MF.NTN_CD			"ntnCd"
+                          , NC.NTN_CD_KR_NM		"ntnCdKrNm"
+                          , NC.NTN_CD_EN_NM		"ntnCdEnNm"
+                          , TO_CHAR(MF.REG_DTT, 'YYYY-MM-DD') "regDt"
+                          , AF.FILE_NO			"fileNo"
+                          , AF.ORG_FILE_NM 		"fileNm"
+                          , COUNT(*) OVER() 	"totCnt"
+                    FROM 	MNF			MF
+                          , NTN_CODE 	NC
+                          , ATCH_FILE 	AF
+                    WHERE	1 = 1
+                    AND 	MF.DEL_YN = 'N'
+                    AND 	MF.NTN_CD = NC.NTN_CD
+                    AND 	MF.MNF_NO = AF.FILE_IDNT_NO(+)
+                    AND 	AF.DEL_YN(+) = 'N'
+                    AND 	(
+                    			#{search.schText,jdbcType=VARCHAR} IS NULL OR
+                     		EXISTS	(
+                     					SELECT	'X'
+                     					FROM 	MNF		E
+                  								WHERE	1 = 1
+                  								AND 	E.MNF_NM LIKE '%' || #{search.schText,jdbcType=VARCHAR} || '%'
+                  								AND 	E.DEL_YN = 'N'
+                     					AND		MF.MNF_NO = E.MNF_NO
+                     				)
+                    		)
+                    ORDER	BY	MNF_NO
+                )   A
+	</select>
+
 </mapper>

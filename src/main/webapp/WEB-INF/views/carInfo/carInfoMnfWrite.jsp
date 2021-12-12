@@ -107,8 +107,12 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 function fn_saveMnf(formData) {
-	axios.post('mnfWrite', formData, {headers: {'Content-Type': 'multipart/form-data'}})
-	.then((res) => {
+	axios({
+		method: 'post'
+	  , url: 'mnfWrite'
+	  , data: formData
+	  , headers: {'Content-Type': 'multipart/form-data'}
+	}).then((res) => {
 		location.href="mnfView?mnfNo=" + res.data.mnfNo;
 	}).catch((err) => {
 		alert('저장 실패하였습니다.');
