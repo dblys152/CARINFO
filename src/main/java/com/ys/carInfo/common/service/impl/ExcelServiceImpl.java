@@ -17,7 +17,9 @@ public class ExcelServiceImpl implements ExcelService {
 
 	@Override
 	public SXSSFWorkbook createExcelMnf(List<Map<String, Object>> mnfList) throws Exception {
-		SXSSFWorkbook wb = new SXSSFWorkbook(-1);
+		SXSSFWorkbook wb = new SXSSFWorkbook(100);
+		
+		wb.setCompressTempFiles(true);
 		Sheet sh = wb.createSheet("test Sheet");
 
 		int i=0;
