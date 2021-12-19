@@ -49,7 +49,7 @@ gnbActive = 'setting';
 				<div></div>
 				<div>
 					<a href="mnfWrite?mnfNo=${ mnfVo.mnfNo }" class="btn btn-info">수정</a>
-					<a href="mnfList" class="btn btn-outline-secondary">목록</a>
+					<a href="mnfList?pageNo=${ param.pageNo }" class="btn btn-outline-secondary">목록</a>
 				</div>
 				<div>
 					<button type="button" class="btn btn-danger" id="mnfDel">삭제</button>
@@ -61,6 +61,8 @@ gnbActive = 'setting';
 
 <script>
 window.addEventListener('DOMContentLoaded', () => {
+
+	/* 제조사 삭제 버튼 클릭 */
 	document.getElementById('mnfDel').addEventListener('click', () => {
 		if(confirm('제조사를 삭제하시겠습니까?')) {
 			let dataForm = new FormData();
@@ -69,6 +71,7 @@ window.addEventListener('DOMContentLoaded', () => {
 			fn_delMnf(dataForm);
 		}
 	});
+
 });
 
 function fn_delMnf(dataForm) {

@@ -63,41 +63,50 @@ gnbActive = 'setting';
 </div>
 
 <script>
-$(document).ready(() => {
-	listCore();
+window.addEventListener('DOMContentLoaded', () => {
+	listCore();	//데이터 목록 조회
 
-	$('#schBtn').on('click', () => {
+	/* 검색 버튼 클릭 */
+	document.getElementById('schBtn').addEventListener('click', () => {
 		list(1);
 	});
-	$('#schText').on('keydown', (e) => {
+
+	/* 검색어 엔터 클릭 검색 */
+	document.getElementById('schText').addEventListener('keydown', (e) => {
 		if(e.keyCode==13) list(1);
 	});
 
-	$('#excelDown').on('click', fn_mnfExcelDown);
+	/* 엑셀 다운로드 */
+	document.getElementById('excelDown').addEventListener('click', fn_mnfExcelDown)
 
 });
 
 function list(n) {
 	if(n == null) n = 1;
-	let form = $('#searchVo');
-	form.find('input[name="pageNo"]').val(n);
+	let form = document.forms["searchVo"];
+	form[fname="pageNo"].value = n;
 	form.submit();
 }
 
 function listCore() {
-	let dataForm = $('#searchVo').serialize();
-	$.ajax({
-		url: 'mnfListCore',
-		type: 'GET',
-		data: dataForm,
-		//dataType:'json',
-		//contentType: 'application/json',
-		success: function(result) {
-			$('#mnfTbl > tbody').html(result);
-		},
-		error: function(request,status,error) {
-			 console.log(request.responseText);
-      	}
+	let form = document.forms["searchVo"];
+	axios({
+		method: 'get'
+	  , url: 'mnfListCore'
+	  , params: {
+			"pageNo": form[fname="pageNo"].value
+		  , "schText": form[fname="schText"].value
+		}
+	}).then((res) => {
+		document.querySelector('#mnfTbl > tbody').innerHTML = res.data;
+
+		let scripts = document.querySelector('#mnfTbl > tbody').getElementsByTagName("script");
+		for (let i = 0; i < scripts.length; i++) {
+		    new Function(scripts[i].innerText)();	//스크립트 주입
+		    scripts[i].remove();					//스크립트 태그 제거
+		}
+	}).catch((err) => {
+    	console.log(err);
 	});
 }
 

@@ -1,41 +1,48 @@
-var gnbActive;	//메뉴 gnb
+let gnbActive;	//메뉴 gnb
 
-$(function() {
+window.addEventListener('DOMContentLoaded', () => {
 
-	//gnb, lnb active
-    $('.navbar-nav .nav-link').removeClass('active');
-    var gnbTest = gnbActive === null && gnbActive === undefined;
-    $('.navbar-nav .'+gnbActive).addClass('active');
+	/* gnb, lnb active */
+	document.querySelector('.navbar-nav .nav-link').classList.remove('active');
+	document.querySelector('.navbar-nav .'+gnbActive).classList.add('active');
 
+	/* change Event */
+	document.addEventListener('change', (e) => {
+		let thisInp = e.target;
 
-    $('.upload_img').change(function() {
-		var fileVal = $(this).val().split('\\');
-		var fileName = fileVal[fileVal.length-1]; // 파일명
-	    if (fileVal && fileName != '') {
-	        //확장자 확인
-	    	var ext = fileName.split('.').pop().toLowerCase();
-			if(ext != 'png' && ext != 'jpg' && ext != 'jpeg') {
-				alert('이미지 파일만 업로드 가능합니다.');
-				$(this).val('');
-			}
-	    }
-	});
+		/* 이미지 업로드 시 파일 체크 */
+		if(thisInp.matches('.upload_img')) {
+			let fileVal = thisInp.value.split('\\');
+			let fileName = fileVal[fileVal.length-1]; // 파일명
+		    if (fileVal && fileName != '') {
+		        //확장자 확인
+		    	let ext = fileName.split('.').pop().toLowerCase();
+				if(ext != 'png' && ext != 'jpg' && ext != 'jpeg') {
+					alert('이미지 파일만 업로드 가능합니다.');
+					thisInp.value = '';
+				}
+		    }
+		}
 
-    $('.upload_excel').change(function() {
-		var fileVal = $(this).val().split('\\');
-		var fileName = fileVal[fileVal.length-1]; // 파일명
-	    if (fileVal && fileName != '') {
-	        //확장자 확인
-	    	var ext = fileName.split('.').pop().toLowerCase();
-			if(ext != 'xls' && ext != 'xlsx') {
-				alert('엑셀 파일만 업로드 가능합니다.');
-				$(this).val('');
-			}
-	    }
+		/* 엑셀 업로드 시 파일 체크 */
+		else if(thisInp.matches('.upload_excel')) {
+			let fileVal = thisInp.value.split('\\');
+			let fileName = fileVal[fileVal.length-1]; // 파일명
+		    if (fileVal && fileName != '') {
+		        //확장자 확인
+		    	let ext = fileName.split('.').pop().toLowerCase();
+				if(ext != 'xls' && ext != 'xlsx') {
+					alert('엑셀 파일만 업로드 가능합니다.');
+					thisInp.value = '';
+				}
+		    }
+		}
+
 	});
 
 });
 
+/* 페이징 함수 */
 function paging(pageSize, totCnt, listCnt, pageNo) {
 	//화면에 표시할 페이지 번호 개수, 총 데이터 수, 페이지당 표시할 데이터 수, 현재 페이지 번호
 
@@ -62,5 +69,5 @@ function paging(pageSize, totCnt, listCnt, pageNo) {
 		html += '<li class="page-item disabled"><button type="button" class="page-link" tabindex="-1" aria-disabled="true">></button></li>';
 	}
 
-	$('#paging').html(html);
+	document.getElementById('paging').innerHTML = html;
 }

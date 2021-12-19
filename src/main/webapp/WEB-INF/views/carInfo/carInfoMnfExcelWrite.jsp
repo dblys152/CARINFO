@@ -67,17 +67,7 @@ window.addEventListener('DOMContentLoaded', () => {
 	  licenseKey: 'non-commercial-and-evaluation' // for non-commercial use only
 	});
 
-	if(${ mnfVo.mnfNo != null }) {
-		document.getElementById('log_del').addEventListener('click', () => {
-			if(confirm('로고를 삭제하시겠습니까?')) {
-				let html = '';
-				html += '<label for="formFile" class="form-label">로고 크기 50x50</label>';
-				html += '<input class="form-control upload_img" type="file" name="file">';
-				document.getElementById('file_box').innerHTML = html;
-			}
-		});
-	}
-
+	/* 데이터 확인 버튼 클릭 */
 	document.getElementById('excelConvert').addEventListener('click', () => {
 		let fileInp = document.querySelector('input[name="file"]');
 		if(fileInp == null || fileInp.value == '') {
@@ -91,7 +81,7 @@ window.addEventListener('DOMContentLoaded', () => {
 		}
 	});
 
-
+	/* 제조사 저장 버튼 클릭 */
 	document.getElementById('mnfSave').addEventListener('click', () => {
 		let mnfNmInp = document.querySelector('input[name="mnfNm"]');
 		let fileInp = document.querySelector('input[name="file"]');
@@ -118,18 +108,26 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 function fn_convertExcel(formData) {
-	axios.post('mnfExcelConvert', formData, {headers: {'Content-Type': 'multipart/form-data'}})
-	.then((res) => {
+	axios({
+		method: 'post'
+	  , url: 'mnfExcelConvert'
+	  , data: formData
+	  , headers: {'Content-Type': 'multipart/form-data'}
+	}).then((res) => {
 
 	}).catch((err) => {
-		alert('저장 실패하였습니다.');
+		alert('변환 실패하였습니다.');
     	console.log(err);
 	});
 }
 
 function fn_saveMnf(formData) {
-	axios.post('mnfWrite', formData, {headers: {'Content-Type': 'multipart/form-data'}})
-	.then((res) => {
+	axios({
+		method: 'post'
+	  , url: 'mnfWrite'
+	  , data: formData
+	  , headers: {'Content-Type': 'multipart/form-data'}
+	}).then((res) => {
 		location.href="mnfView?mnfNo=" + res.data.mnfNo;
 	}).catch((err) => {
 		alert('저장 실패하였습니다.');

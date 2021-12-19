@@ -9,7 +9,7 @@
 	<c:forEach items="${ mnfList }" var="i">
 	<tr style="cursor:pointer;">
 		<th scope="row">
-			<c:out value="${ i.rn }"/>
+			<c:out value="${ i.seq }"/>
 			<input type="hidden" name="mnfNo" value="<c:out value="${ i.mnfNo }"/>">
 		</th>
 		<td><img src="/file/images/<c:out value="${ i.fileNo }"/>" class="logo" style="width:50px;height:50px"></td>
@@ -27,11 +27,16 @@
 </c:choose>
 
 <script>
-$(document).ready(() => {
-	$('#mnfTbl > tbody tr:not(.nodata)').on('click', (e) => {
-		location.href="mnfView?mnfNo=" + $(e.currentTarget).find('input[name="mnfNo"]').val();
-	});
+/* 페이징 */
+paging(10, '${ totCnt }', '${ listCnt }', '${ pageNo }');
 
-	paging(10, '${ totCnt }', '${ listCnt }', '${ pageNo }');
-});
+/* 목록 클릭 시 상세화면 이동 */
+let listTr = document.querySelectorAll('#mnfTbl > tbody tr:not(.nodata)');
+for(let i = 0; i < listTr.length; i++) {
+	listTr[i].addEventListener('click', (e) => {
+		location.href="mnfView?mnfNo="
+			+ e.currentTarget.querySelector('input[name="mnfNo"]').value
+			+ "&pageNo=" + document.querySelector('#pageNo').value;
+	});
+}
 </script>

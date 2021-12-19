@@ -70,6 +70,7 @@ gnbActive = 'setting';
 <script>
 window.addEventListener('DOMContentLoaded', () => {
 
+	/* 로고 삭제 버튼 클릭 */
 	if(${ mnfVo.mnfNo != null }) {
 		document.getElementById('log_del').addEventListener('click', () => {
 			if(confirm('로고를 삭제하시겠습니까?')) {
@@ -81,6 +82,7 @@ window.addEventListener('DOMContentLoaded', () => {
 		});
 	}
 
+	/* 제조사 저장 버튼 클릭 */
 	document.getElementById('mnfSave').addEventListener('click', () => {
 		let mnfNmInp = document.querySelector('input[name="mnfNm"]');
 		let fileInp = document.querySelector('input[name="file"]');
