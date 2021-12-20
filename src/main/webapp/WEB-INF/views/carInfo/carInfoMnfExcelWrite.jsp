@@ -23,6 +23,9 @@ gnbActive = 'setting';
 		 	<div class="col-sm-8" id="file_box">
 				<label for="formFile" class="form-label">엑셀 파일 등록 (.xls, .xlsx)</label>
 				<input class="form-control upload_excel" type="file" name="file">
+				<div class="mt-3">
+					<a href="<c:url value="/resources/sample/제조사등록샘플.xlsx"/>">제조사등록샘플파일.xlsx</a>
+				</div>
 			</div>
 		</div>
 		<div class="mb-3 row">
