@@ -20,7 +20,7 @@ public class ExcelServiceImpl implements ExcelService {
 		SXSSFWorkbook wb = new SXSSFWorkbook(100);
 		
 		wb.setCompressTempFiles(true);
-		Sheet sh = wb.createSheet("test Sheet");
+		Sheet sh = wb.createSheet("제조사 목록");
 
 		int i=0;
 		int n=-1;

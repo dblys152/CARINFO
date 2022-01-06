@@ -4,10 +4,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.BadSqlGrammarException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.BindException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
@@ -83,11 +85,39 @@ public class ExceptionController {
         final ErrorResponse response = ErrorResponse.of(errorCode);
         return new ResponseEntity<>(response, HttpStatus.valueOf(errorCode.getStatus()));
     }
+    
+    /**
+     * 유효하지 않은 파라메터를 보냈을 경우 혹은 필요한 파라메터를 보내지 않았을 경우 발생
+     */
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    //protected ResponseEntity<ErrorResponse> handleException(Exception e) {
+    protected ModelAndView MissingServletRequestParameterException(MissingServletRequestParameterException e) {
+    	logger.error("MissingServletRequestParameterException", e);
+        //final ErrorResponse response = ErrorResponse.of(ErrorCode.INVALID_INPUT_VALUE);
+        //return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    	ModelAndView model = new ModelAndView("/empty/common/500");
+    	model.setStatus(HttpStatus.BAD_REQUEST);
+        return model;
+    }
+
+    /**
+     * SQL 실행이 실패했을 경우 발생
+     */
+    @ExceptionHandler(BadSqlGrammarException.class)
+    //protected ResponseEntity<ErrorResponse> handleException(Exception e) {
+    protected ModelAndView BadSqlGrammarException(BadSqlGrammarException e) {
+    	logger.error("handleBadSqlGrammarException");
+        //final ErrorResponse response = ErrorResponse.of(ErrorCode.INTERNAL_SERVER_ERROR);
+        //return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+    	ModelAndView model = new ModelAndView("/empty/common/500");
+    	model.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+        return model;
+    }
 
     @ExceptionHandler(Exception.class)
     //protected ResponseEntity<ErrorResponse> handleException(Exception e) {
     protected ModelAndView handleException(Exception e) {
-    	logger.error("handleEntityNotFoundException", e);
+    	logger.error("handleServerException", e);
         //final ErrorResponse response = ErrorResponse.of(ErrorCode.INTERNAL_SERVER_ERROR);
         //return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     	ModelAndView model = new ModelAndView("/empty/common/500");
