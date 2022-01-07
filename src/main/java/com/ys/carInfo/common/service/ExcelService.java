@@ -7,6 +7,6 @@ import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 
 public interface ExcelService {
 
-	SXSSFWorkbook createExcelMnf(List<Map<String, Object>> mnfList) throws Exception;
+	SXSSFWorkbook createExcelMnf(String sheetNm, List<Map<String, Object>> mnfList) throws Exception;
 
 }

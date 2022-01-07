@@ -3,6 +3,9 @@ package com.ys.carInfo.carMdl.controller;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -169,16 +172,16 @@ public class CarInfoMngController {
 
 		List<Map<String, Object>> mnfList = mnfService.selectMnfAllList(new HashMap<>());
 
-		SXSSFWorkbook wb = excelService.createExcelMnf(mnfList);
+		SXSSFWorkbook wb = excelService.createExcelMnf("제조사 목록", mnfList);
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
 		wb.write(os);
 		os.close();
 
-		String fileNm = "테스트 엑셀";
+		String fileNm = "제조사 목록_" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
 		String encodedFileNm = URLEncoder.encode(fileNm, "UTF-8").replace("+", "%20");
 
 		return ResponseEntity.ok()
-				.contentType(MediaType.parseMediaType("application/vnd.ms-excel"))
+				.contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
 				.header(HttpHeaders.CONTENT_DISPOSITION,
 						"attachment; filename=\"" + encodedFileNm + "\"")
 				.body(os.toByteArray());
