@@ -172,10 +172,11 @@ public class CarInfoMngController {
 
 		List<Map<String, Object>> mnfList = mnfService.selectMnfAllList(new HashMap<>());
 
-		SXSSFWorkbook wb = excelService.createExcelMnf("제조사 목록", mnfList);
+		SXSSFWorkbook workbook = excelService.createExcelMnf("제조사 목록", mnfList);
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
-		wb.write(os);
+		workbook.write(os);
 		os.close();
+		workbook.dispose();
 
 		String fileNm = "제조사 목록_" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
 		String encodedFileNm = URLEncoder.encode(fileNm, "UTF-8").replace("+", "%20");
@@ -183,7 +184,7 @@ public class CarInfoMngController {
 		return ResponseEntity.ok()
 				.contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
 				.header(HttpHeaders.CONTENT_DISPOSITION,
-						"attachment; filename=\"" + encodedFileNm + "\"")
+						"attachment; filename=\"" + encodedFileNm + ".xlsx\"")
 				.body(os.toByteArray());
 	}
 

@@ -65,7 +65,7 @@
               , NC.NTN_CD_EN_NM		"ntnCdEnNm"
               , TO_CHAR(MF.REG_DTT, 'YYYY-MM-DD') "regDt"
               , AF.FILE_NO			"fileNo"
-              , AF.ORG_FILE_NM 		"fileNm"
+              , AF.ORG_FILE_NM 		"orgFileNm"
 		FROM 	MNF			MF
 			  , NTN_CODE 	NC
 			  , ATCH_FILE 	AF
@@ -93,7 +93,7 @@
 		                              , NC.NTN_CD_EN_NM		"ntnCdEnNm"
 		                              , TO_CHAR(MF.REG_DTT, 'YYYY-MM-DD') "regDt"
 		                              , AF.FILE_NO			"fileNo"
-		                              , AF.ORG_FILE_NM 		"fileNm"
+		                              , AF.ORG_FILE_NM 		"orgFileNm"
 		                              , COUNT(*) OVER() 	"totCnt"
 		                        FROM 	MNF			MF
 		                              , NTN_CODE 	NC
@@ -147,7 +147,10 @@
                           , NC.NTN_CD_EN_NM		"ntnCdEnNm"
                           , TO_CHAR(MF.REG_DTT, 'YYYY-MM-DD') "regDt"
                           , AF.FILE_NO			"fileNo"
-                          , AF.ORG_FILE_NM 		"fileNm"
+                          , AF.FILE_PATH_NM		"filePathNm"
+						  , AF.ORG_FILE_NM		"orgFileNm"
+						  , AF.FILE_NM			"fileNm"
+						  , AF.FILE_EXT_NM		"fileExtNm"
                           , COUNT(*) OVER() 	"totCnt"
                     FROM 	MNF			MF
                           , NTN_CODE 	NC

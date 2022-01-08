@@ -42,7 +42,7 @@ gnbActive = 'setting';
 		 	<div class="col-sm-10" id="file_box">
 				<c:choose>
 				<c:when test="${ mnfVo.mnfNo != null }">
-					<c:out value="${ mnfVo.fileNm }"/><button type="button" class="btn-close" id="log_del" aria-label="Close"></button><br/>
+					<c:out value="${ mnfVo.orgFileNm }"/><button type="button" class="btn-close" id="log_del" aria-label="Close"></button><br/>
 					<input type="hidden" name="fileNo" value="<c:out value="${ mnfVo.fileNo }"/>"/>
 					<img src="/file/images/<c:out value="${ mnfVo.fileNo }"/>" class="logo" style="width:50px;height:50px">
 				</c:when>
