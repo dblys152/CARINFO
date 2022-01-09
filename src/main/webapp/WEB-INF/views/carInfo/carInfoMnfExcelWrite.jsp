@@ -37,7 +37,7 @@ gnbActive = 'setting';
 				<div></div>
 			</div>
 		</div>
-		<div id="example" class="hot "></div>
+		<div id="listHandson"></div>
 		<div class="mb-3 row">
 			<div class="d-flex justify-content-between bd-highlight mb-3">
 				<div></div>
@@ -53,23 +53,6 @@ gnbActive = 'setting';
 
 <script>
 window.addEventListener('DOMContentLoaded', () => {
-
-	const data = [
-	  ['', 'Tesla', 'Volvo', 'Toyota', 'Ford'],
-	  ['2019', 10, 11, 12, 13],
-	  ['2020', 20, 11, 14, 13],
-	  ['2021', 30, 15, 12, 13]
-	];
-
-	const container = document.getElementById('example');
-	const hot = new Handsontable(container, {
-	  data: data,
-	  rowHeaders: true,
-	  colHeaders: true,
-	  height: 'auto',
-	  licenseKey: 'non-commercial-and-evaluation' // for non-commercial use only
-	});
-
 	/* 데이터 확인 버튼 클릭 */
 	document.getElementById('excelConvert').addEventListener('click', () => {
 		let fileInp = document.querySelector('input[name="file"]');
@@ -80,7 +63,7 @@ window.addEventListener('DOMContentLoaded', () => {
 			let formData = new FormData();
 			formData.append("file", fileInp.files[0]);
 
-			fn_convertExcel(formData);
+			fn_excelParser(formData);
 		}
 	});
 
@@ -110,18 +93,33 @@ window.addEventListener('DOMContentLoaded', () => {
 
 });
 
-function fn_convertExcel(formData) {
+function fn_excelParser(formData) {
 	axios({
 		method: 'post'
-	  , url: 'mnfExcelConvert'
+	  , url: 'mnfExcelParser'
 	  , data: formData
 	  , headers: {'Content-Type': 'multipart/form-data'}
 	}).then((res) => {
-
+		fn_hansontableLoad(res.data.jsonArr);
 	}).catch((err) => {
 		alert('변환 실패하였습니다.');
     	console.log(err);
 	});
+}
+
+function fn_hansontableLoad(data) {
+	const dataObject = data;
+	const hotElement = document.querySelector('#listHandson');
+	let hotSettings = {
+		data: dataObject,
+		rowHeaders: true,
+		colHeaders: true,
+		height: 'auto',
+		licenseKey: 'non-commercial-and-evaluation' // for non-commercial use only
+	}
+
+	const hot = new Handsontable(hotElement, hotSettings);
+	hot.validateCells();
 }
 
 function fn_saveMnf(formData) {

@@ -3,7 +3,6 @@ package com.ys.carInfo.carMdl.controller;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URLEncoder;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
@@ -15,18 +14,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.google.gson.JsonArray;
 import com.ys.carInfo.carMdl.service.CarMdlService;
 import com.ys.carInfo.carMdl.service.MnfService;
 import com.ys.carInfo.carMdl.vo.MnfVo;
@@ -119,7 +118,7 @@ public class CarInfoMngController {
 		return ResponseEntity.ok(map);
 	}
 
-	/* 제조사 일괄등록 */
+	/* 제조사 일괄등록 화면 */
 	@RequestMapping(value="/mnfExcelWrite", method=RequestMethod.GET)
 	public String mnfExcelWrite(
 			@ModelAttribute("mnfVo") MnfVo mnfVo,
@@ -135,6 +134,21 @@ public class CarInfoMngController {
 		model.addAttribute("mnfVo", mnfVo);
 
 		return "/form/carInfo/carInfoMnfExcelWrite";
+	}
+
+	@RequestMapping(value="/mnfExcelParser", method=RequestMethod.POST)
+	@ResponseBody
+	public ResponseEntity<Map<String, Object>> insertMnf(
+			@RequestParam(value="file") MultipartFile excel) throws Exception {
+
+		if(excel == null)
+			throw new EntityNotFoundException("Excel not found");
+
+		Map<String, Object> map = new HashMap<>();
+		JsonArray jsonArr = excelService.parsingMnfExcel(excel);
+		map.put("jsonArr", jsonArr);
+
+		return ResponseEntity.ok(map);
 	}
 
 	/* 제조사 상세 화면 */
@@ -171,8 +185,8 @@ public class CarInfoMngController {
 	public ResponseEntity<byte[]> mnfExcelDown() throws Exception {
 
 		List<Map<String, Object>> mnfList = mnfService.selectMnfAllList(new HashMap<>());
-
-		SXSSFWorkbook workbook = excelService.createExcelMnf("제조사 목록", mnfList);
+		String[] columns = {"제조사 로고", "제조사명", "제조국", "등록일"};
+		SXSSFWorkbook workbook = excelService.createListExcel("제조사 목록", columns, mnfList);
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
 		workbook.write(os);
 		os.close();

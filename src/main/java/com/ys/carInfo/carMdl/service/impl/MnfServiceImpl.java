@@ -24,8 +24,8 @@ public class MnfServiceImpl implements MnfService {
 	@Override
 	@Transactional
 	public String mergeMnf(MnfVo mnfVo) throws Exception {
-		if(mnfVo.getMnfNo() == null && mnfVo.getFile().isEmpty())
-			throw new EntityNotFoundException("file not found");
+		if(mnfVo.getMnfNo() == null && mnfVo.getFile() == null)
+			throw new EntityNotFoundException("File not found");
 
 		mnfVo.setRegNo(0);
 		mnfVo.setModNo(0);

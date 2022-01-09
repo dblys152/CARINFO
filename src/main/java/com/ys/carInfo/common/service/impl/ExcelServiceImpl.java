@@ -2,27 +2,33 @@ package com.ys.carInfo.common.service.impl;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.ClientAnchor;
-import org.apache.poi.ss.usermodel.CreationHelper;
-import org.apache.poi.ss.usermodel.Drawing;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
-import org.apache.poi.ss.usermodel.Picture;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.apache.poi.ss.util.NumberToTextConverter;
 import org.apache.poi.util.IOUtils;
 import org.apache.poi.xssf.streaming.SXSSFDrawing;
 import org.apache.poi.xssf.streaming.SXSSFPicture;
 import org.apache.poi.xssf.streaming.SXSSFSheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 import com.ys.carInfo.common.service.ExcelService;
 import com.ys.carInfo.common.util.ExcelTemplate;
 
@@ -30,7 +36,7 @@ import com.ys.carInfo.common.util.ExcelTemplate;
 public class ExcelServiceImpl implements ExcelService {
 
 	@Override
-	public SXSSFWorkbook createExcelMnf(String sheetNm, List<Map<String, Object>> mnfList) throws Exception {
+	public SXSSFWorkbook createListExcel(String sheetNm, String[] columns, List<Map<String, Object>> mnfList) throws Exception {
 
 		SXSSFWorkbook workbook = new SXSSFWorkbook(100);
 		ExcelTemplate excelTemplate = new ExcelTemplate(workbook);
@@ -38,11 +44,9 @@ public class ExcelServiceImpl implements ExcelService {
 		workbook.setCompressTempFiles(true);
 		Sheet sheet = workbook.createSheet(sheetNm);
 
-		int rowNum = 0;
-
-		String[] columns = {"제조사 로고", "제조사명", "제조국", "등록일"};
-
 		CellStyle headerStyle = excelTemplate.getHeaderStyle();
+
+		int rowNum = 0;
 
 		sheet.setColumnWidth(0, 3000);
 		sheet.setColumnWidth(1, 8000);
@@ -101,4 +105,46 @@ public class ExcelServiceImpl implements ExcelService {
 		return workbook;
 	}
 
+	@Override
+	public JsonArray parsingMnfExcel(MultipartFile excel) throws Exception {
+		Workbook workbook = WorkbookFactory.create(excel.getInputStream());
+		Sheet sheet = workbook.getSheetAt(0);
+
+		List<List<String>> list = new ArrayList<>();
+
+		int rowSize = sheet.getPhysicalNumberOfRows(); // 행개수
+		if(rowSize >= 3) {
+			for(int i = 2; i < rowSize; i++) {
+				Row row = sheet.getRow(i);
+				List<String> dataList = new ArrayList<>();
+				for(int j = 0; j < 3; j++) {
+					if(row.getCell(j) == null)
+						dataList.add("");
+					else
+						dataList.add(String.valueOf(getValueFromCell(row.getCell(j))));
+				}
+				list.add(dataList);
+			}
+		}
+
+		JsonArray excelList = null;
+		if(list != null && list.size() > 0) {
+			Gson gson = new Gson();
+			JsonElement element = gson.toJsonTree(list, new TypeToken<ArrayList<String>>(){}.getType());
+			System.out.println(element.toString());
+			JsonObject jsonObj = element.getAsJsonObject();
+			System.out.println(jsonObj.toString());
+		}
+
+		return excelList;
+	}
+
+	private static Object getValueFromCell(Cell cell) {
+		if(cell.getCellType() == CellType.STRING) return cell.getStringCellValue();
+		else if(cell.getCellType() == CellType.BOOLEAN) return cell.getBooleanCellValue();
+		else if(cell.getCellType() == CellType.NUMERIC) return NumberToTextConverter.toText(cell.getNumericCellValue());
+		else if(cell.getCellType() == CellType.FORMULA) return cell.getCellFormula();
+		else if(cell.getCellType() == CellType.BLANK) return "";
+		else return "";
+	}
 }

@@ -36,7 +36,7 @@ public class FileServiceImpl implements FileService {
 
 	@Override
 	public Integer uploadFile(MultipartFile file, String tblNm, String fileTyCd, String fileIdntNo) throws Exception {
-		if(file.isEmpty())
+		if(file == null)
 			throw new EntityNotFoundException("file not found");
 
 		LocalDate date = LocalDate.now();
