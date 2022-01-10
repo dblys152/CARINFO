@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.google.gson.JsonArray;
 import com.ys.carInfo.carMdl.service.CarMdlService;
 import com.ys.carInfo.carMdl.service.MnfService;
 import com.ys.carInfo.carMdl.vo.MnfVo;
@@ -145,7 +144,7 @@ public class CarInfoMngController {
 			throw new EntityNotFoundException("Excel not found");
 
 		Map<String, Object> map = new HashMap<>();
-		JsonArray jsonArr = excelService.parsingMnfExcel(excel);
+		String jsonArr = excelService.parsingMnfExcel(excel);
 		map.put("jsonArr", jsonArr);
 
 		return ResponseEntity.ok(map);
@@ -190,15 +189,15 @@ public class CarInfoMngController {
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
 		workbook.write(os);
 		os.close();
-		workbook.dispose();
+		//workbook.dispose();
 
 		String fileNm = "제조사 목록_" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
 		String encodedFileNm = URLEncoder.encode(fileNm, "UTF-8").replace("+", "%20");
 
 		return ResponseEntity.ok()
-				.contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
+				.contentType(MediaType.parseMediaType("application/vnd.ms-excel"))
 				.header(HttpHeaders.CONTENT_DISPOSITION,
-						"attachment; filename=\"" + encodedFileNm + ".xlsx\"")
+						"attachment; filename=\"" + encodedFileNm + ".xls\"")
 				.body(os.toByteArray());
 	}
 

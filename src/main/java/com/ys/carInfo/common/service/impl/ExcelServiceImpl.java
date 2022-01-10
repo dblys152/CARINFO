@@ -24,11 +24,7 @@ import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ys.carInfo.common.service.ExcelService;
 import com.ys.carInfo.common.util.ExcelTemplate;
 
@@ -106,7 +102,7 @@ public class ExcelServiceImpl implements ExcelService {
 	}
 
 	@Override
-	public JsonArray parsingMnfExcel(MultipartFile excel) throws Exception {
+	public String parsingMnfExcel(MultipartFile excel) throws Exception {
 		Workbook workbook = WorkbookFactory.create(excel.getInputStream());
 		Sheet sheet = workbook.getSheetAt(0);
 
@@ -127,16 +123,13 @@ public class ExcelServiceImpl implements ExcelService {
 			}
 		}
 
-		JsonArray excelList = null;
+		String jsonList = null;
 		if(list != null && list.size() > 0) {
-			Gson gson = new Gson();
-			JsonElement element = gson.toJsonTree(list, new TypeToken<ArrayList<String>>(){}.getType());
-			System.out.println(element.toString());
-			JsonObject jsonObj = element.getAsJsonObject();
-			System.out.println(jsonObj.toString());
+			ObjectMapper mapper = new ObjectMapper();
+			jsonList = mapper.writeValueAsString(list);
 		}
 
-		return excelList;
+		return jsonList;
 	}
 
 	private static Object getValueFromCell(Cell cell) {

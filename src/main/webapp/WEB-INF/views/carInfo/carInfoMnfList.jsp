@@ -121,7 +121,7 @@ function fn_mnfExcelDown() {
 					.split("filename=")[1]
 	    			.replace(/"/g, "");
 		name = decodeURIComponent(name);
-		let blob = new Blob([res.data], {type: "application/vnd.ms-excel"});
+		let blob = new Blob([res.data], {type: res.data.type});
         let url = window.URL.createObjectURL(blob);
         let link = document.createElement("a");
         link.href = url;

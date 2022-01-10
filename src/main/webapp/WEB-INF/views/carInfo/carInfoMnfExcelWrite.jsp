@@ -108,7 +108,7 @@ function fn_excelParser(formData) {
 }
 
 function fn_hansontableLoad(data) {
-	const dataObject = data;
+	const dataObject = JSON.parse(data);
 	const hotElement = document.querySelector('#listHandson');
 	let hotSettings = {
 		data: dataObject,
