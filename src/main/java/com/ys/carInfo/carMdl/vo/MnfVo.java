@@ -11,18 +11,18 @@ import lombok.Setter;
 public class MnfVo implements Serializable {
 	private static final long serialVersionUID = 7052526350829637556L;
 
-	private String	mnfNo;
-	private String	mnfNm;
-	private String 	ntnCd;
-	private String 	ntnCdKrNm;
-	private String 	ntnCdEnNm;
-	private Integer regNo;
-	private Integer modNo;
-	private String 	regDt;
+	private String	mnfNo;		// 제조사번호
+	private String	mnfNm;		// 제조사명
+	private String 	ntnCd;		// 국가코드
+	private String 	ntnCdKrNm;	// 국가코드한글명
+	private String 	ntnCdEnNm;	// 국가코드영문명
+	private Integer regNo;		// 등록자번호
+	private Integer modNo;		// 수정자번호
+	private String 	regDt;		// 등록일자
 
-	private MultipartFile file;
-	private Integer fileNo;
-	private String 	orgFileNm;
-	private String 	fileNm;
-	private String 	filePathNm;
+	private MultipartFile file;	// 파일
+	private Integer fileNo;		// 파일번호
+	private String 	orgFileNm;	// 원본파일명
+	private String 	fileNm;		// 파일명
+	private String 	filePathNm;	// 파일저장경로
 }

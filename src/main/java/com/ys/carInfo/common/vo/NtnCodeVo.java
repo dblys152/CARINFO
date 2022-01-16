@@ -9,9 +9,9 @@ import lombok.Setter;
 public class NtnCodeVo implements Serializable {
 	private static final long serialVersionUID = -287985536065225569L;
 
-	private String 	ntnCd;
-	private String	ntnCdKrNm;
-	private String 	ntnCdEnNm;
-    private String	useYn;
+	private String 	ntnCd;		// 국가코드
+	private String	ntnCdKrNm;	// 국가코드한글명
+	private String 	ntnCdEnNm;	// 국가코드영문
+    private String	useYn;		// 사용여부
 
 }

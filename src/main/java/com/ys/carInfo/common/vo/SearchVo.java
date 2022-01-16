@@ -8,9 +8,9 @@ import lombok.Setter;
 public class SearchVo implements Serializable {
 	private static final long serialVersionUID = -7926953500073464929L;
 
-	private Integer pageNo;
-	private Integer listCnt = 10;
-	private String	schText;
+	private Integer pageNo;			// 페이지번호
+	private Integer listCnt = 10;	// 목록 수
+	private String	schText;		// 검색어
 
 
 	public Integer getPageNo() {
