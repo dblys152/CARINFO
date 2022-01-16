@@ -1,5 +1,6 @@
 package com.ys.carInfo.common.service.impl;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -12,6 +13,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import org.apache.poi.openxml4j.opc.PackagePart;
+import org.apache.poi.xssf.usermodel.XSSFPictureData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -32,7 +35,7 @@ public class FileServiceImpl implements FileService {
 	@Value("${file.updload.prefix}")
 	private	String	filePrefix;
 
-	@Autowired FileMapper fileMapper;
+	@Autowired private FileMapper fileMapper;
 
 	@Override
 	public Integer uploadFile(MultipartFile file, String tblNm, String fileTyCd, String fileIdntNo) throws Exception {
@@ -40,7 +43,6 @@ public class FileServiceImpl implements FileService {
 			throw new EntityNotFoundException("file not found");
 
 		LocalDate date = LocalDate.now();
-
 		String orgFileNm = file.getOriginalFilename();
 		String fileNm = filePrefix + date.format(DateTimeFormatter.ofPattern("yyyyMMdd")) + UUID.randomUUID();
 		String extNm = StringUtils.getFilenameExtension(orgFileNm);
@@ -79,6 +81,51 @@ public class FileServiceImpl implements FileService {
 
 		fileMapper.insertFile(fileVo);
 		return fileVo.getFileNo();
+	}
+
+	@Override
+	public FileVo uploadExcelFile(XSSFPictureData xssfPictData, String tblNm, String fileTyCd, String fileIdntNo) throws Exception {
+		PackagePart packagePart = xssfPictData.getPackagePart();
+
+		LocalDate date = LocalDate.now();
+		String orgFileNm = packagePart.getPartName().toString();
+		String fileNm = filePrefix + date.format(DateTimeFormatter.ofPattern("yyyyMMdd")) + UUID.randomUUID();
+		String extNm = StringUtils.getFilenameExtension(orgFileNm);
+		String mimeTy = xssfPictData.getMimeType();
+
+		String folder = date.format(DateTimeFormatter.ofPattern("/yyyy/MM"));
+		if(mimeTy.contains("image")) folder += "/images";
+		else folder += "/files";
+
+		FileVo fileVo = new FileVo();
+		fileVo.setRegNo(0);
+		fileVo.setModNo(0);
+		fileVo.setTblNm(tblNm);
+		fileVo.setFileIdntNo(fileIdntNo);
+		fileVo.setFileTyCd(fileTyCd);
+		fileVo.setOrgFileNm(orgFileNm);
+		fileVo.setFileNm(fileNm);
+		fileVo.setFileSize(packagePart.getSize());
+		fileVo.setFileExtNm(extNm);
+		fileVo.setMimeTy(mimeTy);
+
+		Path fullPath = Paths.get(rootPath, folder);
+		fileVo.setFilePathNm(fullPath.toString());
+
+		try {
+			if(!Files.exists(fullPath)) {
+	        	Files.createDirectories(fullPath);
+	        }
+			try(InputStream inputStream = packagePart.getInputStream()) {
+	            Files.copy(inputStream, fullPath.resolve(fileNm + "." + extNm),
+	                StandardCopyOption.REPLACE_EXISTING);
+	        }
+		} catch(IOException e){
+			throw e;
+		}
+
+		fileMapper.insertFile(fileVo);
+		return fileVo;
 	}
 
 	@Override

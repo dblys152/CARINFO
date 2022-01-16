@@ -18,7 +18,7 @@ import com.ys.global.error.exception.EntityNotFoundException;
 @Service("mnfService")
 public class MnfServiceImpl implements MnfService {
 
-	@Autowired FileService fileService;
+	@Autowired private FileService fileService;
 	@Autowired private MnfMapper mnfMapper;
 
 	@Override

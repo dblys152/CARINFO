@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ys.carInfo.carMdl.service.CarMdlService;
 import com.ys.carInfo.carMdl.service.MnfService;
 import com.ys.carInfo.carMdl.vo.MnfVo;
@@ -125,7 +126,12 @@ public class CarInfoMngController {
 			Model model) throws Exception {
 
 		List<NtnCodeVo> ntnCdList = codeService.selectNtnCdList(new HashMap<>());
-		model.addAttribute("ntnCdList", ntnCdList);
+		String ntnJsonList = null;
+		if(ntnCdList != null && ntnCdList.size() > 0) {
+			ObjectMapper mapper = new ObjectMapper();
+			ntnJsonList = mapper.writeValueAsString(ntnCdList);
+		}
+		model.addAttribute("ntnJsonList", ntnJsonList);
 
 		if(mnfNo != null && !mnfNo.trim().equals("")) {
 			mnfVo = mnfService.selectMnf(mnfNo);

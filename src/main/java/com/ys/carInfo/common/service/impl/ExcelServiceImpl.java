@@ -1,10 +1,18 @@
 package com.ys.carInfo.common.service.impl;
 
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -21,15 +29,34 @@ import org.apache.poi.xssf.streaming.SXSSFDrawing;
 import org.apache.poi.xssf.streaming.SXSSFPicture;
 import org.apache.poi.xssf.streaming.SXSSFSheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
+import org.apache.poi.xssf.usermodel.XSSFClientAnchor;
+import org.apache.poi.xssf.usermodel.XSSFDrawing;
+import org.apache.poi.xssf.usermodel.XSSFPicture;
+import org.apache.poi.xssf.usermodel.XSSFPictureData;
+import org.apache.poi.xssf.usermodel.XSSFShape;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ys.carInfo.carMdl.vo.MnfVo;
 import com.ys.carInfo.common.service.ExcelService;
+import com.ys.carInfo.common.service.FileService;
 import com.ys.carInfo.common.util.ExcelTemplate;
+import com.ys.carInfo.common.vo.FileVo;
 
 @Service("excelService")
 public class ExcelServiceImpl implements ExcelService {
+
+	@Value("${file.updload.path}")
+	private	String	rootPath;
+
+	@Value("${file.updload.prefix}")
+	private	String	filePrefix;
+
+	@Autowired private FileService fileService;
 
 	@Override
 	public SXSSFWorkbook createListExcel(String sheetNm, String[] columns, List<Map<String, Object>> mnfList) throws Exception {
@@ -106,20 +133,45 @@ public class ExcelServiceImpl implements ExcelService {
 		Workbook workbook = WorkbookFactory.create(excel.getInputStream());
 		Sheet sheet = workbook.getSheetAt(0);
 
-		List<List<String>> list = new ArrayList<>();
-
 		int rowSize = sheet.getPhysicalNumberOfRows(); // 행개수
+		Integer[] fileNoArr = new Integer[rowSize];
+		String[] filePathArr = new String[rowSize];
+
+		XSSFDrawing drawing = (XSSFDrawing) sheet.createDrawingPatriarch();
+		for(XSSFShape shape : drawing.getShapes()) {
+            if(shape instanceof XSSFPicture) {
+                XSSFPicture xssfPict = (XSSFPicture) shape;
+                XSSFPictureData xssfPictData = xssfPict.getPictureData();
+                XSSFClientAnchor anchor = (XSSFClientAnchor) shape.getAnchor();
+                //ClientAnchor anchor = picture.getPreferredSize();
+                int row1 = anchor.getRow1();
+                int col1 = anchor.getCol1();
+
+                if(row1 >= 2 && col1 == 0) {
+                	FileVo fileVo = fileService.uploadExcelFile(xssfPictData, "MNF", "100101", "excel");
+                	fileNoArr[row1] = fileVo.getFileNo();
+                	filePathArr[row1] = fileVo.getFilePathNm()
+                			+ "\\" + fileVo.getFileNm()
+                			+ "\\" + fileVo.getFileExtNm();
+                }
+            }
+        }
+
+		List<MnfVo> list = new ArrayList<>();
 		if(rowSize >= 3) {
 			for(int i = 2; i < rowSize; i++) {
 				Row row = sheet.getRow(i);
-				List<String> dataList = new ArrayList<>();
-				for(int j = 0; j < 3; j++) {
-					if(row.getCell(j) == null)
-						dataList.add("");
-					else
-						dataList.add(String.valueOf(getValueFromCell(row.getCell(j))));
-				}
-				list.add(dataList);
+				MnfVo mnfVo = new MnfVo();
+				//파일번호
+				mnfVo.setFileNo(fileNoArr[i]);
+				//파일경로
+				mnfVo.setFilePathNm(filePathArr[i]);
+				// 제조사명
+				mnfVo.setMnfNm(row.getCell(1) == null ? "" : String.valueOf(getValueFromCell(row.getCell(1))));
+				// 국가코드
+				mnfVo.setNtnCd(row.getCell(2) == null ? "" : String.valueOf(getValueFromCell(row.getCell(2))));
+
+				list.add(mnfVo);
 			}
 		}
 
