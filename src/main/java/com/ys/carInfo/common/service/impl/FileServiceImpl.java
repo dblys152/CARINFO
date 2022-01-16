@@ -48,9 +48,11 @@ public class FileServiceImpl implements FileService {
 		String extNm = StringUtils.getFilenameExtension(orgFileNm);
 		String mimeTy = file.getContentType();
 
-		String folder = date.format(DateTimeFormatter.ofPattern("/yyyy/MM"));
-		if(mimeTy.contains("image")) folder += "/images";
-		else folder += "/files";
+		StringBuilder folder = new StringBuilder(date.format(DateTimeFormatter.ofPattern("/yyyy/MM")));
+		if(mimeTy.contains("image")) 
+			folder.append("/images");
+		else 
+			folder.append("/files");
 
 		FileVo fileVo = new FileVo();
 		fileVo.setRegNo(0);
@@ -64,7 +66,7 @@ public class FileServiceImpl implements FileService {
 		fileVo.setFileExtNm(extNm);
 		fileVo.setMimeTy(mimeTy);
 
-		Path fullPath = Paths.get(rootPath, folder);
+		Path fullPath = Paths.get(rootPath, folder.toString());
 		fileVo.setFilePathNm(fullPath.toString());
 
 		try {
@@ -84,18 +86,15 @@ public class FileServiceImpl implements FileService {
 	}
 
 	@Override
-	public FileVo uploadExcelFile(XSSFPictureData xssfPictData, String tblNm, String fileTyCd, String fileIdntNo) throws Exception {
+	public FileVo uploadExcelImgFile(XSSFPictureData xssfPictData, String tblNm, String fileTyCd, String fileIdntNo) throws Exception {
 		PackagePart packagePart = xssfPictData.getPackagePart();
-
+		
 		LocalDate date = LocalDate.now();
 		String orgFileNm = packagePart.getPartName().toString();
 		String fileNm = filePrefix + date.format(DateTimeFormatter.ofPattern("yyyyMMdd")) + UUID.randomUUID();
 		String extNm = StringUtils.getFilenameExtension(orgFileNm);
 		String mimeTy = xssfPictData.getMimeType();
-
-		String folder = date.format(DateTimeFormatter.ofPattern("/yyyy/MM"));
-		if(mimeTy.contains("image")) folder += "/images";
-		else folder += "/files";
+		String folder = date.format(DateTimeFormatter.ofPattern("/yyyy/MM")) + "/images";
 
 		FileVo fileVo = new FileVo();
 		fileVo.setRegNo(0);
@@ -105,7 +104,7 @@ public class FileServiceImpl implements FileService {
 		fileVo.setFileTyCd(fileTyCd);
 		fileVo.setOrgFileNm(orgFileNm);
 		fileVo.setFileNm(fileNm);
-		fileVo.setFileSize(packagePart.getSize());
+		fileVo.setFileSize(xssfPictData.getData().length);
 		fileVo.setFileExtNm(extNm);
 		fileVo.setMimeTy(mimeTy);
 

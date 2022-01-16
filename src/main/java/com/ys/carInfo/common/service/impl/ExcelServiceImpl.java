@@ -143,16 +143,15 @@ public class ExcelServiceImpl implements ExcelService {
                 XSSFPicture xssfPict = (XSSFPicture) shape;
                 XSSFPictureData xssfPictData = xssfPict.getPictureData();
                 XSSFClientAnchor anchor = (XSSFClientAnchor) shape.getAnchor();
-                //ClientAnchor anchor = picture.getPreferredSize();
                 int row1 = anchor.getRow1();
                 int col1 = anchor.getCol1();
 
                 if(row1 >= 2 && col1 == 0) {
-                	FileVo fileVo = fileService.uploadExcelFile(xssfPictData, "MNF", "100101", "excel");
+                	FileVo fileVo = fileService.uploadExcelImgFile(xssfPictData, "MNF", "100101", "excel");
                 	fileNoArr[row1] = fileVo.getFileNo();
                 	filePathArr[row1] = fileVo.getFilePathNm()
                 			+ "\\" + fileVo.getFileNm()
-                			+ "\\" + fileVo.getFileExtNm();
+                			+ "." + fileVo.getFileExtNm();
                 }
             }
         }

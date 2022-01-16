@@ -9,7 +9,7 @@ public interface FileService {
 
 	public Integer uploadFile(MultipartFile file, String tblNm, String fileTyCd, String fileIdntNo) throws Exception;
 
-	public FileVo uploadExcelFile(XSSFPictureData xssfPictData, String tblNm, String fileTyCd, String fileIdntNo) throws Exception;
+	public FileVo uploadExcelImgFile(XSSFPictureData xssfPictData, String tblNm, String fileTyCd, String fileIdntNo) throws Exception;
 
 	public FileVo selectFile(Integer fileNo) throws Exception;
 
