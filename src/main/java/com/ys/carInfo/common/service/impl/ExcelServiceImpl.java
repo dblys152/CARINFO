@@ -71,10 +71,11 @@ public class ExcelServiceImpl implements ExcelService {
 
 		int rowNum = 0;
 
-		sheet.setColumnWidth(0, 3000);
-		sheet.setColumnWidth(1, 8000);
-		sheet.setColumnWidth(2, 5000);
-		sheet.setColumnWidth(3, 5000);
+		sheet.setColumnWidth(0, 3000);	// 제조사 로고
+		sheet.setColumnWidth(1, 8000);	// 제조사명
+		sheet.setColumnWidth(2, 3000);	// 국가코드
+		sheet.setColumnWidth(3, 5000);	// 제조국
+		sheet.setColumnWidth(4, 5000);	// 등록일
 
 		int colSize = columns.length;
 		Row headerRow = sheet.createRow(rowNum++);
@@ -113,11 +114,14 @@ public class ExcelServiceImpl implements ExcelService {
 			cell.setCellStyle(excelTemplate.getGnrlStyle(null, null, HorizontalAlignment.CENTER));
 			cell = row.createCell(1);
 			cell.setCellValue(String.valueOf(mnfList.get(i).get("mnfNm")));
-			cell.setCellStyle(excelTemplate.getGnrlStyle(null, null, HorizontalAlignment.LEFT));
+			cell.setCellStyle(excelTemplate.getGnrlStyle(null, null, HorizontalAlignment.CENTER));
 			cell = row.createCell(2);
-			cell.setCellValue(String.valueOf(mnfList.get(i).get("ntnCdKrNm")) + "(" + String.valueOf(mnfList.get(i).get("ntnCdEnNm")) + ")");
+			cell.setCellValue(String.valueOf(mnfList.get(i).get("ntnCd")));
 			cell.setCellStyle(excelTemplate.getGnrlStyle(null, null, HorizontalAlignment.CENTER));
 			cell = row.createCell(3);
+			cell.setCellValue(String.valueOf(mnfList.get(i).get("ntnCdKrNm")) + "(" + String.valueOf(mnfList.get(i).get("ntnCdEnNm")) + ")");
+			cell.setCellStyle(excelTemplate.getGnrlStyle(null, null, HorizontalAlignment.CENTER));
+			cell = row.createCell(4);
 			cell.setCellValue(String.valueOf(mnfList.get(i).get("regDt")));
 			cell.setCellStyle(excelTemplate.getGnrlStyle(null, null, HorizontalAlignment.CENTER));
 		}

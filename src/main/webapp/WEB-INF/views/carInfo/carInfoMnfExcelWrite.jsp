@@ -37,7 +37,7 @@ gnbActive = 'setting';
 				<div></div>
 			</div>
 		</div>
-		<div id="listHandson"></div>
+		<div id="listHandson" class="mb-3"></div>
 		<div class="mb-3 row">
 			<div class="d-flex justify-content-between bd-highlight mb-3">
 				<div></div>
@@ -51,7 +51,15 @@ gnbActive = 'setting';
 	</div>
 </div>
 
+<script src="/resources/handsontable/select2-editor.js"></script>
 <script>
+let hot;	// handsontable 변수
+const ntnJsonList = JSON.parse('${ ntnJsonList }');
+let ntnList = [];
+for(let i = 0; i < ntnJsonList.length; i++) {
+	ntnList.push({'id': ntnJsonList[i].ntnCd, 'text': ntnJsonList[i].ntnCdKrNm + ' (' + ntnJsonList[i].ntnCdEnNm + ')'})
+}
+
 window.addEventListener('DOMContentLoaded', () => {
 	/* 데이터 확인 버튼 클릭 */
 	document.getElementById('excelConvert').addEventListener('click', () => {
@@ -60,35 +68,25 @@ window.addEventListener('DOMContentLoaded', () => {
 			 alert('엑셀 파일을 등록해주세요.');
 			 fileInp.focus();
 		} else {
-			let formData = new FormData();
-			formData.append("file", fileInp.files[0]);
+			let parsingFlag = 0;
+			if($('.htCore').length == 0) {
+				parsingFlag = 1;
+			} else if(confirm('작성 중인 엑셀 파일이 있습니다. 변환하시겠습니까?')) {
+				hot.destroy();
+				parsingFlag = 1;
+			}
 
-			fn_excelParser(formData);
+			if(parsingFlag == 1) {
+				let formData = new FormData();
+				formData.append("file", fileInp.files[0]);
+				fn_excelParser(formData);
+			}
 		}
 	});
 
 	/* 제조사 저장 버튼 클릭 */
 	document.getElementById('mnfSave').addEventListener('click', () => {
-		let mnfNmInp = document.querySelector('input[name="mnfNm"]');
-		let fileInp = document.querySelector('input[name="file"]');
-		let fileNoInp = document.querySelector('input[name="fileNo"]');
 
-		if(mnfNmInp.value == '') {
-			alert('제조사명을 입력해주세요.');
-			mnfNmInp.focus();
-		} else if((fileInp == null || fileInp.value == '') && (fileNoInp == null || fileNoInp.value == '')) {
-			 alert('로고를 등록해주세요.');
-			 fileInp.focus();
-		} else if(confirm('저장 하시겠습니까?')) {
-			let formData = new FormData();
-			formData.append("mnfNo", document.querySelector('input[name="mnfNo"]').value);
-			formData.append("mnfNm", mnfNmInp.value);
-			formData.append("ntnCd", document.querySelector('select[name="ntnCd"]').value);
-			if(fileInp != null) formData.append("file", fileInp.files[0]);
-			if(fileNoInp != null) formData.append("fileNo", fileNoInp.value);
-
-			fn_saveMnf(formData);
-		}
 	});
 
 });
@@ -112,14 +110,53 @@ function fn_hansontableLoad(data) {
 	const hotElement = document.querySelector('#listHandson');
 	let hotSettings = {
 		data: dataObject,
-		rowHeaders: true,
-		colHeaders: true,
+		licenseKey: 'non-commercial-and-evaluation', // for non-commercial use only
 		height: 'auto',
-		licenseKey: 'non-commercial-and-evaluation' // for non-commercial use only
+		rowHeaders: true,
+		colWidths: [100, 200, 200],
+		colHeaders: [
+			'제조사 로고<span class="text-danger">*</span>',
+			'제조사명<span class="text-danger">*</span>',
+			'국가코드<span class="text-danger">*</span>'
+		],
+		columns: [
+			{data: 'fileNo', className:'htCenter htMiddle', readOnly: true, renderer: fn_customImgRenderer},
+			{data: 'mnfNm', type: 'text', className:'htCenter htMiddle'},
+			{data: 'ntnCd', type: 'key-value-list', filter: false, className:'htCenter htMiddle',
+				source: ntnList, keyProperty: 'id', valueProperty: 'text'
+			}
+			/* {data: 'ntnCd', editor: 'select2', className:'htCenter htMiddle', renderer: fn_customSelectRenderer,
+				select2Options: {
+					data: ntnList,
+                    dropdownAutoWidth: true,
+                    allowClear: true,
+                    width: 'resolve'
+				}
+			} */
+		]
 	}
 
-	const hot = new Handsontable(hotElement, hotSettings);
+	hot = new Handsontable(hotElement, hotSettings);
 	hot.validateCells();
+}
+
+function fn_customImgRenderer(instance, td, row, col, prop, value, cellProperties) {
+	Handsontable.renderers.TextRenderer.apply(this, arguments);
+	if(value != null) {
+		td.innerHTML = '<img src="/file/images/'+ value +'" style="width:50px;height:50px">';
+	}
+}
+
+function fn_customSelectRenderer(instance, td, row, col, prop, value, cellProperties) {
+	if (instance.getCell(row, col)) {
+		$(instance.getCell(row,col)).addClass('select2dropdown');
+	}
+	for(let i = 0; i < ntnList.length; i++) {
+		if(value == ntnList[i].id) {
+			value = ntnList[i].text;
+		}
+	}
+	Handsontable.renderers.TextRenderer.apply(this, arguments);
 }
 
 function fn_saveMnf(formData) {
@@ -135,4 +172,5 @@ function fn_saveMnf(formData) {
     	console.log(err);
 	});
 }
+
 </script>

@@ -141,6 +141,7 @@ public class CarInfoMngController {
 		return "/form/carInfo/carInfoMnfExcelWrite";
 	}
 
+	/* 제조사 일괄등록 양식 파싱 */
 	@RequestMapping(value="/mnfExcelParser", method=RequestMethod.POST)
 	@ResponseBody
 	public ResponseEntity<Map<String, Object>> insertMnf(
@@ -150,8 +151,8 @@ public class CarInfoMngController {
 			throw new EntityNotFoundException("Excel not found");
 
 		Map<String, Object> map = new HashMap<>();
-		String jsonArr = excelService.parsingMnfExcel(excel);
-		map.put("jsonArr", jsonArr);
+		String jsonList = excelService.parsingMnfExcel(excel);
+		map.put("jsonArr", jsonList);
 
 		return ResponseEntity.ok(map);
 	}
@@ -190,7 +191,7 @@ public class CarInfoMngController {
 	public ResponseEntity<byte[]> mnfExcelDown() throws Exception {
 
 		List<Map<String, Object>> mnfList = mnfService.selectMnfAllList(new HashMap<>());
-		String[] columns = {"제조사 로고", "제조사명", "제조국", "등록일"};
+		String[] columns = {"제조사 로고", "제조사명", "국가코드", "제조국", "등록일"};
 		SXSSFWorkbook workbook = excelService.createListExcel("제조사 목록", columns, mnfList);
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
 		workbook.write(os);
