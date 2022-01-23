@@ -14,12 +14,10 @@
     <link rel="icon" type="image/x-icon" href="/resources/bootstrap5/assets/favicon.ico" />
     <link href="/resources/bootstrap5/css/styles.css" rel="stylesheet" />
     <link href="/resources/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
-    <link href="/resources/handsontable/handsontable.full.min.css" rel="stylesheet" />
     <script src="/resources/bootstrap5/js/scripts.js"></script>
     <script src="/resources/script/jquery_v3.5.1.js"></script>
     <script src="/resources/script/common.js"></script>
     <script src="/resources/script/axios.min.js"></script>
-    <script src="/resources/handsontable/handsontable.full.min.js"></script>
 </head>
 <body>
 	<tiles:insertAttribute name="header"/>

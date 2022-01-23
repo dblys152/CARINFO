@@ -51,7 +51,8 @@ gnbActive = 'setting';
 	</div>
 </div>
 
-<script src="/resources/handsontable/select2-editor.js"></script>
+<link href="/resources/handsontable/handsontable.full.min.css" rel="stylesheet" />
+<script src="/resources/handsontable/handsontable.full.min.js"></script>
 <script>
 let hot;	// handsontable 변수
 const ntnJsonList = JSON.parse('${ ntnJsonList }');
@@ -113,31 +114,72 @@ function fn_hansontableLoad(data) {
 		licenseKey: 'non-commercial-and-evaluation', // for non-commercial use only
 		height: 'auto',
 		rowHeaders: true,
-		colWidths: [100, 200, 200],
+		colWidths: [100, 200, 100, 200],
 		colHeaders: [
 			'제조사 로고<span class="text-danger">*</span>',
 			'제조사명<span class="text-danger">*</span>',
-			'국가코드<span class="text-danger">*</span>'
+			'국가코드<span class="text-danger">*</span>',
+			'제조국'
 		],
 		columns: [
-			{data: 'fileNo', className:'htCenter htMiddle', readOnly: true, renderer: fn_customImgRenderer},
-			{data: 'mnfNm', type: 'text', className:'htCenter htMiddle'},
-			{data: 'ntnCd', type: 'key-value-list', filter: false, className:'htCenter htMiddle',
-				source: ntnList, keyProperty: 'id', valueProperty: 'text'
-			}
-			/* {data: 'ntnCd', editor: 'select2', className:'htCenter htMiddle', renderer: fn_customSelectRenderer,
-				select2Options: {
-					data: ntnList,
-                    dropdownAutoWidth: true,
-                    allowClear: true,
-                    width: 'resolve'
+			{data: 'fileNo', type: 'numeric', className:'htCenter htMiddle', validator: fn_customValidator,
+				readOnly: true,
+				renderer: fn_customImgRenderer
+			},
+			{data: 'mnfNm', type: 'text', className:'htCenter htMiddle', validator: fn_customValidator},
+			{data: 'ntnCd', type: 'text', className:'htCenter htMiddle', validator: fn_customValidator},
+			{data: '', type: 'text', className:'htCenter htMiddle', readOnly: true}
+		],
+		contextMenu: {
+			items: {
+				"remove_row": {
+					name: "행 삭제"
 				}
-			} */
-		]
+			}
+		},
+		afterChange: function(changes, source) {
+		  	if(changes != null && source != 'not') {
+		  		for(let i = 0; i < changes.length; i++) {
+					if(changes[i][1] == 'ntnCd') {
+						let flag = 0;
+						for(let ni = 0; ni < ntnList.length; ni++) {
+							if(changes[i][3] == ntnList[ni].id) {
+								hot.setDataAtCell(changes[i][0], 3, ntnList[ni].text);
+								flag = 1;
+								break;
+							}
+						}
+						if(flag == 0)
+							hot.setDataAtCell(changes[i][0], 3, null);
+					}
+		  		}
+			}
+			this.validateCells();
+		},
+		afterValidate: function(isValid, value, row, prop, source) {
+			value = (value == null ? '' : (typeof value == 'string' ? value.trim() : value));
+			if(prop == 'fileNo' && isNaN(parseInt(value))) {
+				return false;
+			} else if(prop == 'mnfNm' && value == '') {
+				return false;
+			} else if(prop == 'ntnCd' && value == '') {
+				return false;
+			} else {
+				return true;
+			}
+		}
 	}
 
 	hot = new Handsontable(hotElement, hotSettings);
 	hot.validateCells();
+	for(let i = 0; i < hot.getSourceData().length; i++) {
+		for(let ni = 0; ni < ntnList.length; ni++) {
+			if(hot.getDataAtCell(i, 2).trim() == ntnList[ni].id) {
+				hot.setDataAtCell(i, 3, ntnList[ni].text);
+				break;
+			}
+		}
+	}
 }
 
 function fn_customImgRenderer(instance, td, row, col, prop, value, cellProperties) {
@@ -147,16 +189,8 @@ function fn_customImgRenderer(instance, td, row, col, prop, value, cellPropertie
 	}
 }
 
-function fn_customSelectRenderer(instance, td, row, col, prop, value, cellProperties) {
-	if (instance.getCell(row, col)) {
-		$(instance.getCell(row,col)).addClass('select2dropdown');
-	}
-	for(let i = 0; i < ntnList.length; i++) {
-		if(value == ntnList[i].id) {
-			value = ntnList[i].text;
-		}
-	}
-	Handsontable.renderers.TextRenderer.apply(this, arguments);
+function fn_customValidator(query, callback) {
+	callback(true);
 }
 
 function fn_saveMnf(formData) {
