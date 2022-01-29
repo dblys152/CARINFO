@@ -27,13 +27,14 @@ public class MnfServiceImpl implements MnfService {
 		if(mnfVo.getMnfNo() == null && mnfVo.getFile() == null)
 			throw new EntityNotFoundException("File not found");
 
-		mnfVo.setRegNo(0);
-		mnfVo.setModNo(0);
+		int userNo = 0;
+		mnfVo.setRegNo(userNo);
+		mnfVo.setModNo(userNo);
 		mnfMapper.mergeMnf(mnfVo);			// 제조사 등록
 		String mnfNo = mnfVo.getMnfNo();
 
 		if(mnfVo.getFileNo() == null) {
-			fileService.deleteFile(mnfNo);	// 로고 삭제
+			fileService.deleteAtchFileIdntNo(mnfNo);	// 로고 삭제
 			try {
 				fileService.uploadFile(mnfVo.getFile(), "MNF", "100101", mnfNo);	// 로고 등록
 			} catch(EntityNotFoundException e) {
@@ -44,6 +45,21 @@ public class MnfServiceImpl implements MnfService {
 		}
 
 		return mnfNo;
+	}
+
+	@Override
+	@Transactional
+	public void insertMnfList(List<MnfVo> mnfList) throws Exception {
+		int userNo = 0;
+		for(MnfVo mnfVo : mnfList) {
+			mnfVo.setRegNo(userNo);
+			mnfVo.setModNo(userNo);
+			mnfMapper.mergeMnf(mnfVo);			// 제조사 등록
+			String mnfNo = mnfVo.getMnfNo();
+
+			//파일 업데이트
+			fileService.updateAtchFileIdntNo(mnfVo.getFileNo(), mnfNo);
+		}
 	}
 
 	@Override
@@ -62,7 +78,7 @@ public class MnfServiceImpl implements MnfService {
 		Map<String, Object> map = new HashMap<>();
 		map.put("modNo", 0);
 		map.put("mnfNo", mnfNo);
-		fileService.deleteFile(mnfNo);
+		fileService.deleteAtchFileIdntNo(mnfNo);
 		mnfMapper.deleteMnf(map);
 	}
 

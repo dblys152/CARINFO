@@ -14,11 +14,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -155,6 +157,31 @@ public class CarInfoMngController {
 		map.put("jsonArr", jsonList);
 
 		return ResponseEntity.ok(map);
+	}
+
+	/* 국가코드 팝업 코어 */
+	@RequestMapping(value="/ntnCdListPopCore", method=RequestMethod.GET)
+	public String ntnCdListPopCore(
+			@ModelAttribute(value="searchVo") SearchVo searchVo,
+			Model model) throws Exception {
+
+		Map<String, Object> map = new HashMap<>();
+		map.put("search", searchVo);
+		List<NtnCodeVo> ntnCdList = codeService.selectNtnCdList(map);
+		model.addAttribute("ntnCdList", ntnCdList);
+
+		return "/empty/carInfo/carInfoNtnCdListPopCore";
+	}
+
+	/* 제조사 일괄등록  */
+	@RequestMapping(value="/mnfExcelWrite", method=RequestMethod.POST)
+	@ResponseBody
+	public ResponseEntity<Map<String, Object>> mnfExcelWrite(
+			@RequestBody List<MnfVo> mnfList) throws Exception {
+
+		mnfService.insertMnfList(mnfList);
+
+		return ResponseEntity.ok(new HashMap<>());
 	}
 
 	/* 제조사 상세 화면 */

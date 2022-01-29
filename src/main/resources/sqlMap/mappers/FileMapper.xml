@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ys.carInfo.common.mapper.FileMapper">
 
-	<insert id="insertFile" parameterType="com.ys.carInfo.common.vo.FileVo" useGeneratedKeys="true" keyColumn="FILE_NO" keyProperty="fileNo">
+	<insert id="insertAtchFile" parameterType="com.ys.carInfo.common.vo.FileVo" useGeneratedKeys="true" keyColumn="FILE_NO" keyProperty="fileNo">
 		INSERT	INTO ATCH_FILE	(
 			FILE_NO
 		  , TBL_NM
@@ -43,7 +43,7 @@
 		)
 	</insert>
 
-	<select id="selectFile" parameterType="Integer" resultType="com.ys.carInfo.common.vo.FileVo">
+	<select id="selectAtchFile" parameterType="Integer" resultType="com.ys.carInfo.common.vo.FileVo">
 		SELECT
 				FILE_NO
 			  , TBL_NM
@@ -64,13 +64,22 @@
 		AND 	DEL_YN = 'N'
 	</select>
 
-	<update id="deleteFile" parameterType="java.util.HashMap">
+	<update id="deleteAtchFileIdntNo" parameterType="java.util.HashMap">
 		UPDATE	ATCH_FILE
 		SET 	DEL_YN = 'Y'
 			  , MOD_NO = #{modNo,jdbcType=INTEGER}
 			  , MOD_DTT = SYSDATE
 		WHERE	1 = 1
 		AND 	FILE_IDNT_NO = #{fileIdntNo,jdbcType=VARCHAR}
+	</update>
+
+	<update id="updateAtchFileIdntNo" parameterType="java.util.HashMap">
+		UPDATE	ATCH_FILE
+		SET 	FILE_IDNT_NO = #{fileIdntNo,jdbcType=VARCHAR}
+			  , MOD_NO = #{modNo,jdbcType=INTEGER}
+			  , MOD_DTT = SYSDATE
+		WHERE	1 = 1
+		AND 	FILE_NO = #{fileNo,jdbcType=INTEGER}
 	</update>
 
 </mapper>

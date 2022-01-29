@@ -7,10 +7,28 @@
 				NTN_CD
 			  , NTN_CD_KR_NM
 			  , NTN_CD_EN_NM
-		FROM 	NTN_CODE
+		FROM 	NTN_CODE	NC
 		WHERE	1 = 1
 		AND 	USE_YN = 'Y'
 		AND 	DEL_YN = 'N'
+		AND 	(
+                	#{search.schText,jdbcType=VARCHAR} IS NULL OR
+					EXISTS	(
+								SELECT	'X'
+								FROM 	(
+											SELECT	NTN_CD
+		                					FROM 	NTN_CODE
+		             						WHERE	1 = 1
+		             						AND 	NTN_CD_KR_NM LIKE '%' || #{search.schText,jdbcType=VARCHAR} || '%'
+		             						UNION	ALL
+		             						SELECT	NTN_CD
+		                					FROM 	NTN_CODE
+		             						WHERE	1 = 1
+		             						AND 	NTN_CD_EN_NM LIKE '%' || UPPER(#{search.schText,jdbcType=VARCHAR}) || '%'
+										)	A
+								WHERE	NC.NTN_CD = A.NTN_CD
+							)
+				)
 		ORDER	BY	NTN_CD_KR_NM
 	</select>
 

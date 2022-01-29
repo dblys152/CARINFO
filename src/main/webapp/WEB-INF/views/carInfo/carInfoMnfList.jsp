@@ -64,16 +64,17 @@ gnbActive = 'setting';
 
 <script>
 window.addEventListener('DOMContentLoaded', () => {
-	listCore();	//데이터 목록 조회
+	fn_listCore();	//데이터 목록 조회
 
 	/* 검색 버튼 클릭 */
 	document.getElementById('schBtn').addEventListener('click', () => {
-		list(1);
+		fn_list(1);
 	});
 
 	/* 검색어 엔터 클릭 검색 */
 	document.getElementById('schText').addEventListener('keydown', (e) => {
-		if(e.keyCode==13) list(1);
+		if(e.keyCode == 13)
+			fn_list(1);
 	});
 
 	/* 엑셀 다운로드 */
@@ -81,14 +82,14 @@ window.addEventListener('DOMContentLoaded', () => {
 
 });
 
-function list(n) {
+function fn_list(n) {
 	if(n == null) n = 1;
 	let form = document.forms["searchVo"];
 	form[fname="pageNo"].value = n;
 	form.submit();
 }
 
-function listCore() {
+function fn_listCore() {
 	let form = document.forms["searchVo"];
 	axios({
 		method: 'get'

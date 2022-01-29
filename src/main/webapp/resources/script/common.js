@@ -52,19 +52,19 @@ function paging(pageSize, totCnt, listCnt, pageNo) {
 
 	let html = '';
 	if(start > 1) {		//시작점 페이지가 아닌 경우 왼쪽 이동 버튼 활성화
-		html += '<li class="page-item"><button type="button" onclick="list(1)" class="page-link"><<</button></li>';
-		html += '<li class="page-item"><button type="button" onclick="list('+ (start - pageSize) +')" class="page-link"><</button></li>';
+		html += '<li class="page-item"><button type="button" onclick="fn_list(1)" class="page-link"><<</button></li>';
+		html += '<li class="page-item"><button type="button" onclick="fn_list('+ (start - pageSize) +')" class="page-link"><</button></li>';
 	} else {	//disabled 처리
 		html += '<li class="page-item disabled"><button type="button" class="page-link" tabindex="-1" aria-disabled="true"><</button></li>';
 	}
 
 	for(let i = start; i < end; i++) {
-		html += '<li class="page-item ' + (i == pageNo ? 'active' : '') + '" aria-current="page"><button type="button" onclick="list('+ i +')" class="page-link">'+ i +'</button></li>';
+		html += '<li class="page-item ' + (i == pageNo ? 'active' : '') + '" aria-current="page"><button type="button" onclick="fn_list('+ i +')" class="page-link">'+ i +'</button></li>';
 	}
 
 	if(end < pageCnt + 1) {	//마지막점 페이지가 아닌 경우 오른쪽 이동 버튼 활성화
-		html += '<li class="page-item"><button type="button" onclick="list('+ (start + pageSize) +')" class="page-link">></button></li>';
-		html += '<li class="page-item"><button type="button" onclick="list('+ pageCnt +')" class="page-link">>></button></li>';
+		html += '<li class="page-item"><button type="button" onclick="fn_list('+ (start + pageSize) +')" class="page-link">></button></li>';
+		html += '<li class="page-item"><button type="button" onclick="fn_list('+ pageCnt +')" class="page-link">>></button></li>';
 	} else {	//disabled 처리
 		html += '<li class="page-item disabled"><button type="button" class="page-link" tabindex="-1" aria-disabled="true">></button></li>';
 	}

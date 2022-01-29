@@ -33,6 +33,9 @@ gnbActive = 'setting';
 				<div></div>
 				<div>
 					<button type="button" class="btn btn-success" id="excelConvert">데이터 확인</button>
+					<button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#ntnCdModal">
+						국가코드표
+					</button>
 				</div>
 				<div></div>
 			</div>
@@ -51,6 +54,40 @@ gnbActive = 'setting';
 	</div>
 </div>
 
+<!-- Modal -->
+<div class="modal fade" id="ntnCdModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+ 	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">국가코드표</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<div class="input-group mb-3">
+					<input type="hidden">
+					<input id="popSchText" class="form-control" placeholder="Search" aria-label="Search"/>
+				  	<button type="button" id="popSchBtn" class="btn btn-secondary me-1"><i class="bi bi-search"></i></button>
+				  	<button type="button" id="popSchReset" class="btn btn-outline-secondary">초기화</button>
+				</div>
+				<table class="table table-hover align-middle" id="popNtnTbl">
+				<thead>
+					<tr>
+						<th scope="col">국가한글명</th>
+						<th scope="col">국가영문명</th>
+						<th scope="col">국가코드</th>
+					</tr>
+				</thead>
+				<tbody></tbody>
+				</table>
+			</div>
+			<!-- <div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-primary">Save changes</button>
+			</div> -->
+		</div>
+	</div>
+</div>
+
 <link href="/resources/handsontable/handsontable.full.min.css" rel="stylesheet" />
 <script src="/resources/handsontable/handsontable.full.min.js"></script>
 <script>
@@ -62,6 +99,7 @@ for(let i = 0; i < ntnJsonList.length; i++) {
 }
 
 window.addEventListener('DOMContentLoaded', () => {
+
 	/* 데이터 확인 버튼 클릭 */
 	document.getElementById('excelConvert').addEventListener('click', () => {
 		let fileInp = document.querySelector('input[name="file"]');
@@ -85,9 +123,36 @@ window.addEventListener('DOMContentLoaded', () => {
 		}
 	});
 
+	/* 국가코드표 팝업 */
+	let form = document.forms["popSearchVo"];
+	document.querySelector('button[data-bs-target="#ntnCdModal"]').addEventListener('click', () => {
+		document.getElementById('popSchText').value = '';
+		fn_popListCore();
+	});
+	/* 국가코드표 팝업 검색 버튼 클릭 */
+	document.getElementById('popSchBtn').addEventListener('click', fn_popListCore);
+	/* 국가코드표 팝업 검색어 엔터 클릭 검색 */
+	document.getElementById('popSchText').addEventListener('keydown', (e) => {
+		if(e.keyCode == 13)
+			fn_popListCore();
+	});
+	/* 국가코드표 팝업 초기화 버튼 클릭 */
+	document.getElementById('popSchReset').addEventListener('click', () => {
+		document.getElementById('popSchText').value = '';
+		fn_popListCore();
+	});
+
 	/* 제조사 저장 버튼 클릭 */
 	document.getElementById('mnfSave').addEventListener('click', () => {
-
+		if(document.querySelectorAll('.htCore').length == 0) {
+			alert('데이터 확인된 파일이 없습니다.');
+		} else {
+			if(document.querySelectorAll('#listHandson .htInvalid').length > 0) {
+				alert('데이터 형식을 확인해주세요.');
+			} else if(confirm('제조사를 일괄 저장하시겠습니까?')) {
+				fn_saveMnfList(hot.getSourceData());
+			}
+		}
 	});
 
 });
@@ -193,14 +258,28 @@ function fn_customValidator(query, callback) {
 	callback(true);
 }
 
-function fn_saveMnf(formData) {
+function fn_popListCore() {
+	axios({
+		method: 'get'
+	  , url: 'ntnCdListPopCore'
+	  , params: {
+			"schText": document.getElementById('popSchText').value
+		}
+	}).then((res) => {
+		document.querySelector('#popNtnTbl > tbody').innerHTML = res.data;
+	}).catch((err) => {
+    	console.log(err);
+	});
+}
+
+function fn_saveMnfList(dataList) {
 	axios({
 		method: 'post'
-	  , url: 'mnfWrite'
-	  , data: formData
-	  , headers: {'Content-Type': 'multipart/form-data'}
+	  , url: 'mnfExcelWrite'
+	  , data: JSON.stringify(dataList)
+	  , headers: {'Content-Type': 'application/json'}
 	}).then((res) => {
-		location.href="mnfView?mnfNo=" + res.data.mnfNo;
+		location.href="mnfList";
 	}).catch((err) => {
 		alert('저장 실패하였습니다.');
     	console.log(err);

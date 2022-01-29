@@ -11,8 +11,10 @@ public interface FileService {
 
 	public FileVo uploadExcelImgFile(XSSFPictureData xssfPictData, String tblNm, String fileTyCd, String fileIdntNo) throws Exception;
 
-	public FileVo selectFile(Integer fileNo) throws Exception;
+	public FileVo selectAtchFile(Integer fileNo) throws Exception;
 
-	public void deleteFile(String fileIdntNo) throws Exception;
+	public void deleteAtchFileIdntNo(String fileIdntNo) throws Exception;
+
+	public void updateAtchFileIdntNo(Integer fileNo, String fileIdntNo) throws Exception;
 
 }

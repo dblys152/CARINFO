@@ -26,7 +26,7 @@ public class FileController {
 	@RequestMapping(value="/images/{fileNo}", method=RequestMethod.GET)
 	public ResponseEntity<Resource> viewImg(
 			@PathVariable("fileNo")	Integer	fileNo) throws Exception {
-		FileVo fileVo = fileService.selectFile(fileNo);
+		FileVo fileVo = fileService.selectAtchFile(fileNo);
 		String fileFullPath = fileVo.getFilePathNm() + "\\" + fileVo.getFileNm() + "." + fileVo.getFileExtNm();
 		Resource file = new FileSystemResource(new File(fileFullPath).toPath());
 		return ResponseEntity.ok()
@@ -37,7 +37,7 @@ public class FileController {
 	@RequestMapping(value="/download", method=RequestMethod.GET)
     public ResponseEntity<Resource> downloadFile(
     		@RequestParam(value="fileNo") Integer fileNo) throws Exception {
-		FileVo fileVo = fileService.selectFile(fileNo);
+		FileVo fileVo = fileService.selectAtchFile(fileNo);
 		String fileFullPath = fileVo.getFilePathNm() + "\\" + fileVo.getFileNm() + "." + fileVo.getFileExtNm();
 		Resource file = new FileSystemResource(new File(fileFullPath).toPath());
         return ResponseEntity.ok()

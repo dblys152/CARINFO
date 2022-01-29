@@ -1,6 +1,5 @@
 package com.ys.carInfo.common.service.impl;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -49,9 +48,9 @@ public class FileServiceImpl implements FileService {
 		String mimeTy = file.getContentType();
 
 		StringBuilder folder = new StringBuilder(date.format(DateTimeFormatter.ofPattern("/yyyy/MM")));
-		if(mimeTy.contains("image")) 
+		if(mimeTy.contains("image"))
 			folder.append("/images");
-		else 
+		else
 			folder.append("/files");
 
 		FileVo fileVo = new FileVo();
@@ -81,14 +80,14 @@ public class FileServiceImpl implements FileService {
 			throw e;
 		}
 
-		fileMapper.insertFile(fileVo);
+		fileMapper.insertAtchFile(fileVo);
 		return fileVo.getFileNo();
 	}
 
 	@Override
 	public FileVo uploadExcelImgFile(XSSFPictureData xssfPictData, String tblNm, String fileTyCd, String fileIdntNo) throws Exception {
 		PackagePart packagePart = xssfPictData.getPackagePart();
-		
+
 		LocalDate date = LocalDate.now();
 		String orgFileNm = packagePart.getPartName().toString();
 		String fileNm = filePrefix + date.format(DateTimeFormatter.ofPattern("yyyyMMdd")) + UUID.randomUUID();
@@ -123,21 +122,30 @@ public class FileServiceImpl implements FileService {
 			throw e;
 		}
 
-		fileMapper.insertFile(fileVo);
+		fileMapper.insertAtchFile(fileVo);
 		return fileVo;
 	}
 
 	@Override
-	public FileVo selectFile(Integer fileNo) throws Exception {
-		return fileMapper.selectFile(fileNo);
+	public FileVo selectAtchFile(Integer fileNo) throws Exception {
+		return fileMapper.selectAtchFile(fileNo);
 	}
 
 	@Override
-	public void deleteFile(String fileIdntNo) throws Exception {
+	public void deleteAtchFileIdntNo(String fileIdntNo) throws Exception {
 		Map<String, Object> map = new HashMap<>();
 		map.put("modNo", 0);
 		map.put("fileIdntNo", fileIdntNo);
-		fileMapper.deleteFile(map);
+		fileMapper.deleteAtchFileIdntNo(map);
+	}
+
+	@Override
+	public void updateAtchFileIdntNo(Integer fileNo, String fileIdntNo) throws Exception {
+		Map<String, Object> map = new HashMap<>();
+		map.put("modNo", 0);
+		map.put("fileNo", fileNo);
+		map.put("fileIdntNo", fileIdntNo);
+		fileMapper.updateAtchFileIdntNo(map);
 	}
 
 

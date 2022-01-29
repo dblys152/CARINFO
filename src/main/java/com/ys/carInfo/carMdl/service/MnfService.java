@@ -11,6 +11,9 @@ public interface MnfService {
 	/* 제조사 등록 및 수정 */
 	public String mergeMnf(MnfVo mnfVo) throws Exception;
 
+	/* 제조사 일괄 등록 */
+	public void insertMnfList(List<MnfVo> mnfList) throws Exception;
+
 	/* 제조사 조회 */
 	public MnfVo selectMnf(String mnfNo) throws Exception;
 
