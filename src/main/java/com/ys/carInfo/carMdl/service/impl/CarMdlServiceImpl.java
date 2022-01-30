@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ys.carInfo.carMdl.mapper.CarMdlMapper;
 import com.ys.carInfo.carMdl.service.CarMdlService;
-import com.ys.carInfo.carMdl.vo.CarInfoVo;
+import com.ys.carInfo.carMdl.vo.CarMdlVo;
 
 @Service("carMdlService")
 public class CarMdlServiceImpl implements CarMdlService {
@@ -24,7 +24,7 @@ public class CarMdlServiceImpl implements CarMdlService {
 	@Override
 	@Transactional
 	public void insertCarInfo(Map<String, Object> map) throws Exception {
-		CarInfoVo carInfoVo = new CarInfoVo();
+		CarMdlVo carInfoVo = new CarMdlVo();
 		carMdlMapper.insertCarInfo(carInfoVo);
 	}
 

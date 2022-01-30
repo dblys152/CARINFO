@@ -30,6 +30,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ys.carInfo.carMdl.service.CarMdlService;
 import com.ys.carInfo.carMdl.service.MnfService;
+import com.ys.carInfo.carMdl.vo.CarMdlVo;
 import com.ys.carInfo.carMdl.vo.MnfVo;
 import com.ys.carInfo.common.service.CodeService;
 import com.ys.carInfo.common.service.ExcelService;
@@ -47,11 +48,29 @@ public class CarInfoMngController {
 	@Autowired private CodeService codeService;
 	@Autowired private ExcelService excelService;
 
-	/* 자동차정보 목록 화면 */
-	@RequestMapping(value="/mdlList", method=RequestMethod.GET)
+	/* 자동차모델 목록 화면 */
+	@RequestMapping(value="/carMdlList", method=RequestMethod.GET)
 	public String mdlList(Model model) throws Exception {
 
-		return "/form/carInfo/mdlList";
+		return "/form/carInfo/carMdlList";
+	}
+
+	/* 자동차모델 등록 및 수정 화면 */
+	@RequestMapping(value="/carMdlWrite", method=RequestMethod.GET)
+	public String mdlWrite(
+			@ModelAttribute("carMdlVo") CarMdlVo carMdlVo,
+			@RequestParam(value="carMdlNo", required=false) String carMdlNo,
+			Model model) throws Exception {
+
+		List<Map<String, Object>> mnfList = mnfService.selectMnfAllList(new HashMap<>());
+		model.addAttribute("mnfList", mnfList);
+
+		if(carMdlNo != null && !carMdlNo.trim().equals("")) {
+			//carMdlVo = mnfService.selectCarMdl(carMdlVo);
+		}
+		model.addAttribute("carMdlVo", carMdlVo);
+
+		return "/form/carInfo/carMdlWrite";
 	}
 
 	/* 제조사 목록 화면 */

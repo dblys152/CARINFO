@@ -21,14 +21,14 @@ gnbActive = 'setting';
 	<div class="col-lg-12">
 		<form:form modelAttribute="mnfVo" enctype="multipart/form-data">
 		<form:hidden path="mnfNo"/>
-		<div class="mb-3 row">
-		 	<label for="inputPassword" class="col-sm-2 col-form-label">제조사명<span class="text-danger">*</span></label>
+		<div class="row mb-3">
+		 	<label class="col-sm-2 col-form-label">제조사명<span class="text-danger">*</span></label>
 			<div class="col-sm-10">
 			  <form:input class="form-control" path="mnfNm"/>
 			</div>
 		</div>
-		<div class="mb-3 row">
-		 	<label for="inputPassword" class="col-sm-2 col-form-label">제조국<span class="text-danger">*</span></label>
+		<div class="row mb-3">
+		 	<label class="col-sm-2 col-form-label">제조국<span class="text-danger">*</span></label>
 			<div class="col-sm-10">
 				<form:select class="form-select" aria-label="Default select example" path="ntnCd">
 					<c:forEach items="${ ntnCdList }" var="i">
@@ -37,8 +37,8 @@ gnbActive = 'setting';
 				</form:select>
 			</div>
 		</div>
-		<div class="mb-3 row">
-		 	<label for="inputPassword" class="col-sm-2 col-form-label">제조사 로고<span class="text-danger">*</span></label>
+		<div class="row mb-3">
+		 	<label class="col-sm-2 col-form-label">제조사 로고<span class="text-danger">*</span></label>
 		 	<div class="col-sm-10" id="file_box">
 				<c:choose>
 				<c:when test="${ mnfVo.mnfNo != null }">
@@ -47,14 +47,14 @@ gnbActive = 'setting';
 					<img src="/file/images/<c:out value="${ mnfVo.fileNo }"/>" class="logo" style="width:50px;height:50px">
 				</c:when>
 				<c:otherwise>
-					<label for="formFile" class="form-label">로고 크기 50x50</label>
+					<label class="form-label">로고 크기 50x50</label>
 					<input class="form-control upload_img" type="file" name="file">
 				</c:otherwise>
 				</c:choose>
 			</div>
 		</div>
 		</form:form>
-		<div class="mb-3 row">
+		<div class="row mb-3">
 			<div class="d-flex justify-content-between bd-highlight mb-3">
 				<div></div>
 				<div>
