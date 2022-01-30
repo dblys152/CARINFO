@@ -36,7 +36,7 @@ public class CarInfoController {
 		List<CmnCodeVo> cmnCdList = codeService.selectCmnCdList(map);
 		model.addAttribute("cmnCdList", cmnCdList);
 
-		return "/form/carInfo/carInfoMainView";
+		return "/form/carInfo/mainView";
 	}
 
 	@RequestMapping(value="/save", method=RequestMethod.POST)

@@ -70,6 +70,9 @@ gnbActive = 'setting';
 				  	<button type="button" id="popSchReset" class="btn btn-outline-secondary">초기화</button>
 				</div>
 				<table class="table table-hover align-middle" id="popNtnTbl">
+				<colgroup>
+					<col style="width:150px"><col style="width:150px"><col style="width:100px">
+				</colgroup>
 				<thead>
 					<tr>
 						<th scope="col">국가한글명</th>

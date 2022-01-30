@@ -23,7 +23,7 @@ gnbActive = 'setting';
 			<a href="mdlList" class="btn btn-secondary">자동차 모델</a>
 			<a href="mnfList" class="btn btn-outline-secondary">제조사</a>
 			<div class="float-end">
-				<a href="mnfWrite" class="btn btn-info">자동차 모델 등록</a>
+				<a href="mdlWrite" class="btn btn-info">자동차 모델 등록</a>
 			</div>
 		</div>
 		<div class="col-md-4">

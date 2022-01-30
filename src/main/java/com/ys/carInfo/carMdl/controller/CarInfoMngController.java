@@ -51,7 +51,7 @@ public class CarInfoMngController {
 	@RequestMapping(value="/mdlList", method=RequestMethod.GET)
 	public String mdlList(Model model) throws Exception {
 
-		return "/form/carInfo/carInfoMdlList";
+		return "/form/carInfo/mdlList";
 	}
 
 	/* 제조사 목록 화면 */
@@ -64,7 +64,7 @@ public class CarInfoMngController {
 			searchVo.setPageNo(1);
 		}
 
-		return "/form/carInfo/carInfoMnfList";
+		return "/form/carInfo/mnfList";
 	}
 	@RequestMapping(value="/mnfListCore", method=RequestMethod.GET)
 	public String mnfListCore(
@@ -80,7 +80,7 @@ public class CarInfoMngController {
 		model.addAttribute("listCnt", searchVo.getListCnt());
 		model.addAttribute("pageNo", searchVo.getPageNo());
 
-		return "/empty/carInfo/carInfoMnfListCore";
+		return "/empty/carInfo/mnfListCore";
 	}
 
 	/* 제조사 등록 및 수정 화면 */
@@ -98,7 +98,7 @@ public class CarInfoMngController {
 		}
 		model.addAttribute("mnfVo", mnfVo);
 
-		return "/form/carInfo/carInfoMnfWrite";
+		return "/form/carInfo/mnfWrite";
 	}
 
 	/* 제조사 등록 및 수정 */
@@ -140,7 +140,7 @@ public class CarInfoMngController {
 		}
 		model.addAttribute("mnfVo", mnfVo);
 
-		return "/form/carInfo/carInfoMnfExcelWrite";
+		return "/form/carInfo/mnfExcelWrite";
 	}
 
 	/* 제조사 일괄등록 양식 파싱 */
@@ -170,7 +170,7 @@ public class CarInfoMngController {
 		List<NtnCodeVo> ntnCdList = codeService.selectNtnCdList(map);
 		model.addAttribute("ntnCdList", ntnCdList);
 
-		return "/empty/carInfo/carInfoNtnCdListPopCore";
+		return "/empty/carInfo/ntnCdListPopCore";
 	}
 
 	/* 제조사 일괄등록  */
@@ -196,7 +196,7 @@ public class CarInfoMngController {
 		}
 		model.addAttribute("mnfVo", mnfVo);
 
-		return "/form/carInfo/carInfoMnfView";
+		return "/form/carInfo/mnfView";
 	}
 
 	/* 제조사 삭제 */
