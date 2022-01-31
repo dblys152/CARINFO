@@ -9,12 +9,6 @@
 gnbActive = 'setting';
 </script>
 
-<style>
-.choice {
-	background: #dcdcdc
-}
-</style>
-
 <!-- Page content-->
 <div class="row">
 	<!-- Page header-->
@@ -28,7 +22,7 @@ gnbActive = 'setting';
 		<form:form modelAttribute="carMdlVo" enctype="multipart/form-data">
 		<form:hidden path="carMdlNo"/>
 
-		<div class="row mb-5 row-cols-1 row-cols-md-6 g-4">
+		<div class="row mb-5 row-cols-1 row-cols-md-6 g-4 overflow-auto" style="height: 310px" >
 			<label class="col-sm-2 col-form-label">제조사 선택<span class="text-danger">*</span></label>
 			<c:forEach items="${ mnfList }" var="i">
 			<div class="col" id="mnfBox">
@@ -67,12 +61,12 @@ window.addEventListener('DOMContentLoaded', () => {
 	for(let i = 0; i < mnfCards.length; i++) {
 		mnfCards[i].addEventListener('click', (e) => {
 			for(let i = 0; i < mnfCards.length; i++) {
-				mnfCards[i].classList.remove('choice');
+				mnfCards[i].classList.remove('mnf_choice');
 			}
 
 			let thisMnf = e.currentTarget;
-			if(!thisMnf.classList.contains('choice')) {
-				thisMnf.classList.add('choice');
+			if(!thisMnf.classList.contains('mnf_choice')) {
+				thisMnf.classList.add('mnf_choice');
 			}
 		});
 	}
@@ -81,10 +75,10 @@ window.addEventListener('DOMContentLoaded', () => {
 
 function fn_saveMnf(formData) {
 	axios({
-		method: 'post'
-	  , url: 'mnfWrite'
-	  , data: formData
-	  , headers: {'Content-Type': 'multipart/form-data'}
+		method: 'post',
+	  	url: 'mnfWrite',
+	 	data: formData,
+	 	headers: {'Content-Type': 'multipart/form-data'}
 	}).then((res) => {
 		location.href="mnfView?mnfNo=" + res.data.mnfNo;
 	}).catch((err) => {

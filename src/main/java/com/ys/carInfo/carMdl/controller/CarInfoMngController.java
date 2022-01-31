@@ -35,6 +35,7 @@ import com.ys.carInfo.carMdl.vo.CarMdlVo;
 import com.ys.carInfo.carMdl.vo.MnfVo;
 import com.ys.carInfo.common.service.CodeService;
 import com.ys.carInfo.common.service.ExcelService;
+import com.ys.carInfo.common.util.MessageBox;
 import com.ys.carInfo.common.vo.NtnCodeVo;
 import com.ys.carInfo.common.vo.SearchVo;
 import com.ys.global.error.exception.EntityNotFoundException;
@@ -219,7 +220,7 @@ public class CarInfoMngController {
 
 		MnfVo mnfVo = mnfService.selectMnf(mnfNo);
 		if(mnfVo == null) {
-
+			return MessageBox.showMsgAndBack(model, "등록되지 않은 제조사입니다.");
 		}
 		model.addAttribute("mnfVo", mnfVo);
 

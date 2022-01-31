@@ -32,7 +32,7 @@ gnbActive = 'setting';
 			<form:form modelAttribute="searchVo" method="get">
 			<form:hidden path="pageNo"/>
 			<div class="input-group mb-3">
-				<form:input path="schText" class="form-control" placeholder="Search" aria-label="Search"/>
+				<form:input path="schText" class="form-control" placeholder="제조사명을 입력하세요." aria-label="Search"/>
 			  	<button type="button" id="schBtn" class="btn btn-secondary me-1"><i class="bi bi-search"></i></button>
 			  	<a href="mnfList" class="btn btn-outline-secondary">초기화</a>
 			</div>
