@@ -162,15 +162,28 @@ window.addEventListener('DOMContentLoaded', () => {
 
 function fn_excelParser(formData) {
 	axios({
-		method: 'post'
-	  , url: 'mnfExcelParser'
-	  , data: formData
-	  , headers: {'Content-Type': 'multipart/form-data'}
+		method: 'post',
+	  	url: 'mnfExcelParser',
+	  	data: formData,
+	  	headers: {'Content-Type': 'multipart/form-data'}
 	}).then((res) => {
 		fn_hansontableLoad(res.data.jsonArr);
 	}).catch((err) => {
-		alert('변환 실패하였습니다.');
-    	console.log(err);
+		if(err.response) {
+			if(err.response.data.errors.length > 0) {
+				alert('데이터를 확인해주세요.\n변환 실패하였습니다.');
+				console.log(err);
+			} else {
+				alert(err.response.data.message + '\n변환 실패하였습니다.');
+				console.log(err);
+			}
+		} else if(err.request) {
+			alert('변환 실패하였습니다.');
+			console.log(err.request);
+		} else {
+			alert('변환 실패하였습니다.');
+			console.log(err);
+		}
 	});
 }
 
@@ -263,9 +276,9 @@ function fn_customValidator(query, callback) {
 
 function fn_popListCore() {
 	axios({
-		method: 'get'
-	  , url: 'ntnCdListPopCore'
-	  , params: {
+		method: 'get',
+	  	url: 'ntnCdListPopCore',
+	  	params: {
 			"schText": document.getElementById('popSchText').value
 		}
 	}).then((res) => {
@@ -277,10 +290,10 @@ function fn_popListCore() {
 
 function fn_saveMnfList(dataList) {
 	axios({
-		method: 'post'
-	  , url: 'mnfExcelWrite'
-	  , data: JSON.stringify(dataList)
-	  , headers: {'Content-Type': 'application/json'}
+		method: 'post',
+	  	url: 'mnfExcelWrite',
+	  	data: JSON.stringify(dataList),
+	  	headers: {'Content-Type': 'application/json'}
 	}).then((res) => {
 		location.href="mnfList";
 	}).catch((err) => {

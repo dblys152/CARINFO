@@ -44,10 +44,10 @@ gnbActive = 'setting';
 				<c:when test="${ mnfVo.mnfNo != null }">
 					<c:out value="${ mnfVo.orgFileNm }"/><button type="button" class="btn-close" id="log_del" aria-label="Close"></button><br/>
 					<input type="hidden" name="fileNo" value="<c:out value="${ mnfVo.fileNo }"/>"/>
-					<img src="/file/images/<c:out value="${ mnfVo.fileNo }"/>" class="logo" style="width:50px;height:50px">
+					<img src="/file/images/<c:out value="${ mnfVo.fileNo }"/>" class="mnf_logo">
 				</c:when>
 				<c:otherwise>
-					<label class="form-label">로고 크기 50x50</label>
+					<label class="form-label">정방형 크기 1MB이하</label>
 					<input class="form-control upload_img" type="file" name="file">
 				</c:otherwise>
 				</c:choose>
@@ -75,7 +75,7 @@ window.addEventListener('DOMContentLoaded', () => {
 		document.getElementById('log_del').addEventListener('click', () => {
 			if(confirm('로고를 삭제하시겠습니까?')) {
 				let html = '';
-				html += '<label for="formFile" class="form-label">로고 크기 50x50</label>';
+				html += '<label class="form-label">정방형 크기 1MB이하</label>';
 				html += '<input class="form-control upload_img" type="file" name="file">';
 				document.getElementById('file_box').innerHTML = html;
 			}
@@ -110,15 +110,28 @@ window.addEventListener('DOMContentLoaded', () => {
 
 function fn_saveMnf(formData) {
 	axios({
-		method: 'post'
-	  , url: 'mnfWrite'
-	  , data: formData
-	  , headers: {'Content-Type': 'multipart/form-data'}
+		method: 'post',
+	  	url: 'mnfWrite',
+	  	data: formData,
+	  	headers: {'Content-Type': 'multipart/form-data'}
 	}).then((res) => {
 		location.href="mnfView?mnfNo=" + res.data.mnfNo;
 	}).catch((err) => {
-		alert('저장 실패하였습니다.');
-    	console.log(err);
+		if(err.response) {
+			if(err.response.data.errors.length > 0) {
+				alert('데이터를 확인해주세요.\n저장 실패하였습니다.');
+				console.log(err);
+			} else {
+				alert(err.response.data.message + '\n저장 실패하였습니다.');
+				console.log(err);
+			}
+		} else if(err.request) {
+			alert('저장 실패하였습니다.');
+			console.log(err.request);
+		} else {
+			alert('저장 실패하였습니다.');
+			console.log(err);
+		}
 	});
 }
 </script>

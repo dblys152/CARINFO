@@ -24,9 +24,6 @@ public class MnfServiceImpl implements MnfService {
 	@Override
 	@Transactional
 	public String mergeMnf(MnfVo mnfVo) throws Exception {
-		if(mnfVo.getMnfNo() == null && mnfVo.getFile() == null)
-			throw new EntityNotFoundException("File not found");
-
 		int userNo = 0;
 		mnfVo.setRegNo(userNo);
 		mnfVo.setModNo(userNo);
@@ -37,8 +34,6 @@ public class MnfServiceImpl implements MnfService {
 			fileService.deleteAtchFileIdntNo(mnfNo);	// 로고 삭제
 			try {
 				fileService.uploadFile(mnfVo.getFile(), "MNF", "100101", mnfNo);	// 로고 등록
-			} catch(EntityNotFoundException e) {
-				throw e;
 			} catch(IOException e) {
 				throw e;
 			}

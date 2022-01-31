@@ -19,6 +19,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,6 +38,7 @@ import com.ys.carInfo.common.service.ExcelService;
 import com.ys.carInfo.common.vo.NtnCodeVo;
 import com.ys.carInfo.common.vo.SearchVo;
 import com.ys.global.error.exception.EntityNotFoundException;
+import com.ys.global.error.exception.InvalidValueException;
 
 @Controller
 @RequestMapping("/carInfoMng")
@@ -126,12 +128,18 @@ public class CarInfoMngController {
 	public ResponseEntity<Map<String, Object>> insertMnf(
 			@ModelAttribute MnfVo mnfVo) throws Exception {
 
+		if((mnfVo.getMnfNo() == null || mnfVo.getMnfNo().equals("")) && mnfVo.getFile() == null) {
+			throw new EntityNotFoundException("파일을 찾을 수 없습니다.");
+		} else if(mnfVo.getFile() != null) {	// 1MB 제한
+			long bytes = mnfVo.getFile().getSize();
+			if((bytes / 1024) / 1024 > 1)
+				throw new InvalidValueException("파일 크기 1MB를 초과하였습니다.");
+		}
+
 		Map<String, Object> map = new HashMap<>();
 		try {
 			String mnfNo = mnfService.mergeMnf(mnfVo);
 			map.put("mnfNo", mnfNo);
-		} catch(EntityNotFoundException e) {
-			throw e;
 		} catch(IOException e) {
 			throw e;
 		}
@@ -169,7 +177,7 @@ public class CarInfoMngController {
 			@RequestParam(value="file") MultipartFile excel) throws Exception {
 
 		if(excel == null)
-			throw new EntityNotFoundException("Excel not found");
+			throw new EntityNotFoundException("엑셀 파일을 찾을 수 없습니다.");
 
 		Map<String, Object> map = new HashMap<>();
 		String jsonList = excelService.parsingMnfExcel(excel);
@@ -222,9 +230,9 @@ public class CarInfoMngController {
 	@RequestMapping(value="/mnfDel", method=RequestMethod.POST)
 	@ResponseBody
 	public ResponseEntity<Map<String, Object>> mnfDel(
-			@ModelAttribute MnfVo mnfVo) throws Exception {
+			@RequestBody MnfVo mnfVo) throws Exception {
 
-		if(mnfVo.getMnfNo() == null)
+		if(mnfVo.getMnfNo() == null || mnfVo.getMnfNo().equals(""))
 			throw new EntityNotFoundException("mnfNo not found");
 		mnfService.deleteMnf(mnfVo.getMnfNo());
 

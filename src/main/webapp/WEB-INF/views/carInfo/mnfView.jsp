@@ -27,19 +27,19 @@ gnbActive = 'setting';
 			</div>
 		</div>
 		<div class="row mb-3">
-		 	<label for="inputPassword" class="col-sm-2 col-form-label">제조국</label>
+		 	<label class="col-sm-2 col-form-label">제조국</label>
 			<div class="col-sm-10 col-form-label">
 				<c:out value="${ mnfVo.ntnCdKrNm } (${ mnfVo.ntnCdEnNm })"/>
 			</div>
 		</div>
 		<div class="row mb-3">
-		 	<label for="inputPassword" class="col-sm-2 col-form-label">제조사 로고</label>
+		 	<label class="col-sm-2 col-form-label">제조사 로고</label>
 		 	<div class="col-sm-10 col-form-label">
-				<img src="/file/images/<c:out value="${ mnfVo.fileNo }"/>" class="logo" style="width:50px;height:50px">
+				<img src="/file/images/<c:out value="${ mnfVo.fileNo }"/>" class="mnf_logo">
 			</div>
 		</div>
 		<div class="row mb-3">
-		 	<label for="inputPassword" class="col-sm-2 col-form-label">등록일</label>
+		 	<label class="col-sm-2 col-form-label">등록일</label>
 			<div class="col-sm-10 col-form-label">
 				<c:out value="${ mnfVo.regDt }"/>
 			</div>
@@ -65,18 +65,19 @@ window.addEventListener('DOMContentLoaded', () => {
 	/* 제조사 삭제 버튼 클릭 */
 	document.getElementById('mnfDel').addEventListener('click', () => {
 		if(confirm('제조사를 삭제하시겠습니까?')) {
-			let dataForm = new FormData();
-			dataForm.append("mnfNo", "${ mnfVo.mnfNo }");
-
-			fn_delMnf(dataForm);
+			fn_delMnf({"mnfNo": "${ mnfVo.mnfNo }"});
 		}
 	});
 
 });
 
 function fn_delMnf(dataForm) {
-	axios.post('mnfDel', dataForm, {headers: {'Content-Type': 'multipart/form-data'}})
-	.then((res) => {
+	axios({
+		method: 'post',
+	  	url: 'mnfDel',
+	  	data: JSON.stringify(dataForm),
+	  	headers: {'Content-Type': 'application/json'}
+	}).then((res) => {
 		location.href="mnfList";
 	}).catch((err) => {
 		alert('삭제 실패하였습니다.');

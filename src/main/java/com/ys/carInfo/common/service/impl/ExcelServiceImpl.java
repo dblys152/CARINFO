@@ -46,6 +46,7 @@ import com.ys.carInfo.common.service.ExcelService;
 import com.ys.carInfo.common.service.FileService;
 import com.ys.carInfo.common.util.ExcelTemplate;
 import com.ys.carInfo.common.vo.FileVo;
+import com.ys.global.error.exception.InvalidValueException;
 
 @Service("excelService")
 public class ExcelServiceImpl implements ExcelService {
@@ -150,7 +151,11 @@ public class ExcelServiceImpl implements ExcelService {
                 int row1 = anchor.getRow1();
                 int col1 = anchor.getCol1();
 
-                if(row1 >= 2 && col1 == 0) {
+                if(row1 >= 1 && col1 == 0) {
+                	long bytes = xssfPictData.getData().length;
+                	if((bytes / 1024) / 1024 > 1)
+        				throw new InvalidValueException("파일 크기 1MB를 초과하였습니다.");
+
                 	FileVo fileVo = fileService.uploadExcelImgFile(xssfPictData, "MNF", "100101", "excel");
                 	fileNoArr[row1] = fileVo.getFileNo();
                 	filePathArr[row1] = fileVo.getFilePathNm()
@@ -161,20 +166,22 @@ public class ExcelServiceImpl implements ExcelService {
         }
 
 		List<MnfVo> list = new ArrayList<>();
-		if(rowSize >= 3) {
-			for(int i = 2; i < rowSize; i++) {
-				Row row = sheet.getRow(i);
-				MnfVo mnfVo = new MnfVo();
-				//파일번호
-				mnfVo.setFileNo(fileNoArr[i]);
-				//파일경로
-				mnfVo.setFilePathNm(filePathArr[i]);
-				// 제조사명
-				mnfVo.setMnfNm(row.getCell(1) == null ? "" : String.valueOf(getValueFromCell(row.getCell(1))));
-				// 국가코드
-				mnfVo.setNtnCd(row.getCell(2) == null ? "" : String.valueOf(getValueFromCell(row.getCell(2))));
+		if(rowSize >= 2) {
+			for(int i = 1; i < rowSize; i++) {
+				if(fileNoArr[i] != null && fileNoArr[i] != 0) {		// 로고가 존재하면 등록
+					Row row = sheet.getRow(i);
+					MnfVo mnfVo = new MnfVo();
+					//파일번호
+					mnfVo.setFileNo(fileNoArr[i]);
+					//파일경로
+					mnfVo.setFilePathNm(filePathArr[i]);
+					// 제조사명
+					mnfVo.setMnfNm(row.getCell(1) == null ? "" : String.valueOf(getValueFromCell(row.getCell(1))));
+					// 국가코드
+					mnfVo.setNtnCd(row.getCell(2) == null ? "" : String.valueOf(getValueFromCell(row.getCell(2))));
 
-				list.add(mnfVo);
+					list.add(mnfVo);
+				}
 			}
 		}
 

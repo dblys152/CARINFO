@@ -18,6 +18,16 @@
     <script src="/resources/bootstrap5/js/bootstrap.bundle.min.js"></script>
     <script src="/resources/script/common.js"></script>
     <script src="/resources/script/axios.min.js"></script>
+
+    <style>
+    	.mnf_logo {
+    		width: 54px;
+    		height: 54px;
+    	}
+    	.mnf_choice {
+			background: #dcdcdc
+		}
+    </style>
 </head>
 <body>
 	<tiles:insertAttribute name="header"/>

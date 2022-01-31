@@ -39,7 +39,7 @@ public class FileServiceImpl implements FileService {
 	@Override
 	public Integer uploadFile(MultipartFile file, String tblNm, String fileTyCd, String fileIdntNo) throws Exception {
 		if(file == null)
-			throw new EntityNotFoundException("file not found");
+			throw new EntityNotFoundException("파일을 찾을 수 없습니다.");
 
 		LocalDate date = LocalDate.now();
 		String orgFileNm = file.getOriginalFilename();

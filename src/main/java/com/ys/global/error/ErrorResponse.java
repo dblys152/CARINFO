@@ -19,36 +19,35 @@ public class ErrorResponse {
     private int status;
     private List<FieldError> errors;
 
-
-    private ErrorResponse(final ErrorCode code, final List<FieldError> errors) {
-        this.message = code.getMessage();
+    private ErrorResponse(String message, final ErrorCode code, final List<FieldError> errors) {
+        this.message = (message == null || message.equals("") ? code.getMessage() : message);
         this.status = code.getStatus();
         this.errors = errors;
     }
 
-    private ErrorResponse(final ErrorCode code) {
-        this.message = code.getMessage();
+    private ErrorResponse(String message, final ErrorCode code) {
+        this.message = (message == null || message.equals("") ? code.getMessage() : message);
         this.status = code.getStatus();
         this.errors = new ArrayList<>();
     }
 
 
-    public static ErrorResponse of(final ErrorCode code, final BindingResult bindingResult) {
-        return new ErrorResponse(code, FieldError.of(bindingResult));
+    public static ErrorResponse of(String message, final ErrorCode code, final BindingResult bindingResult) {
+        return new ErrorResponse(message, code, FieldError.of(bindingResult));
     }
 
-    public static ErrorResponse of(final ErrorCode code) {
-        return new ErrorResponse(code);
+    public static ErrorResponse of(String message, final ErrorCode code) {
+        return new ErrorResponse(message, code);
     }
 
-    public static ErrorResponse of(final ErrorCode code, final List<FieldError> errors) {
-        return new ErrorResponse(code, errors);
+    public static ErrorResponse of(String message, final ErrorCode code, final List<FieldError> errors) {
+        return new ErrorResponse(message, code, errors);
     }
 
     public static ErrorResponse of(MethodArgumentTypeMismatchException e) {
         final String value = e.getValue() == null ? "" : e.getValue().toString();
         final List<ErrorResponse.FieldError> errors = ErrorResponse.FieldError.of(e.getName(), value, e.getErrorCode());
-        return new ErrorResponse(ErrorCode.INVALID_TYPE_VALUE, errors);
+        return new ErrorResponse(e.getMessage(), ErrorCode.INVALID_TYPE_VALUE, errors);
     }
 
 

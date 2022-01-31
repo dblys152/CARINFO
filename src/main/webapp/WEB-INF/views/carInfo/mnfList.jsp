@@ -92,9 +92,9 @@ function fn_list(n) {
 function fn_listCore() {
 	let form = document.forms["searchVo"];
 	axios({
-		method: 'get'
-	  , url: 'mnfListCore'
-	  , params: {
+		method: 'get',
+	  	url: 'mnfListCore',
+	  	params: {
 			"pageNo": form[fname="pageNo"].value
 		  , "schText": form[fname="schText"].value
 		}
@@ -113,10 +113,10 @@ function fn_listCore() {
 
 function fn_mnfExcelDown() {
 	axios({
-		method: 'get'
-	  , url: 'mnfExcelDown'
-	  , responseType: 'blob'
-	  , responseEncoding: 'utf8'
+		method: 'get',
+	  	url: 'mnfExcelDown',
+	  	responseType: 'blob',
+	  	responseEncoding: 'utf8'
 	}).then((res) => {
 		let name = res.headers["content-disposition"]
 					.split("filename=")[1]
