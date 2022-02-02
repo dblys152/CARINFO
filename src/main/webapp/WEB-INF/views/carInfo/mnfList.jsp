@@ -99,14 +99,10 @@ gnbActive = 'setting';
 
 <link href="/resources/dragula/dragula.min.css" rel="stylesheet" />
 <script src="/resources/dragula/dragula.min.js"></script>
-<link href="/resources/multiple-select/multiple-select.min.css" rel="stylesheet" />
-<script src="/resources/multiple-select/multiple-select.min.js"></script>
 <script>
 let drake = window.dragula();	// dragula 변수 (드래그앤드롭)
 window.addEventListener('DOMContentLoaded', () => {
 	fn_listCore();	//데이터 목록 조회
-
-	$('select[name="ntnCdList"]').multipleSelect();
 	
 	/* 검색 버튼 클릭 */
 	document.getElementById('schBtn').addEventListener('click', () => {
