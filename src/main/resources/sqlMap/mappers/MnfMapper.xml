@@ -40,6 +40,7 @@
 							MNF_NO
 						  , MNF_NM
 						  , NTN_CD
+						  , SRT_ORD
 						  , REG_NO
 						  , REG_DTT
 						  , MOD_NO
@@ -49,6 +50,7 @@
 							S.MNF_NO
 						  , S.MNF_NM
 						  , S.NTN_CD
+						  , (SELECT NVL(MAX(SRT_ORD) + 1, 1) FROM MNF)
 						  , S.REG_NO
 						  , S.REG_DTT
 						  , S.MOD_NO
@@ -85,7 +87,7 @@
 		                  , A.*
 		            FROM    (
 		                        SELECT
-		                                RANK() OVER(ORDER BY MF.MNF_NO) "seq"
+		                                RANK() OVER(ORDER BY MF.SRT_ORD, MF.MNF_NO) "seq"
 		                              , MF.MNF_NO			"mnfNo"
 		                              , MF.MNF_NM			"mnfNm"
 		                              , MF.NTN_CD			"ntnCd"
@@ -114,7 +116,8 @@
 			                        					AND		MF.MNF_NO = E.MNF_NO
 			                        				)
 		                        		)
-		                        ORDER	BY	MNF_NO	DESC
+		                        ORDER	BY	MF.SRT_ORD 	${search.ordDescStr}
+		                        		  , MF.MNF_NO	${search.ordDescStr}
 		                    )   A
 		        <![CDATA[
 		            WHERE   ROWNUM <= #{search.listCnt,jdbcType=INTEGER} * #{search.pageNo,jdbcType=INTEGER}
@@ -171,8 +174,16 @@
                      					AND		MF.MNF_NO = E.MNF_NO
                      				)
                     		)
-                    ORDER	BY	MNF_NO
+                    ORDER	BY	MF.SRT_ORD, MF.MNF_NO
                 )   A
 	</select>
+
+	<update id="updateMnfSrtOrd" parameterType="java.util.HashMap">
+		UPDATE	MNF
+		SET 	SRT_ORD = #{srtOrd,jdbcType=INTEGER}
+			  , MOD_NO = #{modNo,jdbcType=INTEGER}
+			  , MOD_DTT = SYSDATE
+		WHERE 	MNF_NO = #{mnfNo,jdbcType=VARCHAR}
+	</update>
 
 </mapper>

@@ -82,4 +82,18 @@ public class MnfServiceImpl implements MnfService {
 		return mnfMapper.selectMnfAllList(map);
 	}
 
+	@Override
+	@Transactional
+	public void updateMnfSrtOrd(List<String> mnfNoList) throws Exception {
+		int userNo = 0;
+		int mnfSize = mnfNoList.size();
+		for(int i = 0; i < mnfSize; i++) {
+			Map<String, Object> map = new HashMap<>();
+			map.put("mnfNo", mnfNoList.get(i));
+			map.put("srtOrd", i + 1);
+			map.put("modNo", userNo);
+			mnfMapper.updateMnfSrtOrd(map);
+		}
+	}
+	
 }

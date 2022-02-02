@@ -45,7 +45,7 @@ gnbActive = 'setting';
 			<div class="d-flex justify-content-between bd-highlight mb-3">
 				<div></div>
 				<div>
-					<button type="button" class="btn btn-info" id="mnfSave">저장</button>
+					<button type="button" class="btn btn-info" id="saveMnf">저장</button>
 					<button type="button" class="btn btn-outline-secondary" onclick="history.back();">취소</button>
 				</div>
 				<div></div>
@@ -55,8 +55,8 @@ gnbActive = 'setting';
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="ntnCdModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
- 	<div class="modal-dialog">
+<div class="modal fade" id="ntnCdModal" tabindex="-1" aria-hidden="true">
+ 	<div class="modal-dialog modal-dialog-scrollable">
 		<div class="modal-content">
 			<div class="modal-header">
 				<h5 class="modal-title" id="exampleModalLabel">국가코드표</h5>
@@ -65,7 +65,7 @@ gnbActive = 'setting';
 			<div class="modal-body">
 				<div class="input-group mb-3">
 					<input type="hidden">
-					<input id="popSchText" class="form-control" placeholder="Search" aria-label="Search"/>
+					<input id="popSchText" class="form-control" placeholder="국가한글명 or 국가영문명을 입력하세요." aria-label="Search"/>
 				  	<button type="button" id="popSchBtn" class="btn btn-secondary me-1"><i class="bi bi-search"></i></button>
 				  	<button type="button" id="popSchReset" class="btn btn-outline-secondary">초기화</button>
 				</div>
@@ -130,27 +130,30 @@ window.addEventListener('DOMContentLoaded', () => {
 	let form = document.forms["popSearchVo"];
 	document.querySelector('button[data-bs-target="#ntnCdModal"]').addEventListener('click', () => {
 		document.getElementById('popSchText').value = '';
-		fn_popListCore();
+		fn_popNtnCdListCore();
 	});
 	/* 국가코드표 팝업 검색 버튼 클릭 */
-	document.getElementById('popSchBtn').addEventListener('click', fn_popListCore);
+	document.getElementById('popSchBtn').addEventListener('click', fn_popNtnCdListCore);
 	/* 국가코드표 팝업 검색어 엔터 클릭 검색 */
 	document.getElementById('popSchText').addEventListener('keydown', (e) => {
 		if(e.keyCode == 13)
-			fn_popListCore();
+			fn_popNtnCdListCore();
 	});
 	/* 국가코드표 팝업 초기화 버튼 클릭 */
 	document.getElementById('popSchReset').addEventListener('click', () => {
 		document.getElementById('popSchText').value = '';
-		fn_popListCore();
+		fn_popNtnCdListCore();
 	});
 
 	/* 제조사 저장 버튼 클릭 */
-	document.getElementById('mnfSave').addEventListener('click', () => {
+	document.getElementById('saveMnf').addEventListener('click', () => {
 		if(document.querySelectorAll('.htCore').length == 0) {
 			alert('데이터 확인된 파일이 없습니다.');
 		} else {
-			if(document.querySelectorAll('#listHandson .htInvalid').length > 0) {
+			let dataList = hot.getSourceData();
+			if(dataList.length == 0) {
+				alert('등록할 데이터가 없습니다.');
+			} else if(document.querySelectorAll('#listHandson .htInvalid').length > 0) {
 				alert('데이터 형식을 확인해주세요.');
 			} else if(confirm('제조사를 일괄 저장하시겠습니까?')) {
 				fn_saveMnfList(hot.getSourceData());
@@ -274,7 +277,7 @@ function fn_customValidator(query, callback) {
 	callback(true);
 }
 
-function fn_popListCore() {
+function fn_popNtnCdListCore() {
 	axios({
 		method: 'get',
 	  	url: 'ntnCdListPopCore',

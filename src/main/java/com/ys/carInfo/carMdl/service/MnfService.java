@@ -52,4 +52,10 @@ public interface MnfService {
 	 */
 	public List<Map<String, Object>> selectMnfAllList(Map<String, Object> map) throws Exception;
 
+	/**
+	 * 제조사 정렬순서 저장
+	 * @param mnfNoList
+	 */
+	public void updateMnfSrtOrd(List<String> mnfNoList) throws Exception;
+
 }

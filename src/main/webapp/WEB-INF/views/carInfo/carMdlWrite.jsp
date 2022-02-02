@@ -22,18 +22,24 @@ gnbActive = 'setting';
 		<form:form modelAttribute="carMdlVo" enctype="multipart/form-data">
 		<form:hidden path="carMdlNo"/>
 
-		<div class="row mb-5 row-cols-1 row-cols-md-6 g-4 overflow-auto" style="height: 310px" >
+		<div class="row mb-5 row-cols-1 row-cols-md-6 g-4 overflow-auto" id="mnfBox" style="height: 310px" >
 			<label class="col-sm-2 col-form-label">제조사 선택<span class="text-danger">*</span></label>
 			<c:forEach items="${ mnfList }" var="i">
-			<div class="col" id="mnfBox">
+			<div class="col">
 				<div class="card" style="align-items: center;cursor: pointer;">
 					<img src="/file/images/<c:out value="${ i.fileNo }"/>" class="card-img-top" style="width:50px;height:50px">
 					<span class="card-text"><c:out value="${ i.mnfNm }"/></span>
 				</div>
-			</div>
+			</div> 
 			</c:forEach>
 		</div>
 
+		<div class="row mb-3">
+		 	<label class="col-sm-2 col-form-label">모델명<span class="text-danger">*</span></label>
+			<div class="col-sm-10">
+			  <form:input class="form-control" path="carMdlNm"/>
+			</div>
+		</div>
 		<div class="row mb-3">
 		 	<label class="col-sm-2 col-form-label">모델명<span class="text-danger">*</span></label>
 			<div class="col-sm-10">
@@ -57,9 +63,9 @@ gnbActive = 'setting';
 <script>
 window.addEventListener('DOMContentLoaded', () => {
 
-	let mnfCards = document.querySelectorAll('#mnfBox .card');
+	let mnfCards = document.querySelectorAll('#mnfBox .col .card');
 	for(let i = 0; i < mnfCards.length; i++) {
-		mnfCards[i].addEventListener('click', (e) => {
+		mnfCards[i].addEventListener('mousedown', (e) => {
 			for(let i = 0; i < mnfCards.length; i++) {
 				mnfCards[i].classList.remove('mnf_choice');
 			}

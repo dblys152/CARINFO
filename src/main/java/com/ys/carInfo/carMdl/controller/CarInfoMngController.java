@@ -84,7 +84,11 @@ public class CarInfoMngController {
 
 		if(searchVo.getPageNo() == null) {
 			searchVo.setPageNo(1);
+			searchVo.setOrdDesc(true);
 		}
+		
+		List<NtnCodeVo> ntnCdList = codeService.selectNtnCdList(new HashMap<>());
+		model.addAttribute("ntnCdList", ntnCdList);
 
 		return "/form/carInfo/mnfList";
 	}
@@ -93,6 +97,8 @@ public class CarInfoMngController {
 			@ModelAttribute(value="searchVo") SearchVo searchVo,
 			Model model) throws Exception {
 
+		System.out.println(searchVo.getOrdDesc());
+		System.out.println(searchVo.getOrdDescStr());
 		Map<String, Object> map = new HashMap<>();
 		map.put("search", searchVo);
 		List<Map<String, Object>> mnfList = mnfService.selectMnfList(map);
@@ -103,6 +109,27 @@ public class CarInfoMngController {
 		model.addAttribute("pageNo", searchVo.getPageNo());
 
 		return "/empty/carInfo/mnfListCore";
+	}
+	
+	/* 제조사 팝업 코어 */
+	@RequestMapping(value="/mnfListPopCore", method=RequestMethod.GET)
+	public String mnfListPopCore(Model model) throws Exception {
+
+		List<Map<String, Object>> mnfList = mnfService.selectMnfAllList(new HashMap<>());
+		model.addAttribute("mnfList", mnfList);
+
+		return "/empty/carInfo/mnfListPopCore";
+	}
+	
+	/* 제조사 정렬순서 저장 */
+	@RequestMapping(value="/mnfSrtOrd", method=RequestMethod.POST)
+	@ResponseBody
+	public ResponseEntity<Map<String, Object>> updateMnfSrtOrd(
+			@RequestBody List<String> mnfNoList) throws Exception {
+
+		mnfService.updateMnfSrtOrd(mnfNoList);
+		
+		return ResponseEntity.ok(new HashMap<>());
 	}
 
 	/* 제조사 등록 및 수정 화면 */
