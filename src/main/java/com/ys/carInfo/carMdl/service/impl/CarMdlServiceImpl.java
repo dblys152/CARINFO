@@ -17,16 +17,27 @@ public class CarMdlServiceImpl implements CarMdlService {
 	@Autowired private CarMdlMapper carMdlMapper;
 
 	@Override
+	public String mergeCarMdl(CarMdlVo carMdlVo) throws Exception {
+		int userNo = 0;
+		carMdlVo.setRegNo(userNo);
+		carMdlVo.setModNo(userNo);
+		carMdlMapper.mergeCarMdl(carMdlVo);
+		return carMdlVo.getCarMdlNo();
+	}
+
+	@Override
+	public CarMdlVo selectCarMdl(String carMdlNo) throws Exception {
+		return carMdlMapper.selectCarMdl(carMdlNo);
+	}
+
+	@Override
 	public List<Map<String, Object>> selectCarInfoList(Map<String, Object> map) throws Exception {
 		return carMdlMapper.selectCarInfoList(map);
 	}
 
-	@Override
-	@Transactional
-	public void insertCarInfo(Map<String, Object> map) throws Exception {
-		CarMdlVo carInfoVo = new CarMdlVo();
-		carMdlMapper.insertCarInfo(carInfoVo);
-	}
+
+
+
 
 
 }

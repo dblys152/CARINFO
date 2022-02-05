@@ -33,25 +33,10 @@ public class CarInfoController {
 		List<Map<String, Object>> carInfoList = carMdlService.selectCarInfoList(map);
 		model.addAttribute("carInfoList", carInfoList);
 
-		List<CmnCodeVo> cmnCdList = codeService.selectCmnCdList(map);
+		List<CmnCodeVo> cmnCdList = codeService.selectCmnCodeList(null, "Y", null);
 		model.addAttribute("cmnCdList", cmnCdList);
 
 		return "/form/carInfo/mainView";
 	}
-
-	@RequestMapping(value="/save", method=RequestMethod.POST)
-	@ResponseBody
-	public Map<String, Object> save (
-			@RequestBody Map<String, Object> map,
-			Model model) throws Exception {
-		try {
-			carMdlService.insertCarInfo(map);
-		} catch(Exception e) {
-			logger.error(e.getMessage());
-		}
-
-		return map;
-	}
-
 
 }

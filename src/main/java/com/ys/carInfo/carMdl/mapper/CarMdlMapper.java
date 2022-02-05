@@ -10,8 +10,14 @@ import com.ys.carInfo.carMdl.vo.CarMdlVo;
 @Mapper
 public interface CarMdlMapper {
 
+	public void mergeCarMdl(CarMdlVo carMdlVo) throws Exception;
+
+	public CarMdlVo selectCarMdl(String carMdlNo) throws Exception;
+
 	public List<Map<String, Object>> selectCarInfoList(Map<String, Object> map) throws Exception;
 
-	public void insertCarInfo(CarMdlVo carInfoVo) throws Exception;
+
+
+
 
 }

@@ -14,42 +14,42 @@ gnbActive = 'setting';
 	<!-- Page header-->
 	<div class="py-3 bg-light border-bottom mb-4">
         <div class="my-1">
-            <p class="lead mb-0">제조사 상세정보</p>
+            <p class="lead mb-0">자동차 모델 상세정보</p>
         </div>
 	</div>
 	<!-- content -->
 	<div class="col-lg-12">
-		<input type="hidden" name="mnfNo" value="<c:out value="${ mnfVo.mnfNo }"/>">
+		<input type="hidden" name="mnfNo" value="<c:out value="${ carMdlVo.carMdlNo }"/>">
 		<div class="row mb-3">
-		 	<label for="inputPassword" class="col-sm-2 col-form-label">제조사명</label>
+		 	<label for="inputPassword" class="col-sm-2 col-form-label">모델명</label>
 			<div class="col-sm-10 col-form-label">
-				<c:out value="${ mnfVo.mnfNm }"/>
+				<c:out value="${ carMdlVo.carMdlNm }"/>
 			</div>
 		</div>
 		<div class="row mb-3">
-		 	<label class="col-sm-2 col-form-label">제조국</label>
+		 	<label for="inputPassword" class="col-sm-2 col-form-label">외형</label>
 			<div class="col-sm-10 col-form-label">
-				<c:out value="${ mnfVo.ntnCdKrNm } (${ mnfVo.ntnCdEnNm })"/>
+				<c:out value="${ carMdlVo.carAprnNm }"/>
 			</div>
 		</div>
 		<div class="row mb-3">
-		 	<label class="col-sm-2 col-form-label">제조사 로고</label>
-		 	<div class="col-sm-10 col-form-label">
-				<img src="/file/images/<c:out value="${ mnfVo.fileNo }"/>" class="mnf_logo">
+		 	<label for="inputPassword" class="col-sm-2 col-form-label">종류</label>
+			<div class="col-sm-10 col-form-label">
+				<c:out value="${ carMdlVo.carKnNm }"/>
 			</div>
 		</div>
 		<div class="row mb-3">
 		 	<label class="col-sm-2 col-form-label">등록일</label>
 			<div class="col-sm-10 col-form-label">
-				<c:out value="${ mnfVo.regDt }"/>
+				<c:out value="${ carMdlVo.regDt }"/>
 			</div>
 		</div>
 		<div class="row mb-3">
 			<div class="d-flex justify-content-between bd-highlight mb-3">
 				<div></div>
 				<div>
-					<a href="mnfWrite?mnfNo=${ mnfVo.mnfNo }" class="btn btn-info">수정</a>
-					<a href="mnfList?pageNo=${ param.pageNo }" class="btn btn-outline-secondary">목록</a>
+					<a href="carMdlWrite?carMdlNo=${ carMdlVo.carMdlNo }" class="btn btn-info">수정</a>
+					<a href="carMdlList?pageNo=${ param.pageNo }" class="btn btn-outline-secondary">목록</a>
 				</div>
 				<div>
 					<button type="button" class="btn btn-danger" id="mnfDel">삭제</button>

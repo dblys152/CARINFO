@@ -64,7 +64,6 @@ gnbActive = 'setting';
 			</div>
 			<div class="modal-body">
 				<div class="input-group mb-3">
-					<input type="hidden">
 					<input id="popSchText" class="form-control" placeholder="국가한글명 or 국가영문명을 입력하세요." aria-label="Search"/>
 				  	<button type="button" id="popSchBtn" class="btn btn-secondary me-1"><i class="bi bi-search"></i></button>
 				  	<button type="button" id="popSchReset" class="btn btn-outline-secondary">초기화</button>
@@ -121,7 +120,7 @@ window.addEventListener('DOMContentLoaded', () => {
 			if(parsingFlag == 1) {
 				let formData = new FormData();
 				formData.append("file", fileInp.files[0]);
-				fn_excelParser(formData);
+				fn_excelParsing(formData);
 			}
 		}
 	});
@@ -163,10 +162,10 @@ window.addEventListener('DOMContentLoaded', () => {
 
 });
 
-function fn_excelParser(formData) {
+function fn_excelParsing(formData) {
 	axios({
 		method: 'post',
-	  	url: 'mnfExcelParser',
+	  	url: 'mnf/excel-parsing',
 	  	data: formData,
 	  	headers: {'Content-Type': 'multipart/form-data'}
 	}).then((res) => {
@@ -244,7 +243,7 @@ function fn_hansontableLoad(data) {
 			value = (value == null ? '' : (typeof value == 'string' ? value.trim() : value));
 			if(prop == 'fileNo' && isNaN(parseInt(value))) {
 				return false;
-			} else if(prop == 'mnfNm' && value == '') {
+			} else if(prop == 'mnfNm' && (value == '' || value.length > 50)) {
 				return false;
 			} else if(prop == 'ntnCd' && value == '') {
 				return false;
@@ -294,7 +293,7 @@ function fn_popNtnCdListCore() {
 function fn_saveMnfList(dataList) {
 	axios({
 		method: 'post',
-	  	url: 'mnfExcelWrite',
+	  	url: 'mnf/excel',
 	  	data: JSON.stringify(dataList),
 	  	headers: {'Content-Type': 'application/json'}
 	}).then((res) => {

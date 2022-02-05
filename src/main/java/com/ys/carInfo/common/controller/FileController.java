@@ -23,6 +23,9 @@ public class FileController {
 
 	@Autowired FileService fileService;
 
+	/*** API ***/
+
+	/* 이미지 출력 */
 	@RequestMapping(value="/images/{fileNo}", method=RequestMethod.GET)
 	public ResponseEntity<Resource> viewImg(
 			@PathVariable("fileNo")	Integer	fileNo) throws Exception {
@@ -34,6 +37,7 @@ public class FileController {
 				.body(file);
 	}
 
+	/* 파일 다운로드 */
 	@RequestMapping(value="/download", method=RequestMethod.GET)
     public ResponseEntity<Resource> downloadFile(
     		@RequestParam(value="fileNo") Integer fileNo) throws Exception {

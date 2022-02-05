@@ -1,8 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ys.carInfo.common.mapper.NtnCodeMapper">
+<mapper namespace="com.ys.carInfo.common.mapper.CodeMapper">
 
-	<select id="selectNtnCdList" parameterType="HashMap" resultType="com.ys.carInfo.common.vo.NtnCodeVo">
+	<select id="selectCmnCodeList" parameterType="HashMap" resultType="com.ys.carInfo.common.vo.CmnCodeVo">
+		SELECT
+				CMN_CD
+			  , CMN_CD_NM
+			  , UP_CMN_CD
+			  , NOTE
+		FROM 	CMN_CODE
+		WHERE	1 = 1
+		AND 	( #{upCmnCd,jdbcType=VARCHAR} IS NULL OR UP_CMN_CD = #{upCmnCd,jdbcType=VARCHAR} )
+		AND 	( #{useYn,jdbcType=VARCHAR} IS NULL OR USE_YN = #{useYn,jdbcType=VARCHAR} )
+		AND 	DEL_YN = 'N'
+		AND 	( #{cmnCdNm,jdbcType=VARCHAR} IS NULL OR CMN_CD_NM LIKE '%' || #{cmnCdNm,jdbcType=VARCHAR} || '%' )
+		ORDER	BY	SRT_ORD
+				  , CMN_CD
+	</select>
+
+	<select id="selectNtnCodeList" parameterType="HashMap" resultType="com.ys.carInfo.common.vo.NtnCodeVo">
 		SELECT
 				NTN_CD
 			  , NTN_CD_KR_NM

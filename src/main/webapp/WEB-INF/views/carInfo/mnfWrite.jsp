@@ -21,16 +21,18 @@ gnbActive = 'setting';
 	<div class="col-lg-12">
 		<form:form modelAttribute="mnfVo" enctype="multipart/form-data">
 		<form:hidden path="mnfNo"/>
+		<input type="text" style="display:none;"/>
 		<div class="row mb-3">
 		 	<label class="col-sm-2 col-form-label">제조사명<span class="text-danger">*</span></label>
 			<div class="col-sm-10">
-			  <form:input class="form-control" path="mnfNm"/>
+			  <form:input path="mnfNm" class="form-control" maxlength="25"/>
 			</div>
 		</div>
 		<div class="row mb-3">
 		 	<label class="col-sm-2 col-form-label">제조국<span class="text-danger">*</span></label>
 			<div class="col-sm-10">
-				<form:select class="form-select" aria-label="Default select example" path="ntnCd">
+				<form:select path="ntnCd" class="form-select">
+					<form:option value="">선택하세요.</form:option>
 					<c:forEach items="${ ntnCdList }" var="i">
 					<form:option value="${ i.ntnCd }"><c:out value="${ i.ntnCdKrNm } (${ i.ntnCdEnNm })"/></form:option>
 					</c:forEach>
@@ -58,7 +60,7 @@ gnbActive = 'setting';
 			<div class="d-flex justify-content-between bd-highlight mb-3">
 				<div></div>
 				<div>
-					<button type="button" class="btn btn-info" id="mnfSave">저장</button>
+					<button type="button" class="btn btn-info" id="saveMnf">저장</button>
 					<button type="button" class="btn btn-outline-secondary" onclick="history.back();">취소</button>
 				</div>
 				<div></div>
@@ -83,22 +85,27 @@ window.addEventListener('DOMContentLoaded', () => {
 	}
 
 	/* 제조사 저장 버튼 클릭 */
-	document.getElementById('mnfSave').addEventListener('click', () => {
+	document.getElementById('saveMnf').addEventListener('click', () => {
 		let mnfNmInp = document.querySelector('input[name="mnfNm"]');
+		let ntnCdSel = document.querySelector('select[name="ntnCd"]');
 		let fileInp = document.querySelector('input[name="file"]');
 		let fileNoInp = document.querySelector('input[name="fileNo"]');
 
-		if(mnfNmInp.value == '') {
+		if(mnfNmInp.value.trim() == '') {
 			alert('제조사명을 입력해주세요.');
+			mnfNmInp.value = mnfNmInp.value.trim();
 			mnfNmInp.focus();
+		} else if(ntnCdSel.value == '') {
+			alert('제조국을 선택해주세요.');
+			ntnCdSel.focus();
 		} else if((fileInp == null || fileInp.value == '') && (fileNoInp == null || fileNoInp.value == '')) {
 			 alert('로고를 등록해주세요.');
 			 fileInp.focus();
 		} else if(confirm('저장 하시겠습니까?')) {
 			let formData = new FormData();
 			formData.append("mnfNo", document.querySelector('input[name="mnfNo"]').value);
-			formData.append("mnfNm", mnfNmInp.value);
-			formData.append("ntnCd", document.querySelector('select[name="ntnCd"]').value);
+			formData.append("mnfNm", mnfNmInp.value.trim());
+			formData.append("ntnCd", ntnCdSel.value);
 			if(fileInp != null) formData.append("file", fileInp.files[0]);
 			if(fileNoInp != null) formData.append("fileNo", fileNoInp.value);
 
@@ -111,7 +118,7 @@ window.addEventListener('DOMContentLoaded', () => {
 function fn_saveMnf(formData) {
 	axios({
 		method: 'post',
-	  	url: 'mnfWrite',
+	  	url: 'mnf',
 	  	data: formData,
 	  	headers: {'Content-Type': 'multipart/form-data'}
 	}).then((res) => {

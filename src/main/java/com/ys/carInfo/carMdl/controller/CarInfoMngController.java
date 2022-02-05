@@ -36,6 +36,7 @@ import com.ys.carInfo.carMdl.vo.MnfVo;
 import com.ys.carInfo.common.service.CodeService;
 import com.ys.carInfo.common.service.ExcelService;
 import com.ys.carInfo.common.util.MessageBox;
+import com.ys.carInfo.common.vo.CmnCodeVo;
 import com.ys.carInfo.common.vo.NtnCodeVo;
 import com.ys.carInfo.common.vo.SearchVo;
 import com.ys.global.error.exception.EntityNotFoundException;
@@ -51,6 +52,8 @@ public class CarInfoMngController {
 	@Autowired private CodeService codeService;
 	@Autowired private ExcelService excelService;
 
+	/*** View ***/
+
 	/* 자동차모델 목록 화면 */
 	@RequestMapping(value="/carMdlList", method=RequestMethod.GET)
 	public String mdlList(Model model) throws Exception {
@@ -65,15 +68,38 @@ public class CarInfoMngController {
 			@RequestParam(value="carMdlNo", required=false) String carMdlNo,
 			Model model) throws Exception {
 
-		List<Map<String, Object>> mnfList = mnfService.selectMnfAllList(new HashMap<>());
-		model.addAttribute("mnfList", mnfList);
-
 		if(carMdlNo != null && !carMdlNo.trim().equals("")) {
-			//carMdlVo = mnfService.selectCarMdl(carMdlVo);
+			carMdlVo = carMdlService.selectCarMdl(carMdlNo);
+			if(carMdlVo == null) {
+				return MessageBox.showMsgAndBack(model, "등록되지 않은 제조사입니다.");
+			}
 		}
 		model.addAttribute("carMdlVo", carMdlVo);
 
+		List<Map<String, Object>> mnfList = mnfService.selectMnfAllList(new HashMap<>());	// 제조사 목록
+		model.addAttribute("mnfList", mnfList);
+
+		List<CmnCodeVo> carAprnCdList = codeService.selectCmnCodeList("102", "Y", null);	// 자동차외형코드 목록
+		model.addAttribute("carAprnCdList", carAprnCdList);
+		List<CmnCodeVo> carKnCdList = codeService.selectCmnCodeList("103", "Y", null);	// 자동차종류코드 목록
+		model.addAttribute("carKnCdList", carKnCdList);
+
 		return "/form/carInfo/carMdlWrite";
+	}
+
+	/* 자동차모델 상세 화면 */
+	@RequestMapping(value="carMdlView", method=RequestMethod.GET)
+	public String carMdlView(
+			@RequestParam(value="carMdlNo") String carMdlNo,
+			Model model) throws Exception {
+
+		CarMdlVo carMdlVo = carMdlService.selectCarMdl(carMdlNo);
+		if(carMdlVo == null) {
+			return MessageBox.showMsgAndBack(model, "등록되지 않은 모델입니다.");
+		}
+		model.addAttribute("carMdlVo", carMdlVo);
+
+		return "/form/carInfo/carMdlView";
 	}
 
 	/* 제조사 목록 화면 */
@@ -86,8 +112,8 @@ public class CarInfoMngController {
 			searchVo.setPageNo(1);
 			searchVo.setOrdDesc(true);
 		}
-		
-		List<NtnCodeVo> ntnCdList = codeService.selectNtnCdList(new HashMap<>());
+
+		List<NtnCodeVo> ntnCdList = codeService.selectNtnCodeList(new HashMap<>());
 		model.addAttribute("ntnCdList", ntnCdList);
 
 		return "/form/carInfo/mnfList";
@@ -110,7 +136,80 @@ public class CarInfoMngController {
 
 		return "/empty/carInfo/mnfListCore";
 	}
-	
+
+	/* 제조사 등록 및 수정 화면 */
+	@RequestMapping(value="/mnfWrite", method=RequestMethod.GET)
+	public String mnfWrite(
+			@ModelAttribute("mnfVo") MnfVo mnfVo,
+			@RequestParam(value="mnfNo", required=false) String mnfNo,
+			Model model) throws Exception {
+
+		List<NtnCodeVo> ntnCdList = codeService.selectNtnCodeList(new HashMap<>());
+		model.addAttribute("ntnCdList", ntnCdList);
+
+		if(mnfNo != null && !mnfNo.trim().equals("")) {
+			mnfVo = mnfService.selectMnf(mnfNo);
+			if(mnfVo == null) {
+				return MessageBox.showMsgAndBack(model, "등록되지 않은 제조사입니다.");
+			}
+		}
+		model.addAttribute("mnfVo", mnfVo);
+
+		return "/form/carInfo/mnfWrite";
+	}
+
+	/* 제조사 상세 화면 */
+	@RequestMapping(value="/mnfView", method=RequestMethod.GET)
+	public String mnfView(
+			@RequestParam(value="mnfNo") String mnfNo,
+			Model model) throws Exception {
+
+		MnfVo mnfVo = mnfService.selectMnf(mnfNo);
+		if(mnfVo == null) {
+			return MessageBox.showMsgAndBack(model, "등록되지 않은 제조사입니다.");
+		}
+		model.addAttribute("mnfVo", mnfVo);
+
+		return "/form/carInfo/mnfView";
+	}
+
+	/* 제조사 일괄등록 화면 */
+	@RequestMapping(value="/mnfExcelWrite", method=RequestMethod.GET)
+	public String mnfExcelWrite(
+			@ModelAttribute("mnfVo") MnfVo mnfVo,
+			@RequestParam(value="mnfNo", required=false) String mnfNo,
+			Model model) throws Exception {
+
+		List<NtnCodeVo> ntnCdList = codeService.selectNtnCodeList(new HashMap<>());
+		String ntnJsonList = null;
+		if(ntnCdList != null && ntnCdList.size() > 0) {
+			ObjectMapper mapper = new ObjectMapper();
+			ntnJsonList = mapper.writeValueAsString(ntnCdList);
+		}
+		model.addAttribute("ntnJsonList", ntnJsonList);
+
+		if(mnfNo != null && !mnfNo.trim().equals("")) {
+			mnfVo = mnfService.selectMnf(mnfNo);
+		}
+		model.addAttribute("mnfVo", mnfVo);
+
+		return "/form/carInfo/mnfExcelWrite";
+	}
+
+	/* 국가코드 팝업 코어 */
+	@RequestMapping(value="/ntnCdListPopCore", method=RequestMethod.GET)
+	public String ntnCdListPopCore(
+			@ModelAttribute(value="searchVo") SearchVo searchVo,
+			Model model) throws Exception {
+
+		Map<String, Object> map = new HashMap<>();
+		map.put("search", searchVo);
+		List<NtnCodeVo> ntnCdList = codeService.selectNtnCodeList(map);
+		model.addAttribute("ntnCdList", ntnCdList);
+
+		return "/empty/carInfo/ntnCdListPopCore";
+	}
+
 	/* 제조사 팝업 코어 */
 	@RequestMapping(value="/mnfListPopCore", method=RequestMethod.GET)
 	public String mnfListPopCore(Model model) throws Exception {
@@ -120,38 +219,37 @@ public class CarInfoMngController {
 
 		return "/empty/carInfo/mnfListPopCore";
 	}
-	
+
+
+
+	/*** API ***/
+
+	/* 자동차모델 등록 및 수정 */
+	@RequestMapping(value="/car-mdl", method=RequestMethod.POST)
+	@ResponseBody
+	public ResponseEntity<Map<String, Object>> insertCarMdl(
+			@RequestBody CarMdlVo carMdlVo) throws Exception {
+
+		Map<String, Object> map = new HashMap<>();
+		String carMdlNo = carMdlService.mergeCarMdl(carMdlVo);
+		map.put("carMdlNo", carMdlNo);
+
+		return ResponseEntity.ok(map);
+	}
+
 	/* 제조사 정렬순서 저장 */
-	@RequestMapping(value="/mnfSrtOrd", method=RequestMethod.POST)
+	@RequestMapping(value="/mnf/srt-ord", method=RequestMethod.PUT)
 	@ResponseBody
 	public ResponseEntity<Map<String, Object>> updateMnfSrtOrd(
 			@RequestBody List<String> mnfNoList) throws Exception {
 
 		mnfService.updateMnfSrtOrd(mnfNoList);
-		
+
 		return ResponseEntity.ok(new HashMap<>());
 	}
 
-	/* 제조사 등록 및 수정 화면 */
-	@RequestMapping(value="/mnfWrite", method=RequestMethod.GET)
-	public String mnfWrite(
-			@ModelAttribute("mnfVo") MnfVo mnfVo,
-			@RequestParam(value="mnfNo", required=false) String mnfNo,
-			Model model) throws Exception {
-
-		List<NtnCodeVo> ntnCdList = codeService.selectNtnCdList(new HashMap<>());
-		model.addAttribute("ntnCdList", ntnCdList);
-
-		if(mnfNo != null && !mnfNo.trim().equals("")) {
-			mnfVo = mnfService.selectMnf(mnfNo);
-		}
-		model.addAttribute("mnfVo", mnfVo);
-
-		return "/form/carInfo/mnfWrite";
-	}
-
 	/* 제조사 등록 및 수정 */
-	@RequestMapping(value="/mnfWrite", method=RequestMethod.POST)
+	@RequestMapping(value="/mnf", method=RequestMethod.POST)
 	@ResponseBody
 	public ResponseEntity<Map<String, Object>> insertMnf(
 			@ModelAttribute MnfVo mnfVo) throws Exception {
@@ -175,31 +273,21 @@ public class CarInfoMngController {
 		return ResponseEntity.ok(map);
 	}
 
-	/* 제조사 일괄등록 화면 */
-	@RequestMapping(value="/mnfExcelWrite", method=RequestMethod.GET)
-	public String mnfExcelWrite(
-			@ModelAttribute("mnfVo") MnfVo mnfVo,
-			@RequestParam(value="mnfNo", required=false) String mnfNo,
-			Model model) throws Exception {
+	/* 제조사 삭제 */
+	@RequestMapping(value="/mnf", method=RequestMethod.DELETE)
+	@ResponseBody
+	public ResponseEntity<Map<String, Object>> mnfDel(
+			@RequestBody MnfVo mnfVo) throws Exception {
 
-		List<NtnCodeVo> ntnCdList = codeService.selectNtnCdList(new HashMap<>());
-		String ntnJsonList = null;
-		if(ntnCdList != null && ntnCdList.size() > 0) {
-			ObjectMapper mapper = new ObjectMapper();
-			ntnJsonList = mapper.writeValueAsString(ntnCdList);
-		}
-		model.addAttribute("ntnJsonList", ntnJsonList);
+		if(mnfVo.getMnfNo() == null || mnfVo.getMnfNo().equals(""))
+			throw new EntityNotFoundException("mnfNo not found");
+		mnfService.deleteMnf(mnfVo.getMnfNo());
 
-		if(mnfNo != null && !mnfNo.trim().equals("")) {
-			mnfVo = mnfService.selectMnf(mnfNo);
-		}
-		model.addAttribute("mnfVo", mnfVo);
-
-		return "/form/carInfo/mnfExcelWrite";
+		return ResponseEntity.ok(new HashMap<>());
 	}
 
 	/* 제조사 일괄등록 양식 파싱 */
-	@RequestMapping(value="/mnfExcelParser", method=RequestMethod.POST)
+	@RequestMapping(value="/mnf/excel-parsing", method=RequestMethod.POST)
 	@ResponseBody
 	public ResponseEntity<Map<String, Object>> insertMnf(
 			@RequestParam(value="file") MultipartFile excel) throws Exception {
@@ -214,22 +302,8 @@ public class CarInfoMngController {
 		return ResponseEntity.ok(map);
 	}
 
-	/* 국가코드 팝업 코어 */
-	@RequestMapping(value="/ntnCdListPopCore", method=RequestMethod.GET)
-	public String ntnCdListPopCore(
-			@ModelAttribute(value="searchVo") SearchVo searchVo,
-			Model model) throws Exception {
-
-		Map<String, Object> map = new HashMap<>();
-		map.put("search", searchVo);
-		List<NtnCodeVo> ntnCdList = codeService.selectNtnCdList(map);
-		model.addAttribute("ntnCdList", ntnCdList);
-
-		return "/empty/carInfo/ntnCdListPopCore";
-	}
-
 	/* 제조사 일괄등록  */
-	@RequestMapping(value="/mnfExcelWrite", method=RequestMethod.POST)
+	@RequestMapping(value="/mnf/excel", method=RequestMethod.POST)
 	@ResponseBody
 	public ResponseEntity<Map<String, Object>> mnfExcelWrite(
 			@RequestBody List<MnfVo> mnfList) throws Exception {
@@ -239,36 +313,8 @@ public class CarInfoMngController {
 		return ResponseEntity.ok(new HashMap<>());
 	}
 
-	/* 제조사 상세 화면 */
-	@RequestMapping(value="/mnfView", method=RequestMethod.GET)
-	public String mnfView(
-			@RequestParam(value="mnfNo") String mnfNo,
-			Model model) throws Exception {
-
-		MnfVo mnfVo = mnfService.selectMnf(mnfNo);
-		if(mnfVo == null) {
-			return MessageBox.showMsgAndBack(model, "등록되지 않은 제조사입니다.");
-		}
-		model.addAttribute("mnfVo", mnfVo);
-
-		return "/form/carInfo/mnfView";
-	}
-
-	/* 제조사 삭제 */
-	@RequestMapping(value="/mnfDel", method=RequestMethod.POST)
-	@ResponseBody
-	public ResponseEntity<Map<String, Object>> mnfDel(
-			@RequestBody MnfVo mnfVo) throws Exception {
-
-		if(mnfVo.getMnfNo() == null || mnfVo.getMnfNo().equals(""))
-			throw new EntityNotFoundException("mnfNo not found");
-		mnfService.deleteMnf(mnfVo.getMnfNo());
-
-		return ResponseEntity.ok(new HashMap<>());
-	}
-
 	/* 제조사 엑셀 다운로드 */
-	@RequestMapping(value="/mnfExcelDown", method=RequestMethod.GET)
+	@RequestMapping(value="/mnf/excel", method=RequestMethod.GET)
 	@ResponseBody
 	public ResponseEntity<byte[]> mnfExcelDown() throws Exception {
 

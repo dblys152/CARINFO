@@ -21,29 +21,47 @@ gnbActive = 'setting';
 	<div class="col-lg-12">
 		<form:form modelAttribute="carMdlVo" enctype="multipart/form-data">
 		<form:hidden path="carMdlNo"/>
+		<input type="text" style="display:none;"/>
 
 		<div class="row mb-5 row-cols-1 row-cols-md-6 g-4 overflow-auto" id="mnfBox" style="height: 310px" >
 			<label class="col-sm-2 col-form-label">제조사 선택<span class="text-danger">*</span></label>
 			<c:forEach items="${ mnfList }" var="i">
 			<div class="col">
-				<div class="card" style="align-items: center;cursor: pointer;">
+				<div class="card ${ carMdlVo.carMdlNo == null ? '' : carMdlVo.mnfNo == i.mnfNo ? 'mnf_choice' : '' }" style="align-items: center;cursor: pointer;">
+					<input type="hidden" name="mnfNo" value="<c:out value="${ i.mnfNo }"/>">
 					<img src="/file/images/<c:out value="${ i.fileNo }"/>" class="card-img-top" style="width:50px;height:50px">
 					<span class="card-text"><c:out value="${ i.mnfNm }"/></span>
 				</div>
-			</div> 
+			</div>
 			</c:forEach>
 		</div>
 
 		<div class="row mb-3">
 		 	<label class="col-sm-2 col-form-label">모델명<span class="text-danger">*</span></label>
 			<div class="col-sm-10">
-			  <form:input class="form-control" path="carMdlNm"/>
+				<form:input path="carMdlNm" class="form-control" maxlength="50"/>
 			</div>
 		</div>
 		<div class="row mb-3">
-		 	<label class="col-sm-2 col-form-label">모델명<span class="text-danger">*</span></label>
+		 	<label class="col-sm-2 col-form-label">외형<span class="text-danger">*</span></label>
 			<div class="col-sm-10">
-			  <form:input class="form-control" path="carMdlNm"/>
+				<form:select path="carAprnCd" class="form-select">
+					<form:option value="">선택하세요.</form:option>
+					<c:forEach items="${ carAprnCdList }" var="i">
+					<form:option value="${ i.cmnCd }"><c:out value="${ i.cmnCdNm }"/></form:option>
+					</c:forEach>
+				</form:select>
+			</div>
+		</div>
+		<div class="row mb-3">
+		 	<label class="col-sm-2 col-form-label">종류<span class="text-danger">*</span></label>
+			<div class="col-sm-10">
+				<form:select path="carKnCd" class="form-select">
+					<form:option value="">선택하세요.</form:option>
+					<c:forEach items="${ carKnCdList }" var="i">
+					<form:option value="${ i.cmnCd }"><c:out value="${ i.cmnCdNm }"/></form:option>
+					</c:forEach>
+				</form:select>
 			</div>
 		</div>
 		</form:form>
@@ -51,7 +69,7 @@ gnbActive = 'setting';
 			<div class="d-flex justify-content-between bd-highlight mb-3">
 				<div></div>
 				<div>
-					<button type="button" class="btn btn-info" id="mnfSave">저장</button>
+					<button type="button" class="btn btn-info" id=saveCarMdl>저장</button>
 					<button type="button" class="btn btn-outline-secondary" onclick="history.back();">취소</button>
 				</div>
 				<div></div>
@@ -63,6 +81,7 @@ gnbActive = 'setting';
 <script>
 window.addEventListener('DOMContentLoaded', () => {
 
+	/* 제조사 선택 이벤트 */
 	let mnfCards = document.querySelectorAll('#mnfBox .col .card');
 	for(let i = 0; i < mnfCards.length; i++) {
 		mnfCards[i].addEventListener('mousedown', (e) => {
@@ -77,16 +96,50 @@ window.addEventListener('DOMContentLoaded', () => {
 		});
 	}
 
+	/* 자동자모델 저장 버튼 클릭 */
+	document.getElementById('saveCarMdl').addEventListener('click', () => {
+		let mnfCard = document.querySelector('#mnfBox .mnf_choice');
+		let carMdlNmInp = document.querySelector('input[name="carMdlNm"]');
+		let carAprnCdSel = document.querySelector('select[name="carAprnCd"]');
+		let carKnCdSel = document.querySelector('select[name="carKnCd"]');
+
+		if(mnfCard == null) {
+			alert('제조사를 선택해주세요.');
+		} else if(carMdlNmInp.value.trim() == '') {
+			alert('모델명을 입력해주세요.');
+			carMdlNmInp.value = carMdlNmInp.value.trim();
+			carMdlNmInp.focus();
+		} else if(carAprnCdSel.value == '') {
+			alert('외형을 선택해주세요.');
+			carAprnCdSel.focus();
+		} else if(carKnCdSel.value == '') {
+			alert('종류을 선택해주세요.');
+			carKnCdSel.focus();
+		} else if(confirm('저장 하시겠습니까?')) {
+			let dataForm = {
+				"carMdlNo": document.querySelector('input[name="carMdlNo"]').value,
+				"carMdlNm": carMdlNmInp.value.trim(),
+				"carMdlClCd": "101100", 	// 자동차모델분류코드(대표모델)
+				"upCarMdlNo": "M",
+				"mnfNo": mnfCard.querySelector('input[name="mnfNo"]').value,
+				"carAprnCd": carAprnCdSel.value,
+				"carKnCd": carKnCdSel.value
+			};
+
+			fn_saveCarMdl(dataForm);
+		}
+	});
+
 });
 
-function fn_saveMnf(formData) {
+function fn_saveCarMdl(dataForm) {
 	axios({
 		method: 'post',
-	  	url: 'mnfWrite',
-	 	data: formData,
-	 	headers: {'Content-Type': 'multipart/form-data'}
+	  	url: 'car-mdl',
+	 	data: JSON.stringify(dataForm),
+	 	headers: {'Content-Type': 'application/json'}
 	}).then((res) => {
-		location.href="mnfView?mnfNo=" + res.data.mnfNo;
+		location.href="carMdlView?carMdlNo=" + res.data.carMdlNo;
 	}).catch((err) => {
 		alert('저장 실패하였습니다.');
     	console.log(err);

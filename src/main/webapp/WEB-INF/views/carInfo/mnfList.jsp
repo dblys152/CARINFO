@@ -103,7 +103,7 @@ gnbActive = 'setting';
 let drake = window.dragula();	// dragula 변수 (드래그앤드롭)
 window.addEventListener('DOMContentLoaded', () => {
 	fn_listCore();	//데이터 목록 조회
-	
+
 	/* 검색 버튼 클릭 */
 	document.getElementById('schBtn').addEventListener('click', () => {
 		fn_list(1);
@@ -113,7 +113,7 @@ window.addEventListener('DOMContentLoaded', () => {
 	document.getElementById('schText').addEventListener('keydown', (e) => {
 		if(e.keyCode == 13)
 			fn_list(1);
-	}); 
+	});
 
 	/* 정렬순서 역순 체크 시 조회 */
 	document.querySelector('input[name="ordDesc"]').addEventListener('click', fn_listCore);
@@ -181,7 +181,7 @@ function fn_popMnfListCore() {
 		for (let i = 0; i < scripts.length; i++) {
 		    new Function(scripts[i].innerText)();	//스크립트 주입
 		    scripts[i].remove();					//스크립트 태그 제거
-		} 
+		}
 		fn_setupDragula();
 	}).catch((err) => {
     	console.log(err);
@@ -195,8 +195,8 @@ function fn_setupDragula() {
 
 function fn_saveMnfSrtOrd(mnfNoList) {
 	axios({
-		method: 'post',
-	  	url: 'mnfSrtOrd',
+		method: 'put',
+	  	url: 'mnf/srt-ord',
 	 	data: JSON.stringify(mnfNoList),
 	 	headers: {'Content-Type': 'application/json'}
 	}).then((res) => {
@@ -210,7 +210,7 @@ function fn_saveMnfSrtOrd(mnfNoList) {
 function fn_mnfExcelDown() {
 	axios({
 		method: 'get',
-	  	url: 'mnfExcelDown',
+	  	url: 'mnf/excel',
 	  	responseType: 'blob',
 	  	responseEncoding: 'utf8'
 	}).then((res) => {
