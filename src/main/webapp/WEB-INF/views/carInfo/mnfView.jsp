@@ -52,7 +52,7 @@ gnbActive = 'setting';
 					<a href="mnfList?pageNo=${ param.pageNo }" class="btn btn-outline-secondary">목록</a>
 				</div>
 				<div>
-					<button type="button" class="btn btn-danger" id="mnfDel">삭제</button>
+					<button type="button" class="btn btn-danger" id="delMnf">삭제</button>
 				</div>
 			</div>
 		</div>
@@ -63,7 +63,7 @@ gnbActive = 'setting';
 window.addEventListener('DOMContentLoaded', () => {
 
 	/* 제조사 삭제 버튼 클릭 */
-	document.getElementById('mnfDel').addEventListener('click', () => {
+	document.getElementById('delMnf').addEventListener('click', () => {
 		if(confirm('제조사를 삭제하시겠습니까?')) {
 			fn_delMnf({"mnfNo": "${ mnfVo.mnfNo }"});
 		}

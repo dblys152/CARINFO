@@ -119,8 +119,6 @@ window.addEventListener('DOMContentLoaded', () => {
 			let dataForm = {
 				"carMdlNo": document.querySelector('input[name="carMdlNo"]').value,
 				"carMdlNm": carMdlNmInp.value.trim(),
-				"carMdlClCd": "101100", 	// 자동차모델분류코드(대표모델)
-				"upCarMdlNo": "M",
 				"mnfNo": mnfCard.querySelector('input[name="mnfNo"]').value,
 				"carAprnCd": carAprnCdSel.value,
 				"carKnCd": carKnCdSel.value

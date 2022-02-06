@@ -3,6 +3,7 @@ package com.ys.carInfo.carMdl.controller;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
@@ -56,9 +57,32 @@ public class CarInfoMngController {
 
 	/* 자동차모델 목록 화면 */
 	@RequestMapping(value="/carMdlList", method=RequestMethod.GET)
-	public String mdlList(Model model) throws Exception {
+	public String carMdlList(
+			@ModelAttribute(value="searchVo") SearchVo searchVo,
+			Model model) throws Exception {
+
+		if(searchVo.getPageNo() == null) {
+			searchVo.setPageNo(1);
+			searchVo.setOrdDesc(true);
+		}
 
 		return "/form/carInfo/carMdlList";
+	}
+	@RequestMapping(value="/carMdlListCore", method=RequestMethod.GET)
+	public String carMdlListCore(
+			@ModelAttribute(value="searchVo") SearchVo searchVo,
+			Model model) throws Exception {
+
+		Map<String, Object> map = new HashMap<>();
+		map.put("search", searchVo);
+		List<Map<String, Object>> carMdlList = carMdlService.selectCarMdlList(map);
+		model.addAttribute("carMdlList", carMdlList);
+
+		model.addAttribute("totCnt", (carMdlList != null && carMdlList.size() > 0 ? carMdlList.get(0).get("totCnt") : 0));
+		model.addAttribute("listCnt", searchVo.getListCnt());
+		model.addAttribute("pageNo", searchVo.getPageNo());
+
+		return "/empty/carInfo/carMdlListCore";
 	}
 
 	/* 자동차모델 등록 및 수정 화면 */
@@ -99,6 +123,11 @@ public class CarInfoMngController {
 		}
 		model.addAttribute("carMdlVo", carMdlVo);
 
+		model.addAttribute("thisYear", LocalDate.now().getYear());	// 올해년도
+
+		List<String> carMdlYearList = carMdlService.selectCarMdlYearList(carMdlNo);	// 자동차연식 목록
+		model.addAttribute("carMdlYearList", carMdlYearList);
+
 		return "/form/carInfo/carMdlView";
 	}
 
@@ -123,8 +152,6 @@ public class CarInfoMngController {
 			@ModelAttribute(value="searchVo") SearchVo searchVo,
 			Model model) throws Exception {
 
-		System.out.println(searchVo.getOrdDesc());
-		System.out.println(searchVo.getOrdDescStr());
 		Map<String, Object> map = new HashMap<>();
 		map.put("search", searchVo);
 		List<Map<String, Object>> mnfList = mnfService.selectMnfList(map);

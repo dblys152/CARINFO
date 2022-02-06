@@ -14,10 +14,8 @@ public interface CarMdlMapper {
 
 	public CarMdlVo selectCarMdl(String carMdlNo) throws Exception;
 
-	public List<Map<String, Object>> selectCarInfoList(Map<String, Object> map) throws Exception;
+	public List<Map<String, Object>> selectCarMdlList(Map<String, Object> map) throws Exception;
 
-
-
-
+	public List<String> selectCarMdlYearList(String carMdlNo) throws Exception;
 
 }

@@ -30,11 +30,6 @@ public class CarInfoController {
 	@RequestMapping(value="/main", method=RequestMethod.GET)
 	public String main(Model model) throws Exception {
 		Map<String, Object> map = new HashMap<>();
-		List<Map<String, Object>> carInfoList = carMdlService.selectCarInfoList(map);
-		model.addAttribute("carInfoList", carInfoList);
-
-		List<CmnCodeVo> cmnCdList = codeService.selectCmnCodeList(null, "Y", null);
-		model.addAttribute("cmnCdList", cmnCdList);
 
 		return "/form/carInfo/mainView";
 	}

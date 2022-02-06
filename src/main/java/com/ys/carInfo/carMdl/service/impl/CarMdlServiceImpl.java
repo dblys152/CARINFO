@@ -31,13 +31,14 @@ public class CarMdlServiceImpl implements CarMdlService {
 	}
 
 	@Override
-	public List<Map<String, Object>> selectCarInfoList(Map<String, Object> map) throws Exception {
-		return carMdlMapper.selectCarInfoList(map);
+	public List<Map<String, Object>> selectCarMdlList(Map<String, Object> map) throws Exception {
+		return carMdlMapper.selectCarMdlList(map);
 	}
 
-
-
-
+	@Override
+	public List<String> selectCarMdlYearList(String carMdlNo) throws Exception {
+		return carMdlMapper.selectCarMdlYearList(carMdlNo);
+	}
 
 
 }

@@ -20,12 +20,9 @@
 					SELECT
 							#{carMdlNo,jdbcType=VARCHAR}	CAR_MDL_NO
 						  , #{carMdlNm,jdbcType=VARCHAR}	CAR_MDL_NM
-						  , #{carMdlClCd,jdbcType=VARCHAR}	CAR_MDL_CL_CD
-						  , #{upCarMdlNo,jdbcType=VARCHAR}	UP_CAR_MDL_NO
 						  , #{mnfNo,jdbcType=VARCHAR}		MNF_NO
 						  , #{carAprnCd,jdbcType=VARCHAR}	CAR_APRN_CD
 						  , #{carKnCd,jdbcType=VARCHAR}		CAR_KN_CD
-						  , #{rlsYear,jdbcType=VARCHAR}		RLS_YEAR
 						  , #{regNo,jdbcType=INTEGER}		REG_NO
 						  , SYSDATE							REG_DTT
 						  , #{modNo,jdbcType=INTEGER}		MOD_NO
@@ -46,12 +43,9 @@
 				INSERT 	(
 							CAR_MDL_NO
 						  , CAR_MDL_NM
-						  , CAR_MDL_CL_CD
-						  , UP_CAR_MDL_NO
 						  , MNF_NO
 						  , CAR_APRN_CD
 						  , CAR_KN_CD
-						  , RLS_YEAR
 						  , SRT_ORD
 						  , REG_NO
 						  , REG_DTT
@@ -61,13 +55,10 @@
 				VALUES	(
 							S.CAR_MDL_NO
 						  , S.CAR_MDL_NM
-						  , S.CAR_MDL_CL_CD
-						  , S.UP_CAR_MDL_NO
 						  , S.MNF_NO
 						  , S.CAR_APRN_CD
 						  , S.CAR_KN_CD
-						  , S.RLS_YEAR
-						  , (SELECT NVL(MAX(SRT_ORD) + 1, 1) FROM CAR_MDL WHERE UP_CAR_MDL_NO = #{upCarMdlNo,jdbcType=VARCHAR})
+						  , (SELECT NVL(MAX(SRT_ORD) + 1, 1) FROM CAR_MDL WHERE MNF_NO = #{mnfNo,jdbcType=VARCHAR})
 						  , S.REG_NO
 						  , S.REG_DTT
 						  , S.MOD_NO
@@ -79,21 +70,21 @@
 		SELECT
 		        CM.CAR_MDL_NO
 		      , CM.CAR_MDL_NM
-		      , CM.CAR_MDL_CL_CD
-		      , CM.UP_CAR_MDL_NO
+		      , MAX(CY.RLS_YEAR)	RLS_YEAR
 		      , CM.MNF_NO
 		      , MF.MNF_NM
-		      , AF.FILE_NO 		MNF_FILE_NO
+		      , AF.FILE_NO 			MNF_FILE_NO
 		      , CM.CAR_APRN_CD
-		      , C.CMN_CD_NM		CAR_APRN_NM
+		      , C.CMN_CD_NM			CAR_APRN_NM
 		      , CM.CAR_KN_CD
-		      , C2.CMN_CD_NM 	CAR_KN_NM
+		      , C2.CMN_CD_NM 		CAR_KN_NM
 		      , TO_CHAR(CM.REG_DTT, 'YYYY-MM-DD') REG_DT
 		FROM    CAR_MDL 	CM
 			  , CMN_CODE 	C
 		      , CMN_CODE 	C2
 		      , MNF     	MF
 		      , ATCH_FILE   AF
+		      , CAR_MDL_YEAR 	CY
 		WHERE   1 = 1
 		AND     CM.CAR_MDL_NO = #{carMdlNo,jdbcType=VARCHAR}
 		AND     CM.DEL_YN = 'N'
@@ -103,11 +94,102 @@
 		AND     MF.DEL_YN = 'N'
 		AND     MF.MNF_NO = AF.FILE_IDNT_NO
 		AND     AF.DEL_YN = 'N'
+		AND 	CM.CAR_MDL_NO = CY.CAR_MDL_NO(+)
+		AND 	CY.DEL_YN(+) = 'N'
+		GROUP	BY	CM.CAR_MDL_NO
+			      , CM.CAR_MDL_NM
+			      , CM.MNF_NO
+			      , MF.MNF_NM
+			      , AF.FILE_NO
+			      , CM.CAR_APRN_CD
+			      , C.CMN_CD_NM
+			      , CM.CAR_KN_CD
+			      , C2.CMN_CD_NM
+			      , TO_CHAR(CM.REG_DTT, 'YYYY-MM-DD')
 	</select>
 
-	<select id="selectCarInfoList" parameterType="HashMap" resultType="HashMap">
-		SELECT	*
-		FROM 	CAR_MDL
+	<select id="selectCarMdlList" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		SELECT	A.*
+		FROM    (
+		            SELECT
+		                    ROWNUM	"rn"
+		                  , A.*
+		            FROM    (
+		            			SELECT
+		            					RANK() OVER(ORDER BY CM.SRT_ORD, CM.CAR_MDL_NO) "seq"
+									  , CM.CAR_MDL_NO	"carMdlNo"
+								      , CM.CAR_MDL_NM	"carMdlNm"
+								      , CM.RLS_YEAR		"rlsYear"
+								      , CM.MNF_NO		"mnfNo"
+								      , CM.MNF_NM		"mnfNm"
+								      , CM.MNF_FILE_NO 	"mnfFileNo"
+								      , CM.CAR_APRN_CD	"carAprnCd"
+								      , CM.CAR_APRN_NM	"carAprnNm"
+								      , CM.CAR_KN_CD	"carKnCd"
+								      , CM.CAR_KN_NM 	"carKnNm"
+								      , CM.REG_DT 		"regDt"
+								      , COUNT(*) OVER() "totCnt"
+		            			FROM 	(
+		            						SELECT
+													CM.CAR_MDL_NO
+											      , CM.CAR_MDL_NM
+											      , MAX(CY.RLS_YEAR)	RLS_YEAR
+											      , CM.MNF_NO
+											      , MF.MNF_NM
+											      , AF.FILE_NO 			MNF_FILE_NO
+											      , CM.CAR_APRN_CD
+											      , C.CMN_CD_NM			CAR_APRN_NM
+											      , CM.CAR_KN_CD
+											      , C2.CMN_CD_NM 		CAR_KN_NM
+											      , CM.SRT_ORD
+											      , TO_CHAR(CM.REG_DTT, 'YYYY-MM-DD') REG_DT
+											FROM    CAR_MDL 	CM
+												  , CMN_CODE 	C
+											      , CMN_CODE 	C2
+											      , MNF     	MF
+											      , ATCH_FILE   AF
+											      , CAR_MDL_YEAR 	CY
+											WHERE   1 = 1
+											AND     CM.DEL_YN = 'N'
+											AND 	CM.CAR_APRN_CD = C.CMN_CD
+											AND 	CM.CAR_KN_CD = C2.CMN_CD
+											AND     CM.MNF_NO = MF.MNF_NO
+											AND     MF.DEL_YN = 'N'
+											AND     MF.MNF_NO = AF.FILE_IDNT_NO
+											AND     AF.DEL_YN = 'N'
+											AND 	CM.CAR_MDL_NO = CY.CAR_MDL_NO(+)
+											AND 	CY.DEL_YN(+) = 'N'
+											GROUP	BY	CM.CAR_MDL_NO
+												      , CM.CAR_MDL_NM
+												      , CM.MNF_NO
+												      , MF.MNF_NM
+												      , AF.FILE_NO
+												      , CM.CAR_APRN_CD
+												      , C.CMN_CD_NM
+												      , CM.CAR_KN_CD
+												      , C2.CMN_CD_NM
+												      , CM.SRT_ORD
+												      , TO_CHAR(CM.REG_DTT, 'YYYY-MM-DD')
+		            					)	CM
+								ORDER	BY	CM.SRT_ORD 	${search.ordDescStr}
+								          , CM.CAR_MDL_NO	${search.ordDescStr}
+		                    )   A
+		        <![CDATA[
+		            WHERE   ROWNUM <= #{search.listCnt,jdbcType=INTEGER} * #{search.pageNo,jdbcType=INTEGER}
+		        ]]>
+		        )   A
+	<![CDATA[
+		WHERE   "rn" > (#{search.pageNo,jdbcType=INTEGER} - 1) * #{search.listCnt,jdbcType=INTEGER}
+	]]>
+	</select>
+
+	<select id="selectCarMdlYearList" parameterType="String" resultType="String">
+		SELECT	RLS_YEAR
+		FROM 	CAR_MDL_YEAR
+		WHERE	1 = 1
+		AND 	CAR_MDL_NO = #{carMdlNo,jdbcType=VARCHAR}
+		AND 	DEL_YN = 'N'
+		ORDER	BY	RLS_YEAR DESC
 	</select>
 
 

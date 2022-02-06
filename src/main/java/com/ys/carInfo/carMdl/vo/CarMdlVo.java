@@ -12,10 +12,11 @@ public class CarMdlVo implements Serializable {
 	private String 	carMdlNo;		// 자동차모델번호
 	private String	carMdlNm;		// 자동차모델명
     private String 	mnfNo;			// 제조사번호
+    private String 	mnfNm; 			// 자조사명
     private String 	carAprnCd;		// 자동차외형코드(세단, 해치백, 컨버터블, SUV, 쿠페, 왜건, RV, 벤, 트럭)
-    private String 	carAprnNm;
+    private String 	carAprnNm;		// 자동차외형명
     private String 	carKnCd;		// 자동차종류코드(경형, 소형, 준중형, 중형, 중대형, 대형, 스포츠카)
-    private String 	carKnNm;
+    private String 	carKnNm;		// 자동차종류명
     private Integer srtOrd;			// 정렬순서
     private Integer regNo;			// 등록자번호
 	private Integer modNo;			// 수정자번호

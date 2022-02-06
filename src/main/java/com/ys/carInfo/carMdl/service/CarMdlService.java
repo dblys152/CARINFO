@@ -6,9 +6,6 @@ import java.util.Map;
 import com.ys.carInfo.carMdl.vo.CarMdlVo;
 
 public interface CarMdlService {
-
-	public List<Map<String, Object>> selectCarInfoList(Map<String, Object> map) throws Exception;
-
 	/**
 	 * 자동차모델 정보 조회
 	 * @param carMdlNo
@@ -24,5 +21,21 @@ public interface CarMdlService {
 	 * @throws Exception
 	 */
 	public String mergeCarMdl(CarMdlVo carMdlVo) throws Exception;
+
+	/**
+	 * 자동차모델 목록 조회
+	 * @param map
+	 * @return list
+	 * @throws Exception
+	 */
+	public List<Map<String, Object>> selectCarMdlList(Map<String, Object> map) throws Exception;
+
+	/**
+	 * 자동차모델연식 목록 조회
+	 * @param carMdlNo
+	 * @return list
+	 * @throws Exception
+	 */
+	public List<String> selectCarMdlYearList(String carMdlNo) throws Exception;
 
 }
