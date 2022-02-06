@@ -13,5 +13,4 @@ public class NtnCodeVo implements Serializable {
 	private String	ntnCdKrNm;	// 국가코드한글명
 	private String 	ntnCdEnNm;	// 국가코드영문
     private String	useYn;		// 사용여부
-
 }

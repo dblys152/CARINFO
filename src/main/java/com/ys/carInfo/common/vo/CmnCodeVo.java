@@ -15,5 +15,4 @@ public class CmnCodeVo implements Serializable {
 	private String 	useYn;		// 사용여부
     private Integer	srtOrd;		// 정렬순서
     private String 	note;		// 비고
-
 }
