@@ -24,6 +24,10 @@
     		width: 54px;
     		height: 54px;
     	}
+    	.mnf_view_logo {
+    		width: 166px;
+    		height: 166px;
+    	}
     	.mnf_choice {
 			background: #dcdcdc
 		}

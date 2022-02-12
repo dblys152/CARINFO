@@ -40,5 +40,13 @@ public class CarMdlServiceImpl implements CarMdlService {
 		return carMdlMapper.selectCarMdlYearList(carMdlNo);
 	}
 
+	@Override
+	public void insertCarMdlYear(CarMdlVo carMdlVo) throws Exception {
+		int userNo = 0;
+		carMdlVo.setRegNo(userNo);
+		carMdlVo.setModNo(userNo);
+		carMdlMapper.insertCarMdlYear(carMdlVo);
+	}
+
 
 }

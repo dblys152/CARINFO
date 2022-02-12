@@ -14,32 +14,32 @@ gnbActive = 'setting';
 	<!-- Page header-->
 	<div class="py-3 bg-light border-bottom mb-4">
         <div class="my-1">
-            <p class="lead mb-0">제조사 상세정보</p>
+            <p class="lead mb-0 fw-bold">제조사 상세정보</p>
         </div>
 	</div>
 	<!-- content -->
 	<div class="col-lg-12">
 		<input type="hidden" name="mnfNo" value="<c:out value="${ mnfVo.mnfNo }"/>">
 		<div class="row mb-3">
-		 	<label for="inputPassword" class="col-sm-2 col-form-label">제조사명</label>
+		 	<label for="inputPassword" class="col-sm-2 col-form-label fw-bold">제조사명</label>
 			<div class="col-sm-10 col-form-label">
 				<c:out value="${ mnfVo.mnfNm }"/>
 			</div>
 		</div>
 		<div class="row mb-3">
-		 	<label class="col-sm-2 col-form-label">제조국</label>
+		 	<label class="col-sm-2 col-form-label fw-bold">제조국</label>
 			<div class="col-sm-10 col-form-label">
 				<c:out value="${ mnfVo.ntnCdKrNm } (${ mnfVo.ntnCdEnNm })"/>
 			</div>
 		</div>
 		<div class="row mb-3">
-		 	<label class="col-sm-2 col-form-label">제조사 로고</label>
+		 	<label class="col-sm-2 col-form-label fw-bold">제조사 로고</label>
 		 	<div class="col-sm-10 col-form-label">
-				<img src="/file/images/<c:out value="${ mnfVo.fileNo }"/>" class="mnf_logo">
+				<img src="/file/images/<c:out value="${ mnfVo.fileNo }"/>" class="mnf_view_logo">
 			</div>
 		</div>
 		<div class="row mb-3">
-		 	<label class="col-sm-2 col-form-label">등록일</label>
+		 	<label class="col-sm-2 col-form-label fw-bold">등록일</label>
 			<div class="col-sm-10 col-form-label">
 				<c:out value="${ mnfVo.regDt }"/>
 			</div>

@@ -14,7 +14,7 @@ gnbActive = 'setting';
 	<!-- Page header-->
 	<div class="py-3 bg-light border-bottom mb-4">
         <div class="my-1">
-            <p class="lead mb-0">제조사 ${ mnfVo.mnfNo == null ? '등록' : '수정 ' }</p>
+            <p class="lead mb-0 fw-bold">제조사 ${ mnfVo.mnfNo == null ? '등록' : '수정 ' }</p>
         </div>
 	</div>
 	<!-- content -->
@@ -23,13 +23,13 @@ gnbActive = 'setting';
 		<form:hidden path="mnfNo"/>
 		<input type="text" style="display:none;"/>
 		<div class="row mb-3">
-		 	<label class="col-sm-2 col-form-label">제조사명<span class="text-danger">*</span></label>
+		 	<label class="col-sm-2 col-form-label fw-bold">제조사명<span class="text-danger">*</span></label>
 			<div class="col-sm-10">
 			  <form:input path="mnfNm" class="form-control" maxlength="25"/>
 			</div>
 		</div>
 		<div class="row mb-3">
-		 	<label class="col-sm-2 col-form-label">제조국<span class="text-danger">*</span></label>
+		 	<label class="col-sm-2 col-form-label fw-bold">제조국<span class="text-danger">*</span></label>
 			<div class="col-sm-10">
 				<form:select path="ntnCd" class="form-select">
 					<form:option value="">선택하세요.</form:option>
@@ -39,7 +39,7 @@ gnbActive = 'setting';
 				</form:select>
 			</div>
 		</div>
-		<div class="row mb-3">
+		<%-- <div class="row mb-3">
 		 	<label class="col-sm-2 col-form-label">제조사 로고<span class="text-danger">*</span></label>
 		 	<div class="col-sm-10" id="file_box">
 				<c:choose>
@@ -53,6 +53,13 @@ gnbActive = 'setting';
 					<input class="form-control upload_img" type="file" name="file">
 				</c:otherwise>
 				</c:choose>
+			</div>
+		</div> --%>
+		<div class="row mb-3">
+		 	<label class="col-sm-2 col-form-label fw-bold">제조사 로고<span class="text-danger">*</span></label>
+		 	<div class="col-sm-10" id="file_box">
+		 		<label class="form-label">정방형 크기 1MB이하</label>
+				<div id="input-image"></div>
 			</div>
 		</div>
 		</form:form>
@@ -69,11 +76,28 @@ gnbActive = 'setting';
 	</div>
 </div>
 
+<link href="/resources/image-uploader/dist/image-uploader.min.css" rel="stylesheet" />
+<script src="/resources/image-uploader/dist/image-uploader.min.js"></script>
 <script>
 window.addEventListener('DOMContentLoaded', () => {
 
+	/* 이미지 업로더 라이브러리 */
+	let imageData = [];
+	if(${mnfVo.fileNo != null}) {
+		imageData.push({id: '${mnfVo.fileNo}', src: '/file/images/${mnfVo.fileNo}'});
+	}
+	$('#input-image').imageUploader({
+		preloaded: imageData,
+		label:'사진을 올려놓거나 여기를 클릭하세요.',
+		extensions: ['.jpg','.jpeg','.png','.gif','.svg'],
+		mimes: ['image/jpeg','image/png','image/gif','image/svg+xml'],
+		maxSize: undefined,
+		maxFiles: 1
+	});
+	document.querySelector('#input-image input[type="file"]').multiple = false;
+	
 	/* 로고 삭제 버튼 클릭 */
-	if(${ mnfVo.mnfNo != null }) {
+	/* if(${ mnfVo.mnfNo != null }) {
 		document.getElementById('log_del').addEventListener('click', () => {
 			if(confirm('로고를 삭제하시겠습니까?')) {
 				let html = '';
@@ -82,14 +106,14 @@ window.addEventListener('DOMContentLoaded', () => {
 				document.getElementById('file_box').innerHTML = html;
 			}
 		});
-	}
+	} */
 
 	/* 제조사 저장 버튼 클릭 */
 	document.getElementById('saveMnf').addEventListener('click', () => {
 		let mnfNmInp = document.querySelector('input[name="mnfNm"]');
 		let ntnCdSel = document.querySelector('select[name="ntnCd"]');
-		let fileInp = document.querySelector('input[name="file"]');
-		let fileNoInp = document.querySelector('input[name="fileNo"]');
+		let fileInp = document.querySelector('input[name="images[]"]');
+		let fileNoInp = document.querySelector('input[name="preloaded[]"]');
 
 		if(mnfNmInp.value.trim() == '') {
 			alert('제조사명을 입력해주세요.');
@@ -98,7 +122,7 @@ window.addEventListener('DOMContentLoaded', () => {
 		} else if(ntnCdSel.value == '') {
 			alert('제조국을 선택해주세요.');
 			ntnCdSel.focus();
-		} else if((fileInp == null || fileInp.value == '') && (fileNoInp == null || fileNoInp.value == '')) {
+		} else if(fileInp.files.length == 0 && (fileNoInp == null || fileNoInp.value == '')) {
 			 alert('로고를 등록해주세요.');
 			 fileInp.focus();
 		} else if(confirm('저장 하시겠습니까?')) {
@@ -106,8 +130,10 @@ window.addEventListener('DOMContentLoaded', () => {
 			formData.append("mnfNo", document.querySelector('input[name="mnfNo"]').value);
 			formData.append("mnfNm", mnfNmInp.value.trim());
 			formData.append("ntnCd", ntnCdSel.value);
-			if(fileInp != null) formData.append("file", fileInp.files[0]);
-			if(fileNoInp != null) formData.append("fileNo", fileNoInp.value);
+			if(fileInp.files.length > 0) 
+				formData.append("file", fileInp.files[0]);
+			if(fileNoInp != null) 
+				formData.append("fileNo", fileNoInp.value);
 
 			fn_saveMnf(formData);
 		}

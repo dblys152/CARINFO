@@ -192,5 +192,22 @@
 		ORDER	BY	RLS_YEAR DESC
 	</select>
 
+	<insert id="insertCarMdlYear" parameterType="com.ys.carInfo.carMdl.vo.CarMdlVo">
+		INSERT	INTO CAR_MDL_YEAR (
+			CAR_MDL_NO
+		  , RLS_YEAR
+		  , REG_NO
+		  , REG_DTT
+		  , MOD_NO
+		  , MOD_DTT
+		) VALUES (
+			#{carMdlNo,jdbcType=VARCHAR}
+		  , #{rlsYear,jdbcType=VARCHAR}
+		  , #{regNo,jdbcType=INTEGER}
+		  , SYSDATE
+		  , #{modNo,jdbcType=INTEGER}
+		  , SYSDATE
+		)
+	</insert>
 
 </mapper>

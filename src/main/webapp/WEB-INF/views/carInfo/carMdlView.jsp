@@ -19,7 +19,7 @@ gnbActive = 'setting';
 	</div>
 	<!-- content -->
 	<div class="col-lg-12">
-		<input type="hidden" name="mnfNo" value="<c:out value="${ carMdlVo.carMdlNo }"/>">
+		<input type="hidden" name="carMdlNo" value="<c:out value="${ carMdlVo.carMdlNo }"/>">
 		<div class="row mb-5">
 			<div class="col-sm-6">
 				<table>
@@ -38,7 +38,7 @@ gnbActive = 'setting';
 				</table>
 			</div>
 		</div>
-		<div class="row mb-1">
+		<div class="row mb-5">
 			<div class="d-flex flex-wrap">
 				<div class="me-2">
 					<h5>연식</h5>
@@ -62,16 +62,26 @@ gnbActive = 'setting';
 				</div>
 			</div>
 		</div>
+		<div class="row mb-5">
+			<div class="d-flex flex-wrap">
+				<div class="me-2">
+					<h5>모델 사진</h5>
+				</div>
+				<div class="me-2">
+					<button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#carMdlFile">사진 등록</button>
+				</div>
+			</div>
+		</div>
 
 		<div class="row mb-3">
 			<div class="d-flex justify-content-between bd-highlight mb-3">
 				<div></div>
 				<div>
-					<a href="carMdlWrite?carMdlNo=${ carMdlVo.carMdlNo }" class="btn btn-info">수정</a>
+					<a href="carMdlWrite?carMdlNo=${ carMdlVo.carMdlNo }" class="btn btn-info">모델수정</a>
 					<a href="carMdlList?pageNo=${ param.pageNo }" class="btn btn-outline-secondary">목록</a>
 				</div>
 				<div>
-					<button type="button" class="btn btn-danger" id="delCarMdl">삭제</button>
+					<button type="button" class="btn btn-danger" id="delCarMdl">모델삭제</button>
 				</div>
 			</div>
 		</div>
@@ -88,23 +98,81 @@ gnbActive = 'setting';
 			</div>
 			<div class="modal-body">
 				<select id="popRlsYear" class="form-select">
-				<c:forEach var="i" begin="1" end="${ thisYear - 2009 }">
-					<option value="${ thisYear - i + 1 }"><c:out value="${ thisYear - i + 1 }"/></option>
+				<c:forEach var="i" begin="0" end="${ thisYear - 2010 }">
+					<option value="${ thisYear - i }"><c:out value="${ thisYear - i }"/></option>
 				</c:forEach>
 				</select>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-info" id="saveMnfSrtOrd">등록</button>
+				<button type="button" class="btn btn-info" id="saveCarMdlYear">등록</button>
+				<button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">취소</button>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="carMdlFile" tabindex="-1" aria-hidden="true">
+ 	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">모델 사진 등록</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<form id="popFileForm">
+				<div class="row mb-3">
+				 	<label class="col-sm-2 col-form-label">분류<span class="text-danger">*</span></label>
+					<div class="col-sm-10">
+						<select name="carMdlFileClCd" class="form-select">
+							<option	value="">선택하세요.</option>
+							<c:forEach items="${ carMdlFileClCdList }" var="i">
+							<option value="${ i.cmnCd }"><c:out value="${ i.cmnCdNm }"/></option>
+							</c:forEach>
+						</select>
+					</div>
+				</div>
+				</form>
+				<div id="input-image"></div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-info" id="saveCarMdlYear">등록</button>
 				<button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">취소</button>
 			</div>
 		</div>
 	</div>
 </div>
 
+<link href="/resources/image-uploader/dist/image-uploader.min.css" rel="stylesheet" />
+<script src="/resources/image-uploader/dist/image-uploader.min.js"></script>
 <script>
 window.addEventListener('DOMContentLoaded', () => {
 
-	/* 제조사 삭제 버튼 클릭 */
+	/* 연식 등록 */
+	document.getElementById('saveCarMdlYear').addEventListener('click', () => {
+		let thisYear = document.getElementById('popRlsYear').value;
+		let carMdlYearList = JSON.parse("${ carMdlYearList }").map(String);
+		if(carMdlYearList.indexOf(thisYear) > -1) {
+			alert('이미 등록된 연식입니다.');
+		} else if(confirm('연식을 등록하시겠습니까?')) {
+			let dataForm = {
+				'carMdlNo': document.querySelector('input[name="carMdlNo"]').value,
+				'rlsYear': thisYear
+			};
+			fn_saveCarMdlYear(dataForm);
+		}
+	});
+
+	/* 사진 등록 팝업 */
+	document.querySelector('button[data-bs-target="#carMdlFile"]').addEventListener('click', () => {
+		
+		fn_imageUploader();
+	});
+
+	/* 포토 등록 팝업 */
+	
+
+
+	/* 모델 삭제 버튼 클릭 */
 	document.getElementById('delCarMdl').addEventListener('click', () => {
 		if(confirm('모델을 삭제하시겠습니까?')) {
 			fn_delCarMdl({"carMdlNo": "${ carMdlVo.carMdlNo }"});
@@ -112,6 +180,31 @@ window.addEventListener('DOMContentLoaded', () => {
 	});
 
 });
+
+function fn_saveCarMdlYear(dataForm) {
+	axios({
+		method: 'post',
+	  	url: 'car-mdl/year',
+	  	data: JSON.stringify(dataForm),
+	  	headers: {'Content-Type': 'application/json'}
+	}).then((res) => {
+		location.reload();
+	}).catch((err) => {
+		alert('등록 실패하였습니다.');
+    	console.log(err);
+	});
+}
+
+function fn_imageUploader() {
+	document.getElementById('input-image').innerHTML = '';
+	$('#input-image').imageUploader({
+		label:'사진을 올려놓거나 여기를 클릭하세요.',
+		extensions: ['.jpg','.jpeg','.png','.gif','.svg'],
+		mimes: ['image/jpeg','image/png','image/gif','image/svg+xml'],
+		maxSize: undefined,
+		maxFiles: undefined
+	});
+}
 
 function fn_delCarMdl(dataForm) {
 

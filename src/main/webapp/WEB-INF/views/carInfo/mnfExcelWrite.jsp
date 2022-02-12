@@ -14,7 +14,7 @@ gnbActive = 'setting';
 	<!-- Page header-->
 	<div class="py-3 bg-light border-bottom mb-4">
         <div class="my-1">
-            <p class="lead mb-0">제조사 일괄등록</p>
+            <p class="lead mb-0 fw-bold">제조사 일괄등록</p>
         </div>
 	</div>
 	<!-- content -->

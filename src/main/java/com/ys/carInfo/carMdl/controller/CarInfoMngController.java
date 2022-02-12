@@ -127,6 +127,9 @@ public class CarInfoMngController {
 
 		List<String> carMdlYearList = carMdlService.selectCarMdlYearList(carMdlNo);	// 자동차연식 목록
 		model.addAttribute("carMdlYearList", carMdlYearList);
+		
+		List<CmnCodeVo> carMdlFileClCdList = codeService.selectCmnCodeList("101", "Y", null);	// 자동차모델파일분류코드 목록
+		model.addAttribute("carMdlFileClCdList", carMdlFileClCdList);
 
 		return "/form/carInfo/carMdlView";
 	}
@@ -263,16 +266,17 @@ public class CarInfoMngController {
 
 		return ResponseEntity.ok(map);
 	}
-
-	/* 제조사 정렬순서 저장 */
-	@RequestMapping(value="/mnf/srt-ord", method=RequestMethod.PUT)
+	
+	/* 자동차모델연식 등록 */
+	@RequestMapping(value="/car-mdl/year", method=RequestMethod.POST)
 	@ResponseBody
-	public ResponseEntity<Map<String, Object>> updateMnfSrtOrd(
-			@RequestBody List<String> mnfNoList) throws Exception {
+	public ResponseEntity<Map<String, Object>> insertCarMdlYear(
+			@RequestBody CarMdlVo carMdlVo) throws Exception {
 
-		mnfService.updateMnfSrtOrd(mnfNoList);
-
-		return ResponseEntity.ok(new HashMap<>());
+		Map<String, Object> map = new HashMap<>();
+		carMdlService.insertCarMdlYear(carMdlVo);
+		
+		return ResponseEntity.ok(map);
 	}
 
 	/* 제조사 등록 및 수정 */
@@ -280,7 +284,7 @@ public class CarInfoMngController {
 	@ResponseBody
 	public ResponseEntity<Map<String, Object>> insertMnf(
 			@ModelAttribute MnfVo mnfVo) throws Exception {
-
+		
 		if((mnfVo.getMnfNo() == null || mnfVo.getMnfNo().equals("")) && mnfVo.getFile() == null) {
 			throw new EntityNotFoundException("파일을 찾을 수 없습니다.");
 		} else if(mnfVo.getFile() != null) {	// 1MB 제한
@@ -309,6 +313,17 @@ public class CarInfoMngController {
 		if(mnfVo.getMnfNo() == null || mnfVo.getMnfNo().equals(""))
 			throw new EntityNotFoundException("mnfNo not found");
 		mnfService.deleteMnf(mnfVo.getMnfNo());
+
+		return ResponseEntity.ok(new HashMap<>());
+	}
+	
+	/* 제조사 정렬순서 저장 */
+	@RequestMapping(value="/mnf/srt-ord", method=RequestMethod.PUT)
+	@ResponseBody
+	public ResponseEntity<Map<String, Object>> updateMnfSrtOrd(
+			@RequestBody List<String> mnfNoList) throws Exception {
+
+		mnfService.updateMnfSrtOrd(mnfNoList);
 
 		return ResponseEntity.ok(new HashMap<>());
 	}

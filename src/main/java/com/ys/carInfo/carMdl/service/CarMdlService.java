@@ -38,4 +38,11 @@ public interface CarMdlService {
 	 */
 	public List<String> selectCarMdlYearList(String carMdlNo) throws Exception;
 
+	/**
+	 * 자동차모델연식 등록
+	 * @param carMdlVo
+	 * @throws Exception
+	 */
+	public void insertCarMdlYear(CarMdlVo carMdlVo) throws Exception;
+
 }

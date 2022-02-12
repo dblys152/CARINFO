@@ -18,4 +18,6 @@ public interface CarMdlMapper {
 
 	public List<String> selectCarMdlYearList(String carMdlNo) throws Exception;
 
+	public void insertCarMdlYear(CarMdlVo carMdlVo) throws Exception;
+
 }

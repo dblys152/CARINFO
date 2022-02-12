@@ -14,7 +14,7 @@ gnbActive = 'setting';
 	<!-- Page header-->
 	<div class="py-3 bg-light border-bottom mb-4">
         <div class="my-1">
-            <p class="lead mb-0">자동차 모델 ${ carMdlVo.carMdlNo == null ? '등록' : '수정 ' }</p>
+            <p class="lead mb-0 fw-bold">자동차 모델 ${ carMdlVo.carMdlNo == null ? '등록' : '수정 ' }</p>
         </div>
 	</div>
 	<!-- content -->

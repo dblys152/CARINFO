@@ -23,7 +23,7 @@
 </c:when>
 <c:otherwise>
 	<tr class="nodata">
-		<td class="text-center" colspan="5">등록된 데이터가 없습니다.</td>
+		<td class="text-center" colspan="7">등록된 데이터가 없습니다.</td>
 	</tr>
 </c:otherwise>
 </c:choose>
