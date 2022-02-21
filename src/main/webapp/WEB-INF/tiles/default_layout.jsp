@@ -36,7 +36,7 @@
 <body>
 	<tiles:insertAttribute name="header"/>
 
-	<div class="container">
+	<div class="container" style="height: auto;min-height: 100%;padding-bottom: 120px;">
 		<!-- Content -->
 		<div class="contents">
 	  		<tiles:insertAttribute name="body"/>

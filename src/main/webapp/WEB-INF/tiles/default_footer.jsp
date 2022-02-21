@@ -3,6 +3,6 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
 <!-- Footer-->
-<footer class="py-5 bg-dark">
+<footer class="py-3 bg-dark fixed-bottom" style="height: 60px;">
     <div class="container"><p class="m-0 text-center text-white">Copyright &copy; CARINFO 2021</p></div>
 </footer>
