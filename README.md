@@ -26,7 +26,7 @@
 ![mnf write](./screenshot/제조사_등록.PNG)
 ![mnf view](./screenshot/제조사_상세정보.PNG)
 ![mnf excelWrite](./screenshot/제조사_일괄등록.PNG)
-![mnf excelSample](./screenshot/일괄등록양식.PNG)
+![mnf excelSample](./screenshot/제조사_일괄등록양식.PNG)
 ![mnf excelWrite2](./screenshot/제조사_일괄등록2.PNG)
 ![mnf ntnCd](./screenshot/제조사_국가코드표.PNG)
 ![mnf srtOrd](./screenshot/제조사_정렬순서변경.PNG)
